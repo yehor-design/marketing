@@ -1,0 +1,349 @@
+.page {
+  display: flex;
+  justify-content: center;
+  padding: 37px 16px 80px;
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 1000;
+  font-variation-settings: "opsz" 14, "wght" 550;
+}
+
+:global(.site-main):has(.page) {
+  padding: 0;
+}
+
+:global(body):has(.page) :global(.announcement-wrap) {
+  display: none;
+}
+
+.page h1,
+.page h2,
+.page p,
+.page li,
+.page button,
+.page a {
+  font-family: inherit;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: min(342px, 100%);
+  max-height: min(700px, calc(100dvh - 120px));
+  overflow: hidden;
+  border-radius: 24px;
+  background: #141414;
+}
+
+.header,
+.footer {
+  flex: none;
+  padding: 20px 20px 0;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.header > p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-variation-settings: "opsz" 14, "wght" 450;
+  line-height: 1.4;
+}
+
+.plans {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.plan,
+.planOn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  min-height: 68px;
+  padding: 12px 14px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: #171717;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.planOn {
+  border-color: #fff;
+}
+
+.price {
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.detail {
+  color: var(--muted);
+  font-size: 12px;
+  font-variation-settings: "opsz" 14, "wght" 450;
+  line-height: 1.4;
+}
+
+.scroller {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 16px 20px 8px;
+  overflow: auto;
+}
+
+.videoWrap,
+.block,
+.quote,
+.thread {
+  border-radius: 10px;
+  background: #262626;
+}
+
+.videoWrap {
+  overflow: hidden;
+}
+
+.video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 302 / 213;
+  object-fit: cover;
+  background: #111;
+}
+
+.block {
+  margin-top: 12px;
+  padding: 14px;
+}
+
+.block h2,
+.saying {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin: 0;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+
+.block h2 span,
+.kit span {
+  color: var(--muted);
+  font-size: 12px;
+  font-variation-settings: "opsz" 14, "wght" 450;
+}
+
+.points,
+.steps {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.points li,
+.steps li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  color: var(--muted);
+  font-size: 13px;
+  font-variation-settings: "opsz" 14, "wght" 450;
+  line-height: 1.45;
+}
+
+.points li + li,
+.steps li + li {
+  margin-top: 8px;
+}
+
+.points svg {
+  flex: none;
+  margin-top: 2px;
+  color: #fff;
+}
+
+.steps {
+  counter-reset: step;
+}
+
+.steps li::before {
+  content: counter(step) ".";
+  counter-increment: step;
+  flex: none;
+  color: #fff;
+}
+
+.kit {
+  margin: 16px 0 0;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.kit span {
+  display: block;
+}
+
+.saying {
+  margin-top: 22px;
+}
+
+.quote,
+.thread {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 12px;
+  color: inherit;
+}
+
+.quote img,
+.thread > img {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.quote strong,
+.thread strong {
+  display: block;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.handle,
+.quoteBody,
+.thread p,
+.thread time,
+.thread figcaption,
+.taxes {
+  color: var(--muted);
+  font-size: 13px;
+  font-variation-settings: "opsz" 14, "wght" 450;
+  line-height: 1.45;
+}
+
+.handle,
+.quoteBody,
+.thread p,
+.thread time {
+  display: block;
+  margin: 2px 0 0;
+}
+
+.thread figure {
+  margin: 8px 0 0;
+}
+
+.thread figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.thread figcaption {
+  margin-top: 6px;
+}
+
+.thread figcaption span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.support {
+  margin: 12px 0 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(0, 153, 255, 0.1);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.taxes {
+  margin: 10px 0 4px;
+  font-size: 12px;
+}
+
+.footer {
+  padding-bottom: 20px;
+}
+
+.offer {
+  display: block;
+  min-height: 30px;
+  margin: 0;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(0, 230, 197, 0.15);
+  color: var(--accent);
+  font-size: 12px;
+  font-variation-settings: "opsz" 14, "wght" 450;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.offer strong {
+  font-variation-settings: "opsz" 14, "wght" 550;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.access,
+.askDesktop,
+.askMobile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 36px;
+  padding: 0 8px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.access {
+  background: #fff;
+  color: #000;
+}
+
+.askDesktop,
+.askMobile {
+  background: #262626;
+  color: #fff;
+}
+
+.askDesktop {
+  display: none;
+}
+
+@media (min-width: 810px) {
+  .askDesktop {
+    display: inline-flex;
+  }
+
+  .askMobile {
+    display: none;
+  }
+}
