@@ -1,6 +1,7 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { PageHeading } from "@/components/page-heading";
-import { blogSlugs, titleFromSlug } from "@/lib/routes";
+import { ArticlePage } from "@/components/blog/article-page";
+import { getPost, posts } from "@/lib/blog";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -9,14 +10,30 @@ type PageProps = {
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return blogSlugs.map((slug) => ({ slug }));
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
-export default async function BlogArticlePage({ params }: PageProps) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  if (!(blogSlugs as readonly string[]).includes(slug)) {
+  const post = getPost(slug);
+  if (!post) {
+    return {};
+  }
+
+  return {
+    title: post.title,
+    description: post.description,
+    alternates: {
+      canonical: `https://jet.framer.website/blog/${post.slug}`,
+    },
+  };
+}
+
+export default async function Page({ params }: PageProps) {
+  const { slug } = await params;
+  if (!getPost(slug)) {
     notFound();
   }
 
-  return <PageHeading title={titleFromSlug(slug)} />;
+  return <ArticlePage slug={slug} />;
 }
