@@ -19,7 +19,14 @@
   width: min(1200px, calc(100% - 32px));
   margin-right: auto;
   margin-left: auto;
-  border: 1px dashed var(--rule);
+  background-image:
+    repeating-linear-gradient(90deg, var(--rule) 0 12px, transparent 12px 18px),
+    repeating-linear-gradient(90deg, var(--rule) 0 12px, transparent 12px 18px),
+    repeating-linear-gradient(180deg, var(--rule) 0 12px, transparent 12px 18px),
+    repeating-linear-gradient(180deg, var(--rule) 0 12px, transparent 12px 18px);
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  background-position: top left, bottom left, top left, top right;
+  background-size: 100% 1px, 100% 1px, 1px 100%, 1px 100%;
 }
 
 .block {
@@ -80,7 +87,7 @@
 .hero p,
 .cta p {
   max-width: 500px;
-  margin: 24px 0 0;
+  margin: 0;
   color: var(--muted);
   font-size: 16px;
   font-variation-settings: "opsz" 14, "wght" 450;
@@ -102,12 +109,8 @@
 .band {
   position: relative;
   flex: none;
-  height: 96px;
+  height: 150px;
   overflow: hidden;
-}
-
-.bandBottom {
-  transform: rotate(180deg);
 }
 
 .bandRays,
@@ -119,15 +122,21 @@
 }
 
 .bandRays {
-  filter: hue-rotate(1deg) brightness(1.8) contrast(1.25);
-  mask-image: url("/about/hero-mask.svg"),
-    linear-gradient(0deg, transparent 35%, rgba(0, 0, 0, 0.7) 100%);
-  mask-repeat: repeat, no-repeat;
-  mask-size: 49px 49px, 100% 100%;
-  -webkit-mask-image: url("/about/hero-mask.svg"),
-    linear-gradient(0deg, transparent 35%, rgba(0, 0, 0, 0.7) 100%);
-  -webkit-mask-repeat: repeat, no-repeat;
-  -webkit-mask-size: 49px 49px, 100% 100%;
+  filter: hue-rotate(1deg);
+  mask-image:
+    url("/about/connections-mask.svg"),
+    linear-gradient(0deg, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.7) 100%);
+  mask-repeat: repeat, repeat;
+  mask-position: center, 0 0;
+  mask-size: 17.15px 17.15px, auto;
+  mask-composite: add, add;
+  -webkit-mask-image:
+    url("/about/connections-mask.svg"),
+    linear-gradient(0deg, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.7) 100%);
+  -webkit-mask-repeat: repeat, repeat;
+  -webkit-mask-position: center, 0 0;
+  -webkit-mask-size: 17.15px 17.15px, auto;
+  -webkit-mask-composite: plus-lighter, plus-lighter;
 }
 
 .bandRays > :first-child,
@@ -151,19 +160,20 @@
   position: relative;
   z-index: 1;
   display: flex;
-  flex: 1;
+  flex: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 28px 24px;
+  gap: 24px;
+  padding: 50px 24px;
   text-align: center;
 }
 
 .mission {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  padding: 40px 24px 48px;
+  gap: 20px;
+  padding: 50px 24px;
 }
 
 .mission h2 {
@@ -192,18 +202,19 @@
   flex-direction: column;
   align-items: center;
   gap: 24px;
-  padding: 40px 24px 28px;
+  padding: 50px 24px;
   border-bottom: 1px dashed var(--rule);
   text-align: center;
 }
 
 .powersHead p,
 .teamHead p {
-  max-width: 640px;
+  max-width: 593px;
+  letter-spacing: -0.01em;
 }
 
-.teamHead p {
-  max-width: 760px;
+.teamHead h2 {
+  max-width: 1000px;
 }
 
 .powers {
@@ -310,7 +321,7 @@
   flex-direction: column;
   gap: 24px;
   align-items: flex-start;
-  padding: 34px 24px;
+  padding: 24px;
 }
 
 .hiring h2 {
@@ -398,8 +409,8 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 16px;
-  padding: 24px 24px 34px;
+  gap: 14px;
+  padding: 24px;
 }
 
 .tag {
@@ -432,7 +443,6 @@
 .cta {
   position: relative;
   display: grid;
-  min-height: 360px;
   place-items: center;
   overflow: hidden;
   text-align: center;
@@ -473,13 +483,23 @@
   outline-offset: 3px;
 }
 
+@media (max-width: 809.98px) {
+  .ctaCopy {
+    padding: 24px 20px;
+  }
+
+  .cta p {
+    max-width: 270px;
+  }
+
+  .postCopy {
+    padding: 24px 34px 34px;
+  }
+}
+
 @media (min-width: 810px) {
   .hero .frame {
     min-height: 681px;
-  }
-
-  .band {
-    height: 120px;
   }
 
   .mission {
@@ -579,7 +599,8 @@
   }
 
   .postCopy {
-    padding: 24px 34px 34px;
+    min-height: 239px;
+    padding: 36px 34px 34px;
   }
 
   .cta {
@@ -596,7 +617,4 @@
     height: 150px;
   }
 
-  .teamHead p {
-    max-width: 820px;
-  }
 }

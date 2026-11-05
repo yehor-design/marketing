@@ -369,7 +369,7 @@ export function PricingPage() {
         <div className={styles.band} aria-hidden="true">
           <div className={styles.bandMask}>
             <div className={styles.bandGlow}>
-              <PulseGradient />
+              <PulseGradient variant="dots" />
               <div className={styles.grain} />
             </div>
           </div>
@@ -384,7 +384,7 @@ export function PricingPage() {
         <div className={styles.band} aria-hidden="true">
           <div className={styles.bandMask}>
             <div className={styles.bandGlow}>
-              <PulseGradient />
+              <PulseGradient variant="dots" />
               <div className={styles.grain} />
             </div>
           </div>

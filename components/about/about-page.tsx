@@ -167,7 +167,17 @@ export function AboutPage() {
         <div className={styles.frame}>
           <div className={styles.band} aria-hidden="true">
             <div className={styles.bandRays}>
-              <GodRays label="" />
+              <GodRays
+                label=""
+                paper
+                speed={5}
+                frequency={0.1}
+                offsetY={1.2}
+                spotty={5}
+                density={0.5}
+                centerIntensity={0.57}
+                centerSize={0.8}
+              />
             </div>
             <div className={styles.grain} />
           </div>
@@ -178,9 +188,19 @@ export function AboutPage() {
               scale with ease.
             </p>
           </div>
-          <div className={`${styles.band} ${styles.bandBottom}`} aria-hidden="true">
+          <div className={styles.band} aria-hidden="true">
             <div className={styles.bandRays}>
-              <GodRays label="" />
+              <GodRays
+                label=""
+                paper
+                speed={5}
+                frequency={0.1}
+                offsetY={1.2}
+                spotty={5}
+                density={0.5}
+                centerIntensity={0.57}
+                centerSize={0.8}
+              />
             </div>
             <div className={styles.grain} />
           </div>

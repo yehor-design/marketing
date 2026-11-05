@@ -19,6 +19,53 @@ const PULSE_ITERATIONS = 3;
 const PULSE_SHAPE_SCALE = 0.79;
 const PULSE_SEED = -8130 * (1000 / 120) * 0.001;
 
+type PulseConfig = {
+  scale: number;
+  rotation: number;
+  proportion: number;
+  softness: number;
+  distortion: number;
+  swirl: number;
+  iterations: number;
+  shape: number;
+  shapeScale: number;
+  seed: number;
+  speed: number;
+};
+
+/** Homepage hero. Paper Gradient Pulse preset, custom colors, Radial variant. */
+const PULSE_CONFIG: PulseConfig = {
+  scale: 0,
+  rotation: PULSE_ROTATION,
+  proportion: PULSE_PROPORTION,
+  softness: PULSE_SOFTNESS,
+  distortion: PULSE_DISTORTION,
+  swirl: PULSE_SWIRL,
+  iterations: PULSE_ITERATIONS,
+  shape: 0,
+  shapeScale: PULSE_SHAPE_SCALE,
+  seed: PULSE_SEED,
+  speed: 0,
+};
+
+/**
+ * Pricing hero bands. Animated Backgrounds variant Dots (`me0hpdY6q`):
+ * custom stripes, not the Pulse preset. Seed is offset -1000.
+ */
+const DOTS_CONFIG: PulseConfig = {
+  scale: 0.64,
+  rotation: (-318 * Math.PI) / 180,
+  proportion: 0.77,
+  softness: 0,
+  distortion: 58 / 50,
+  swirl: 0.17,
+  iterations: 0,
+  shape: 1,
+  shapeScale: 0,
+  seed: -10000 * (1000 / 120) * 0.001,
+  speed: 0,
+};
+
 function pulseSpeed(amount: number) {
   const x1 = 0.65;
   const x2 = 0.88;
@@ -39,6 +86,8 @@ function pulseSpeed(amount: number) {
 }
 
 const SPEED = pulseSpeed(0.2);
+PULSE_CONFIG.speed = SPEED;
+DOTS_CONFIG.speed = pulseSpeed(0.24);
 
 const FRAGMENT = `#version 300 es
 precision highp float;
@@ -194,16 +243,18 @@ function paintFallback(
   cssWidth: number,
   cssHeight: number,
   time: number,
+  config: PulseConfig,
 ) {
   const image = ctx.createImageData(width, height);
   const data = image.data;
-  const rotation = PULSE_ROTATION * 0.5 * Math.PI;
+  const rotation = config.rotation * 0.5 * Math.PI;
   const cosine = Math.cos(rotation);
   const sine = Math.sin(rotation);
-  const edges = 1 - PULSE_SOFTNESS;
-  const edgeBlur = 0.01;
-  const lift = 0.48 * Math.sqrt(Math.abs(PULSE_PROPORTION - 0.5));
+  const edges = 1 - config.softness;
+  const edgeBlur = 0.01 + 0.01 * config.scale;
+  const lift = 0.48 * Math.sign(config.proportion - 0.5) * Math.sqrt(Math.abs(config.proportion - 0.5));
   const clock = 0.5 * time;
+  const noiseScale = 0.0005 + 0.006 * config.scale;
   const color1 = [0, 230, 197];
   const color2 = [50, 82, 77];
 
@@ -213,8 +264,8 @@ function paintFallback(
       const fragY = ((height - y - 0.5) / height) * cssHeight;
       let uvX = fragX / cssWidth - 0.5;
       let uvY = fragY / cssHeight - 0.5;
-      uvX *= 0.0005 * cssWidth;
-      uvY *= 0.0005 * cssHeight;
+      uvX *= noiseScale * cssWidth;
+      uvY *= noiseScale * cssHeight;
       const rotX = cosine * uvX - sine * uvY;
       const rotY = sine * uvX + cosine * uvY;
       uvX = rotX + 0.5;
@@ -222,16 +273,30 @@ function paintFallback(
       const n1 = valueNoise(uvX + clock, uvY + clock);
       const n2 = valueNoise(uvX * 2 - clock, uvY * 2 - clock);
       const angle = n1 * Math.PI * 2;
-      uvX += 4 * PULSE_DISTORTION * n2 * Math.cos(angle);
-      uvY += 4 * PULSE_DISTORTION * n2 * Math.sin(angle);
-      for (let i = 1; i <= PULSE_ITERATIONS; i += 1) {
-        uvX += (PULSE_SWIRL / i) * Math.cos(clock + i * 1.5 * uvY);
-        uvY += (PULSE_SWIRL / i) * Math.cos(clock + i * uvX);
+      uvX += 4 * config.distortion * n2 * Math.cos(angle);
+      uvY += 4 * config.distortion * n2 * Math.sin(angle);
+      const iterations = Math.ceil(Math.min(30, Math.max(1, config.iterations)));
+      for (let i = 1; i <= iterations; i += 1) {
+        uvX += (Math.min(2, Math.max(0, config.swirl)) / i) * Math.cos(clock + i * 1.5 * uvY);
+        uvY += (Math.min(2, Math.max(0, config.swirl)) / i) * Math.cos(clock + i * uvX);
       }
-      const checksX = uvX * (0.5 + 3.5 * PULSE_SHAPE_SCALE);
-      const checksY = uvY * (0.5 + 3.5 * PULSE_SHAPE_SCALE);
-      const shape = 0.5 + 0.5 * Math.sin(checksX) * Math.cos(checksY);
-      const mixer = shape + lift;
+      let shape = 0;
+      if (config.shape < 0.5) {
+        const checksX = uvX * (0.5 + 3.5 * config.shapeScale);
+        const checksY = uvY * (0.5 + 3.5 * config.shapeScale);
+        shape = 0.5 + 0.5 * Math.sin(checksX) * Math.cos(checksY);
+      } else if (config.shape < 1.5) {
+        const stripe = fract(uvY * (0.25 + 3 * config.shapeScale));
+        shape = smooth(0, 0.55, stripe) * smooth(1, 0.45, stripe);
+      } else {
+        let sh = 1 - uvY;
+        sh -= 0.5;
+        sh /= noiseScale * cssHeight;
+        sh += 0.5;
+        const shapeScaling = 0.2 * (1 - config.shapeScale);
+        shape = smooth(0.45 - shapeScaling, 0.55 + shapeScaling, sh + 0.3 * (config.proportion - 0.5));
+      }
+      const mixer = config.shape < 1.5 ? shape + lift : shape;
       const r1 = smooth(0.35 * edges, 0.7 - 0.35 * edges + 0.5 * edgeBlur, mixer);
       const r2 = smooth(0.3 + 0.35 * edges, 1 - 0.35 * edges + edgeBlur, mixer);
       let red = color1[0] + (color2[0] - color1[0]) * r1;
@@ -250,11 +315,13 @@ function paintFallback(
   ctx.putImageData(image, 0, 0);
 }
 
-export function PulseGradient() {
+export function PulseGradient({ variant = "pulse" }: { variant?: "pulse" | "dots" } = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const glRef = useRef<WebGL2RenderingContext | null>(null);
   const programRef = useRef<WebGLProgram | null>(null);
-  const timeRef = useRef(PULSE_SEED);
+  const configRef = useRef(variant === "dots" ? DOTS_CONFIG : PULSE_CONFIG);
+  configRef.current = variant === "dots" ? DOTS_CONFIG : PULSE_CONFIG;
+  const timeRef = useRef(configRef.current.seed);
   const lastFallback = useRef(0);
 
   const draw = useCallback((time: number) => {
@@ -267,6 +334,7 @@ export function PulseGradient() {
     if (rect.width < 2 || rect.height < 2) {
       return;
     }
+    const config = configRef.current;
     const gl = glRef.current;
     const program = programRef.current;
     if (gl && program) {
@@ -283,18 +351,18 @@ export function PulseGradient() {
       gl.uniform1f(loc("u_time"), time);
       gl.uniform1f(loc("u_pixelRatio"), ratio);
       gl.uniform2f(loc("u_resolution"), width, height);
-      gl.uniform1f(loc("u_scale"), 0);
-      gl.uniform1f(loc("u_rotation"), PULSE_ROTATION);
+      gl.uniform1f(loc("u_scale"), config.scale);
+      gl.uniform1f(loc("u_rotation"), config.rotation);
       gl.uniform4f(loc("u_color1"), 0, 230 / 255, 197 / 255, 1);
       gl.uniform4f(loc("u_color2"), 50 / 255, 82 / 255, 77 / 255, 1);
       gl.uniform4f(loc("u_color3"), 0, 0, 0, 1);
-      gl.uniform1f(loc("u_proportion"), PULSE_PROPORTION);
-      gl.uniform1f(loc("u_softness"), PULSE_SOFTNESS);
-      gl.uniform1f(loc("u_shape"), 0);
-      gl.uniform1f(loc("u_shapeScale"), PULSE_SHAPE_SCALE);
-      gl.uniform1f(loc("u_distortion"), PULSE_DISTORTION);
-      gl.uniform1f(loc("u_swirl"), PULSE_SWIRL);
-      gl.uniform1f(loc("u_swirlIterations"), PULSE_ITERATIONS);
+      gl.uniform1f(loc("u_proportion"), config.proportion);
+      gl.uniform1f(loc("u_softness"), config.softness);
+      gl.uniform1f(loc("u_shape"), config.shape);
+      gl.uniform1f(loc("u_shapeScale"), config.shapeScale);
+      gl.uniform1f(loc("u_distortion"), config.distortion);
+      gl.uniform1f(loc("u_swirl"), config.swirl);
+      gl.uniform1f(loc("u_swirlIterations"), config.iterations);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       return;
     }
@@ -310,7 +378,7 @@ export function PulseGradient() {
     if (!ctx) {
       return;
     }
-    paintFallback(ctx, width, height, rect.width, rect.height, time);
+    paintFallback(ctx, width, height, rect.width, rect.height, time, config);
   }, []);
 
   useEffect(() => {
@@ -347,7 +415,7 @@ export function PulseGradient() {
         }
       }
     }
-    draw(PULSE_SEED);
+    draw(timeRef.current);
     const frame = canvas.parentElement;
     if (!frame) {
       return;
@@ -386,7 +454,7 @@ export function PulseGradient() {
       const delta = now - last;
       last = now;
       if (!motionQuery.matches && visible && delta > 0) {
-        timeRef.current += delta * SPEED * 0.001;
+        timeRef.current += delta * configRef.current.speed * 0.001;
       }
       if (glRef.current || now - lastFallback.current >= 240) {
         if (!glRef.current) {
