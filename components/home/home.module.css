@@ -74,11 +74,13 @@
   overflow: hidden;
 }
 
+.heroVeil,
 .heroMedia {
   position: absolute;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
+  background: #000;
   mask-image: radial-gradient(
     58.8% 105% at 50% 100%,
     #000 0%,

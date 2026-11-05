@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useId, useState } from "react";
-import { GodRays, Pulser, RollingText } from "@/components/motion";
+import { Pulser, PulseGradient, RollingText } from "@/components/motion";
 import styles from "@/components/pricing/pricing.module.css";
 
 const NBSP = "\u00A0";
@@ -366,12 +366,13 @@ export function PricingPage() {
   return (
     <div className={styles.pricing}>
       <section className={styles.hero} aria-labelledby="pricing-title">
-        <div className={styles.heroMedia} aria-hidden="true">
-          <div className={styles.heroWash}>
-            <GodRays label="Pricing hero background" />
+        <div className={styles.band} aria-hidden="true">
+          <div className={styles.bandMask}>
+            <div className={styles.bandGlow}>
+              <PulseGradient />
+              <div className={styles.grain} />
+            </div>
           </div>
-          <div className={styles.dots} />
-          <div className={styles.grain} />
         </div>
         <div className={styles.heroCopy}>
           <h1 id="pricing-title">Choose your Jet plan</h1>
@@ -379,6 +380,14 @@ export function PricingPage() {
             Lightning-fast performance for every website—find the perfect plan for your needs and scale
             with ease.
           </p>
+        </div>
+        <div className={styles.band} aria-hidden="true">
+          <div className={styles.bandMask}>
+            <div className={styles.bandGlow}>
+              <PulseGradient />
+              <div className={styles.grain} />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -532,8 +541,10 @@ export function PricingPage() {
             <div className={styles.grain} />
           </div>
           <div className={styles.ctaCopy}>
-            <h2 id="pricing-cta">Boost your site speed today.</h2>
-            <p>Try Jet now—one click, instant performance. No risk, cancel anytime.</p>
+            <div className={styles.ctaText}>
+              <h2 id="pricing-cta">Boost your site speed today.</h2>
+              <p>Try Jet now—one click, instant performance. No risk, cancel anytime.</p>
+            </div>
             <RollLink href={WAITLIST_HREF} text={`Join${NBSP}waitlist`} tone="primary" />
           </div>
         </div>

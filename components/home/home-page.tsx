@@ -387,11 +387,13 @@ export function HomePage() {
     <div className={styles.home}>
       <section className={styles.hero} aria-labelledby="hero-title">
         <div className={`${styles.frame} ${styles.dash} ${styles.heroFrame}`}>
-          <div className={styles.heroMedia}>
-            <div className={styles.heroShafts}>
-              <div className={styles.heroGlow}>
-                <PulseGradient />
-                <div className={styles.grain} />
+          <div className={styles.heroVeil}>
+            <div className={styles.heroMedia}>
+              <div className={styles.heroShafts}>
+                <div className={styles.heroGlow}>
+                  <PulseGradient />
+                  <div className={styles.grain} />
+                </div>
               </div>
             </div>
           </div>

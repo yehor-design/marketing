@@ -25,72 +25,113 @@
 .cards,
 .table,
 .ctaCard {
-  border: 1px dashed var(--rule);
+  background-image:
+    repeating-linear-gradient(90deg, var(--rule) 0 12px, transparent 12px 18px),
+    repeating-linear-gradient(90deg, var(--rule) 0 12px, transparent 12px 18px),
+    repeating-linear-gradient(180deg, var(--rule) 0 12px, transparent 12px 18px),
+    repeating-linear-gradient(180deg, var(--rule) 0 12px, transparent 12px 18px);
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  background-position: top left, bottom left, top left, top right;
+  background-size: 100% 1px, 100% 1px, 1px 100%, 1px 100%;
 }
 
 .hero {
   position: relative;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 480px;
+  flex-direction: column;
   overflow: hidden;
   text-align: center;
 }
 
-.heroMedia,
-.ctaMedia {
-  position: absolute;
-  inset: 0;
+.band {
+  position: relative;
+  flex: none;
+  height: 150px;
   overflow: hidden;
+  background: #000;
   pointer-events: none;
 }
 
-.heroWash,
-.dots,
-.grain {
+.bandMask {
   position: absolute;
   inset: 0;
+  filter: hue-rotate(1deg);
+  mask-image:
+    url("/pricing/dot-mask.svg"),
+    linear-gradient(0deg, rgba(0, 0, 0, 0) 46%, rgba(0, 0, 0, 0.04) 100%);
+  mask-repeat: repeat, repeat;
+  mask-position:
+    50% 50%,
+    0% 0%;
+  mask-size:
+    11.025px 11.025px,
+    auto;
+  mask-composite: add, add;
+  -webkit-mask-image:
+    url("/pricing/dot-mask.svg"),
+    linear-gradient(0deg, rgba(0, 0, 0, 0) 46%, rgba(0, 0, 0, 0.04) 100%);
+  -webkit-mask-repeat: repeat, repeat;
+  -webkit-mask-position:
+    50% 50%,
+    0% 0%;
+  -webkit-mask-size:
+    11.025px 11.025px,
+    auto;
+  -webkit-mask-composite: plus-lighter, plus-lighter;
 }
 
-.heroWash {
-  filter: hue-rotate(1deg) brightness(5) contrast(1.45);
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9), transparent 78%);
-  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9), transparent 78%);
+.bandGlow {
+  position: absolute;
+  inset: 0;
+  filter: brightness(1.5) contrast(0.85);
 }
 
-.heroWash > :global(div),
+.bandGlow > :global(div),
 .ctaMedia > :global(div) {
   width: 100%;
   height: 100%;
   aspect-ratio: auto;
 }
 
-.dots {
-  background-image: radial-gradient(rgba(0, 230, 197, 0.55) 1px, transparent 1.2px);
-  background-size: 14px 14px;
-  mask-image: linear-gradient(180deg, #000 10%, transparent 82%);
-  -webkit-mask-image: linear-gradient(180deg, #000 10%, transparent 82%);
-  opacity: 0.55;
-}
-
 .grain {
+  position: absolute;
+  inset: 0;
   background-image: url("/home/grain.png");
   background-repeat: repeat;
-  background-size: 40px;
-  opacity: 0.45;
+  background-size: 40px auto;
+  opacity: 0.5;
+  pointer-events: none;
 }
 
-.heroCopy,
+.heroCopy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+  padding: 50px 24px;
+}
+
 .ctaCopy {
   position: relative;
   z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: min(650px, 100%);
-  max-width: 650px;
-  padding: 72px 20px;
+  gap: 28px;
+  width: 100%;
+  padding: 44px;
+}
+
+.ctaText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
 }
 
 .hero h1,
@@ -103,10 +144,14 @@
   line-height: 1.1;
 }
 
+.hero h1 {
+  width: 100%;
+  max-width: 650px;
+}
+
 .hero p,
 .cta p {
-  max-width: 34em;
-  margin: 24px 0 0;
+  margin: 0;
   color: var(--muted);
   font-size: 16px;
   font-weight: 1000;
@@ -115,12 +160,23 @@
   line-height: 1.5;
 }
 
+.hero p {
+  width: 100%;
+  max-width: 500px;
+}
+
 .cta h2 {
-  max-width: 11ch;
+  width: 100%;
+  max-width: 500px;
+}
+
+.cta p {
+  width: 100%;
+  max-width: 344px;
 }
 
 .spacer {
-  height: 80px;
+  height: 100px;
   border-right: 1px dashed var(--rule);
   border-left: 1px dashed var(--rule);
 }
@@ -129,6 +185,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-top: 34px;
 }
 
 .toggle {
@@ -148,11 +205,11 @@
 .toggleOn,
 .toggleOff {
   display: inline-flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
   justify-content: center;
   height: 32px;
-  padding: 0 14px;
+  padding: 0 10px;
   border: 0;
   border-radius: 10px;
   background: transparent;
@@ -162,6 +219,11 @@
   font-variation-settings: "opsz" 14, "wght" 450;
   line-height: 1.5;
   cursor: pointer;
+}
+
+.toggleOn:last-child,
+.toggleOff:last-child {
+  padding: 0 4px 0 10px;
 }
 
 .toggleOn {
@@ -183,7 +245,7 @@
   font-size: 12px;
   font-weight: 1000;
   font-variation-settings: "opsz" 14, "wght" 550;
-  line-height: 1;
+  line-height: 19.2px;
 }
 
 .cards {
@@ -196,8 +258,8 @@
 .cardPopular {
   position: relative;
   display: flex;
-  min-height: 0;
-  padding: 28px 24px 32px;
+  min-height: 500px;
+  padding: 34px;
   color: #fff;
   text-decoration: none;
 }
@@ -290,8 +352,8 @@
 }
 
 .planName {
-  font-size: 16px;
-  line-height: 1.4;
+  font-size: 20px;
+  line-height: 30px;
   letter-spacing: -0.01em;
 }
 
@@ -299,17 +361,17 @@
   display: inline-flex;
   align-items: center;
   height: 24px;
-  padding: 0 10px;
-  border-radius: 100px;
+  padding: 0 6px;
+  border-radius: 6px;
   background: var(--accent);
   color: #000;
   font-size: 12px;
-  line-height: 1;
+  line-height: 19.2px;
   white-space: nowrap;
 }
 
 .description {
-  margin-top: 12px;
+  margin-top: 20px;
   color: var(--muted);
   font-size: 14px;
   font-weight: 1000;
@@ -318,10 +380,14 @@
 }
 
 .free {
-  display: flex;
-  align-items: flex-end;
-  min-height: 39px;
-  margin-top: 22px;
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  height: 40px;
+  margin-top: 26px;
+  padding: 0 16px;
+  border: 1px dashed #333;
+  border-radius: 100px;
   color: var(--muted);
   font-size: 16px;
   font-weight: 1000;
@@ -333,9 +399,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  align-items: flex-end;
+  align-items: center;
   min-height: 39px;
-  margin-top: 22px;
+  margin-top: 26px;
 }
 
 .amount {
@@ -365,7 +431,7 @@
 .divider,
 .dividerAccent {
   height: 2px;
-  margin: 22px 0 18px;
+  margin: 27px 0 34px;
 }
 
 .divider {
@@ -387,7 +453,7 @@
 
 .features li {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: flex-start;
   color: #fff;
   font-size: 14px;
@@ -418,7 +484,7 @@
   align-items: center;
   justify-content: center;
   height: 40px;
-  margin-top: 28px;
+  margin-top: 0;
   padding: 0 18px;
   border-radius: 20px;
   font-size: 14px;
@@ -465,7 +531,7 @@
 }
 
 .cta .primary {
-  margin-top: 28px;
+  margin-top: 0;
 }
 
 .switcher {
@@ -520,14 +586,16 @@
 .category {
   display: flex;
   align-items: center;
-  min-height: 72px;
+  height: 90px;
+  min-height: 0;
   margin: 0;
-  padding: 16px 20px;
+  padding: 0 20px;
+  overflow: hidden;
   border-top: 1px dashed var(--rule);
   font-size: 16px;
   font-weight: 1000;
-  letter-spacing: -0.01em;
-  line-height: 1.4;
+  letter-spacing: 0;
+  line-height: 24px;
 }
 
 .rowGrey,
@@ -535,7 +603,9 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  min-height: 64px;
+  height: 64px;
+  min-height: 0;
+  overflow: hidden;
   border-top: 1px dashed var(--rule);
 }
 
@@ -552,8 +622,10 @@
   display: flex;
   gap: 8px;
   align-items: center;
+  min-height: 0;
   margin: 0;
-  padding: 16px 20px;
+  padding: 0 20px;
+  overflow: hidden;
   font-size: 14px;
   font-weight: 1000;
   font-variation-settings: "opsz" 14, "wght" 550;
@@ -641,6 +713,10 @@
 }
 
 .ctaMedia {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
   mask-image: url("/home/cta-lines.svg");
   mask-repeat: no-repeat;
   mask-position: center bottom;
@@ -683,15 +759,11 @@
   line-height: 1.4;
 }
 
+.push {
+  margin-top: auto;
+}
+
 @media (min-width: 810px) {
-  .hero {
-    min-height: 560px;
-  }
-
-  .spacer {
-    height: 100px;
-  }
-
   .cards {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -710,12 +782,12 @@
     border-left: 1px dashed var(--rule);
   }
 
-  .push {
-    margin-top: auto;
+  .ctaCard {
+    min-height: 382px;
   }
 
-  .ctaCard {
-    min-height: 381px;
+  .description {
+    max-width: 240px;
   }
 }
 
@@ -728,23 +800,21 @@
     width: min(1200px, calc(100% - 48px));
   }
 
-  .hero {
-    min-height: 620px;
-  }
-
   .switcher {
     display: none;
   }
 
   .head {
     display: grid;
-    grid-template-columns: 1.15fr repeat(3, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: center;
+    min-height: 90px;
     border-bottom: 1px dashed var(--rule);
   }
 
   .rowGrey,
   .rowBlack {
-    grid-template-columns: 1.15fr repeat(3, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .value,
@@ -752,16 +822,11 @@
     display: flex;
   }
 
-  .category {
-    min-height: 90px;
-    padding-right: 28px;
-    padding-left: 28px;
-  }
-
+  .category,
   .rowGrey h5,
   .rowBlack h5 {
     padding-right: 20px;
-    padding-left: 28px;
+    padding-left: 20px;
   }
 }
 
