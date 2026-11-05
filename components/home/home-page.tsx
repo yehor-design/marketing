@@ -5,7 +5,10 @@ import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { GodRays, Pulser, RollingText, orderedDither, randomDither } from "@/components/motion";
 import { usePrefersReducedMotion } from "@/components/motion/use-reduced-motion";
+import { Announcement } from "@/components/announcement";
 import { DitherImage } from "@/components/home/dither-image";
+import { Halftone } from "@/components/home/halftone";
+import { PhosphorIcon } from "@/components/home/phosphor-icon";
 import styles from "@/components/home/home.module.css";
 
 const NBSP = "\u00A0";
@@ -13,25 +16,25 @@ const NBSP = "\u00A0";
 const benefits = [
   {
     title: "Better user experience",
-    body: "Load pages in milliseconds. Keep visitors coming back.",
+    body: "Load pages in milliseconds.\nKeep visitors coming back.",
     src: "/home/benefit-wand.png",
     label: "Dithered version of web screen with a magic wand with random dithering applied",
   },
   {
     title: "Improved SEO",
-    body: "Rank higher on Google. Stand out from competitors.",
+    body: "Rank higher on Google.\nStand out from competitors.",
     src: "/home/benefit-podium.png",
     label: "Dithered version of podium with #1 text with random dithering applied",
   },
   {
     title: "Increased conversion",
-    body: "Turn visitors into customers. Boost your bottom line.",
+    body: "Turn visitors into customers.\nBoost your bottom line.",
     src: "/home/benefit-lightning.png",
     label: "Dithered version of lightning with lines around with random dithering applied",
   },
   {
     title: "Cost savings",
-    body: "Reduce hosting expenses. Eliminate performance headaches.",
+    body: "Reduce hosting expenses.\nEliminate performance headaches.",
     src: "/home/benefit-coins.png",
     label: "Dithered version of stacked coins with random dithering applied",
   },
@@ -245,12 +248,26 @@ const faqs = [
   },
 ] as const;
 
-const logoSets = [
-  ["/home/logo-1.svg", "/home/logo-2.svg", "/home/logo-3.svg"],
-  ["/home/logo-4.svg", "/home/logo-5.svg", "/home/logo-6.svg"],
-];
+const logoColumns = [
+  ["/home/logo-1.svg", "/home/logo-4.svg"],
+  ["/home/logo-2.svg", "/home/logo-5.svg"],
+  ["/home/logo-3.svg", "/home/logo-6.svg"],
+] as const;
+
+const logoPhases = [
+  [0, 0, 0],
+  [1, 0, 0],
+  [1, 1, 0],
+  [1, 1, 1],
+  [0, 1, 1],
+  [0, 0, 1],
+  [0, 0, 0],
+] as const;
+
+const logoWaits = [1000, 100, 100, 2000, 100, 100, 1000];
 
 const spring = { type: "spring" as const, duration: 0.6, bounce: 0 };
+const logoSpring = { type: "spring" as const, duration: 0.6, bounce: 0 };
 
 function RollLink({
   href,
@@ -277,98 +294,40 @@ function RollLink({
   );
 }
 
-function Icon({ name }: { name: string }) {
-  const common = {
-    viewBox: "0 0 24 24",
-    width: 24,
-    height: 24,
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.6,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-    "aria-hidden": true,
-  };
-
-  if (name === "link") {
-    return (
-      <svg {...common}>
-        <path d="M10 13a5 5 0 0 0 7.1.1l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1" />
-        <path d="M14 11a5 5 0 0 0-7.1-.1l-2 2a5 5 0 0 0 7.1 7.1l1.1-1.1" />
-      </svg>
-    );
-  }
-  if (name === "wand") {
-    return (
-      <svg {...common}>
-        <path d="M15 4l5 5" />
-        <path d="M14 5l-9 9 2 2 9-9z" />
-        <path d="M5 19l2 2" />
-        <path d="M4 8v2M8 4h2M18 14v2M14 18h2" />
-      </svg>
-    );
-  }
-  if (name === "rocket") {
-    return (
-      <svg {...common}>
-        <path d="M12 15c-3 0-6-3-6-7 4-1 7 1 8 3 2-1 4-4 4-8-4 1-7 4-8 7-1-1-3-1-4-1 0 3 2 6 6 6z" />
-        <path d="M9 14l-3 3 1-4" />
-        <path d="M14 12l4-1-3 4" />
-        <circle cx="13" cy="8" r="1" />
-      </svg>
-    );
-  }
-  if (name === "bolt") {
-    return (
-      <svg {...common}>
-        <path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" />
-      </svg>
-    );
-  }
-  if (name === "broom") {
-    return (
-      <svg {...common}>
-        <path d="M14 4l6 6" />
-        <path d="M4 20c2-4 5-6 10-8l2-2-2-2-8 10z" />
-        <path d="M8 16l2 2" />
-      </svg>
-    );
-  }
-  if (name === "chart") {
-    return (
-      <svg {...common}>
-        <path d="M4 19V5" />
-        <path d="M4 19h16" />
-        <path d="M8 16v-4M12 16V8M16 16v-6" />
-      </svg>
-    );
-  }
+function Check({ color }: { color: string }) {
   return (
-    <svg {...common}>
-      <path d="M6 9a6 6 0 0 1 12 0c0 7 2 7 2 9H4c0-2 2-2 2-9" />
-      <path d="M10 20a2 2 0 0 0 4 0" />
+    <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true" className={styles.check}>
+      <g
+        transform="translate(6.5 8) rotate(180 5.75 4)"
+        fill="none"
+        stroke={color}
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M0 8 L7.784 0" />
+        <path d="M1.773 0 H8 V6.4" />
+      </g>
     </svg>
   );
 }
 
-function Check({ color }: { color: string }) {
+function QuoteMark() {
+  const bubble =
+    "M0 6.988C0 6.926.006 6.866.016 6.807H0V6.698C0 2.999 2.999 0 6.698 0v2.687C4.824 2.687 3.291 4.145 3.17 5.988H6.698V13H0Z";
   return (
-    <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" className={styles.check}>
-      <path
-        d="M3 8.2l3.2 3.2L13 4.6"
-        fill="none"
-        stroke={color}
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg viewBox="0 0 24 24" width="68" height="68" aria-hidden="true" className={styles.mark}>
+      <g transform="translate(4 5)" fill="#00e6c5">
+        <path d={bubble} />
+        <path d={bubble} transform="translate(9.302 0)" />
+      </g>
     </svg>
   );
 }
 
 export function HomePage() {
   const reduced = usePrefersReducedMotion();
-  const [logoSet, setLogoSet] = useState(0);
+  const [logoPhase, setLogoPhase] = useState(0);
   const [phase, setPhase] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const drag = useRef<{ x: number; id: number } | null>(null);
@@ -379,10 +338,10 @@ export function HomePage() {
       return;
     }
     const timer = window.setTimeout(() => {
-      setLogoSet((current) => (current + 1) % logoSets.length);
-    }, 2500);
+      setLogoPhase((current) => (current + 1) % logoPhases.length);
+    }, logoWaits[logoPhase]);
     return () => window.clearTimeout(timer);
-  }, [logoSet, reduced]);
+  }, [logoPhase, reduced]);
 
   useEffect(() => {
     if (reduced !== false) {
@@ -398,26 +357,30 @@ export function HomePage() {
     setPhase((current) => (current + direction + phases.length) % phases.length);
   }
 
+  const logos = logoPhases[logoPhase];
+
   return (
     <div className={styles.home}>
       <section className={styles.hero} aria-labelledby="hero-title">
-        <div className={styles.heroMedia}>
-          <div className={styles.heroFilter}>
-            <div className={styles.heroWash}>
-              <GodRays label="Hero background" />
+        <div className={`${styles.frame} ${styles.dash} ${styles.heroFrame}`}>
+          <div className={styles.heroMedia}>
+            <div className={styles.heroShafts}>
+              <div className={styles.heroGlow}>
+                <GodRays
+                  paper
+                  centerIntensity={0.57}
+                  centerSize={0.8}
+                  label="Hero background"
+                />
+              </div>
+              <div className={styles.grain} />
             </div>
-            <div className={styles.heroLines}>
-              <GodRays label="Hero ray lines" />
-            </div>
-            <div className={styles.grain} />
           </div>
-        </div>
-        <div className={styles.heroCopy}>
-          <h1 id="hero-title">
-            Lightning <br className={styles.phoneBreak} />
-            fast sites. In <br className={styles.phoneBreak} />a single click.
-          </h1>
-          <p>No code, no hassle. Jet simply keeps your website blazing fast 24/7.</p>
+          <Announcement />
+          <div className={styles.heroCopy}>
+            <h1 id="hero-title">Lightning fast sites. In a single click.</h1>
+            <p>No code, no hassle. Jet simply keeps your website blazing fast 24/7.</p>
+          </div>
           <div className={styles.actions}>
             <RollLink href="/waitlist" text={`Join${NBSP}waitlist`} tone="primary" />
             <RollLink href="/#benefits" text="Learn more" tone="secondary" />
@@ -426,98 +389,113 @@ export function HomePage() {
       </section>
 
       <section className={styles.social} aria-label="Trusted by some of the biggest companies">
-        <p>Trusted by some of the biggest companies</p>
-        <div className={styles.logoStage}>
-          {logoSets.map((set, index) => (
-            <div
-              className={index === logoSet ? styles.logoRowOn : styles.logoRow}
-              key={set.join("-")}
-            >
-              {set.map((src) => (
-                <img key={src} src={src} alt="" height={20} />
-              ))}
-            </div>
-          ))}
+        <div className={`${styles.frame} ${styles.dash} ${styles.socialFrame}`}>
+          <p>Trusted by some of the biggest companies</p>
+          <div className={styles.logoStage}>
+            {logoColumns.map((column, index) => (
+              <div className={styles.logoCol} key={column[0]}>
+                <motion.div
+                  className={styles.logoTrack}
+                  animate={{ y: logos[index] === 0 ? "0%" : "-50%" }}
+                  transition={reduced === false ? logoSpring : { duration: 0 }}
+                >
+                  {column.map((src) => (
+                    <div className={styles.logoSlot} key={src}>
+                      <img src={src} alt="" height={20} />
+                    </div>
+                  ))}
+                </motion.div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className={styles.band} id="benefits" aria-labelledby="benefits-title">
-        <h2 id="benefits-title">Accelerate your website with Jet.</h2>
-        <div className={styles.benefitGrid}>
-          {benefits.map((benefit) => (
-            <article className={styles.benefit} key={benefit.title}>
-              <div className={styles.benefitArt}>
-                <DitherImage
-                  src={benefit.src}
-                  label={benefit.label}
-                  preset={{ ...randomDither, brightness: 0, threshold: 152, midtones: 28 }}
-                />
+      <section className={styles.section} id="benefits" aria-labelledby="benefits-title">
+        <div className={`${styles.frame} ${styles.dash}`}>
+          <div className={styles.bandHead}>
+            <h2 id="benefits-title">Accelerate your website with Jet.</h2>
+          </div>
+          <div className={styles.benefitGrid}>
+            {benefits.map((benefit) => (
+              <article className={styles.benefit} key={benefit.title}>
+                <DitherImage src={benefit.src} label={benefit.label} preset={randomDither} />
+                <div className={styles.benefitCopy}>
+                  <h3>{benefit.title}</h3>
+                  <p>{benefit.body}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.section} aria-labelledby="process-title">
+        <div className={`${styles.frame} ${styles.dash}`}>
+          <div className={styles.bandHead}>
+            <h2 id="process-title">Get started in 3 simple steps.</h2>
+          </div>
+          <ol className={styles.steps}>
+            {steps.map((step) => (
+              <li key={step.title}>
+                <span className={styles.stepIcon}>
+                  <PhosphorIcon name={step.icon} />
+                </span>
+                <div className={styles.stepText}>
+                  <p className={styles.stepTitle}>{step.title}</p>
+                  <p className={styles.stepBody}>{step.body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className={styles.section} aria-label="Features">
+        <div className={`${styles.frame} ${styles.dash}`}>
+          {features.map((feature) => (
+            <article
+              className={feature.flip ? styles.featureFlip : styles.feature}
+              key={feature.eyebrow}
+            >
+              <div className={styles.featureCopy}>
+                <p className={styles.eyebrow} style={{ color: feature.color }}>
+                  {feature.eyebrow}
+                </p>
+                <h2>{feature.title}</h2>
+                <p className={styles.featureBody}>{feature.body}</p>
+                <ul className={styles.checks}>
+                  {feature.points.map((point) => (
+                    <li key={point}>
+                      <Check color={feature.color} />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className={styles.benefitCopy}>
-                <h3>{benefit.title}</h3>
-                <p>{benefit.body}</p>
+              <div className={styles.featureArt}>
+                <div className={styles.featureFrame}>
+                  <DitherImage src={feature.src} label={feature.label} preset={orderedDither} />
+                </div>
               </div>
             </article>
           ))}
+          <ul className={styles.tiles}>
+            {tiles.map((tile) => (
+              <li key={tile.title}>
+                <span className={styles.tileIcon}>
+                  <PhosphorIcon name={tile.icon} />
+                </span>
+                <h2>{tile.title}</h2>
+                <p>{tile.body}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
-      <section className={styles.band} aria-labelledby="process-title">
-        <h2 id="process-title">Get started in 3 simple steps.</h2>
-        <ol className={styles.steps}>
-          {steps.map((step) => (
-            <li key={step.title}>
-              <span className={styles.stepIcon}>
-                <Icon name={step.icon} />
-              </span>
-              <p className={styles.stepTitle}>{step.title}</p>
-              <p className={styles.stepBody}>{step.body}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section className={styles.features} aria-label="Features">
-        {features.map((feature) => (
-          <article
-            className={feature.flip ? styles.featureFlip : styles.feature}
-            key={feature.eyebrow}
-          >
-            <div className={styles.featureCopy}>
-              <p className={styles.eyebrow} style={{ color: feature.color }}>
-                {feature.eyebrow}
-              </p>
-              <h2>{feature.title}</h2>
-              <p className={styles.featureBody}>{feature.body}</p>
-              <ul className={styles.checks}>
-                {feature.points.map((point) => (
-                  <li key={point}>
-                    <Check color={feature.color} />
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className={styles.featureArt}>
-              <DitherImage src={feature.src} label={feature.label} preset={orderedDither} />
-            </div>
-          </article>
-        ))}
-        <ul className={styles.tiles}>
-          {tiles.map((tile) => (
-            <li key={tile.title}>
-              <span className={styles.tileIcon}>
-                <Icon name={tile.icon} />
-              </span>
-              <h2>{tile.title}</h2>
-              <p>{tile.body}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
-
       <section
-        className={styles.quotes}
+        className={styles.section}
         aria-labelledby="quotes-title"
         onPointerDown={(event) => {
           drag.current = { x: event.clientX, id: event.pointerId };
@@ -536,19 +514,18 @@ export function HomePage() {
           drag.current = null;
         }}
       >
-        <h2 id="quotes-title">Customers see instant results.</h2>
+        <div className={`${styles.frame} ${styles.dash}`}>
+        <div className={styles.bandHead}>
+          <h2 id="quotes-title">Customers see instant results.</h2>
+        </div>
         <div className={styles.featured}>
           <div className={styles.portrait}>
-            <DitherImage
+            <Halftone
               src={featuredSlides[active.featured].image}
               label={`Portrait of ${featuredSlides[active.featured].name}`}
-              preset={{ ...orderedDither, brightness: 20, threshold: 78, midtones: 90, pixelSize: 2 }}
             />
           </div>
           <div className={styles.featuredCopy}>
-            <span className={styles.mark} aria-hidden="true">
-              “
-            </span>
             <div className={styles.stack}>
               {featuredSlides.map((slide, index) => (
                 <motion.div
@@ -558,9 +535,14 @@ export function HomePage() {
                   transition={reduced === false ? spring : { duration: 0 }}
                   aria-hidden={index === active.featured ? undefined : true}
                 >
-                  <h3>{slide.quote}</h3>
-                  <p className={styles.person}>{slide.name}</p>
-                  <p className={styles.role}>{slide.role}</p>
+                  <div className={styles.quoteTop}>
+                    <QuoteMark />
+                    <h3>{slide.quote}</h3>
+                  </div>
+                  <div>
+                    <p className={styles.featuredName}>{slide.name}</p>
+                    <p className={styles.featuredRole}>{slide.role}</p>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -584,8 +566,8 @@ export function HomePage() {
                         <img src={slide.image} alt="" width={40} height={40} />
                       </span>
                       <span>
-                        <span className={styles.person}>{slide.name}</span>
-                        <span className={styles.role}>{slide.role}</span>
+                        <span className={styles.cardName}>{slide.name}</span>
+                        <span className={styles.cardRole}>{slide.role}</span>
                       </span>
                     </div>
                   </motion.div>
@@ -594,11 +576,13 @@ export function HomePage() {
             </article>
           ))}
         </div>
+        </div>
       </section>
 
-      <section className={styles.faq} aria-labelledby="faq-title">
+      <section className={styles.section} aria-labelledby="faq-title">
+        <div className={`${styles.frame} ${styles.dash} ${styles.faqGrid}`}>
         <h2 id="faq-title">Frequently asked questions.</h2>
-        <div className={styles.faqList}>
+        <div>
           {faqs.map((item, index) => {
             const open = openFaq === index;
             const answerId = `faq-answer-${index}`;
@@ -632,10 +616,11 @@ export function HomePage() {
             );
           })}
         </div>
+        </div>
       </section>
 
       <section className={styles.cta} aria-labelledby="cta-title">
-        <div className={styles.ctaCard}>
+        <div className={`${styles.frame} ${styles.dash} ${styles.ctaCard}`}>
           <div className={styles.ctaMedia}>
             <Pulser />
             <div className={styles.grain} />

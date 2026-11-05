@@ -84,6 +84,7 @@
   display: block;
   width: 100%;
   height: auto;
+  object-fit: cover;
   background: #000;
   image-rendering: pixelated;
 }

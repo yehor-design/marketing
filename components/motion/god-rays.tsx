@@ -25,6 +25,8 @@ export type GodRaysProps = {
   density?: number;
   centerIntensity?: number;
   centerSize?: number;
+  /** Paper GodRays shader. The homepage hero and Pulser use this. */
+  paper?: boolean;
   label?: string;
 };
 
@@ -36,6 +38,7 @@ type Options = {
   density: number;
   centerIntensity?: number;
   centerSize?: number;
+  paper: boolean;
   reduced: boolean | null;
 };
 
@@ -136,6 +139,154 @@ function paint(
   }
 }
 
+const COLOR_A = [0, 230 / 255, 197 / 255, 1] as const;
+const COLOR_B = [50 / 255, 82 / 255, 77 / 255, 1] as const;
+const TWO_PI = Math.PI * 2;
+
+function fract(value: number) {
+  return value - Math.floor(value);
+}
+
+function clamp01(value: number) {
+  return Math.min(1, Math.max(0, value));
+}
+
+function smoothstep(edge0: number, edge1: number, value: number) {
+  const span = edge1 - edge0;
+  if (span === 0) {
+    return value < edge0 ? 0 : 1;
+  }
+  const t = clamp01((value - edge0) / span);
+  return t * t * (3 - 2 * t);
+}
+
+function hash2(x: number, y: number) {
+  return fract(Math.sin(x * 12.9898 + y * 78.233) * 43758.5453123);
+}
+
+function valueNoise(x: number, y: number) {
+  const ix = Math.floor(x);
+  const iy = Math.floor(y);
+  const fx = x - ix;
+  const fy = y - iy;
+  const a = hash2(ix, iy);
+  const b = hash2(ix + 1, iy);
+  const c = hash2(ix, iy + 1);
+  const d = hash2(ix + 1, iy + 1);
+  const ux = fx * fx * (3 - 2 * fx);
+  const uy = fy * fy * (3 - 2 * fy);
+  const x1 = a + (b - a) * ux;
+  const x2 = c + (d - c) * ux;
+  return x1 + (x2 - x1) * uy;
+}
+
+function rotate(x: number, y: number, angle: number) {
+  const cosine = Math.cos(angle);
+  const sine = Math.sin(angle);
+  return [cosine * x - sine * y, sine * x + cosine * y] as const;
+}
+
+function raysShape(x: number, y: number, radiusTerm: number, freq: number, density: number) {
+  const angle = Math.atan2(y, x);
+  const left = valueNoise(angle * freq, radiusTerm);
+  const right = valueNoise((angle - Math.floor(angle / TWO_PI) * TWO_PI) * freq, radiusTerm);
+  const blend = smoothstep(-0.15, 0.15, x);
+  const noise = right + (left - right) * blend;
+  return noise ** density;
+}
+
+function paperSize(canvas: HTMLCanvasElement) {
+  const rect = canvas.getBoundingClientRect();
+  const longest = Math.max(rect.width, rect.height, 1);
+  const scale = Math.min(1, 220 / longest);
+  const width = Math.max(1, Math.round(rect.width * scale));
+  const height = Math.max(1, Math.round(rect.height * scale));
+  if (canvas.width !== width || canvas.height !== height) {
+    canvas.width = width;
+    canvas.height = height;
+  }
+  return { width, height };
+}
+
+function paintPaper(
+  ctx: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  time: number,
+  options: Options,
+) {
+  const image = ctx.createImageData(width, height);
+  const data = image.data;
+  const shortest = Math.min(width, height);
+  const scaleX = width / shortest;
+  const scaleY = height / shortest;
+  const density = 4 - 3 * Math.min(1, Math.max(0, options.density));
+  const spots = 5 * Math.abs(options.spotty);
+  const clock = 0.2 * time;
+  const midIntensity = options.centerIntensity ?? 0;
+  const midSize = Math.abs(options.centerSize ?? 0);
+  const colors = [COLOR_A, COLOR_B];
+
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const uvX = ((x + 0.5) / width - 0.5) * scaleX;
+      const uvY = (0.5 - (y + 0.5) / height) * scaleY + options.offsetY;
+      const radius = Math.hypot(uvX, uvY);
+      let middle = 0;
+      if (midIntensity > 0 && midSize > 0) {
+        middle = midIntensity ** 0.3 * smoothstep(midSize, 0.02 * midSize, 3 * radius);
+        middle **= 5;
+      }
+      const aim = Math.atan2(uvX, Math.max(uvY, 0.001));
+      const lobes: Array<[number, number, number]> = [
+        [-0.58, 0.0024, 1],
+        [-0.4, 0.0011, 0.42],
+        [-0.22, 0.0008, 0.28],
+        [0.16, 0.0008, 0.22],
+        [0.4, 0.0012, 0.36],
+        [0.62, 0.0048, 1],
+      ];
+      let shaft = 0;
+      if (uvY > -0.02) {
+        for (const [center, spread, gain] of lobes) {
+          shaft = Math.max(shaft, gain * Math.exp(-((aim - center) ** 2) / spread));
+        }
+      }
+      let accumR = 0;
+      let accumG = 0;
+      let accumB = 0;
+      let accumA = 0;
+      for (let index = 0; index < colors.length; index += 1) {
+        const [rx, ry] = rotate(uvX, uvY, index + 1);
+        const r1 = radius * (1 + 0.4 * index) - 3 * clock;
+        const r2 = 0.5 * radius * (1 + spots) - 2 * clock;
+        const hashed = fract(Math.sin((index + 10) * 43758.5453123) * 43758.5453123);
+        const freq = (1 + (2 + 0.5 * index) * hashed) * options.frequency;
+        let ray = raysShape(rx, ry, r1, 5 * freq, density);
+        ray *= raysShape(rx, ry, r2, 4 * freq, density);
+        ray += (1 + 4 * ray) * middle;
+        ray += shaft * (index === 0 ? 0.95 : 0.35);
+        ray = Math.min(1, Math.max(0, ray));
+        const color = colors[index];
+        const srcA = color[3] * ray;
+        accumR += color[0] * srcA;
+        accumG += color[1] * srcA;
+        accumB += color[2] * srcA;
+        accumA += srcA;
+      }
+      const grain =
+        (1 / 256) *
+        (fract(Math.sin(0.014 * x * 12.9898 + 0.014 * y * 78.233) * 43758.5453123) - 0.5);
+      const pixel = (y * width + x) * 4;
+      data[pixel] = Math.min(255, Math.max(0, Math.round((accumR + grain) * 255)));
+      data[pixel + 1] = Math.min(255, Math.max(0, Math.round((accumG + grain) * 255)));
+      data[pixel + 2] = Math.min(255, Math.max(0, Math.round((accumB + grain) * 255)));
+      data[pixel + 3] = 255;
+    }
+  }
+  ctx.putImageData(image, 0, 0);
+}
+
 export function GodRays({
   speed = GOD_RAYS_SPEED,
   frequency = GOD_RAYS_FREQUENCY,
@@ -144,6 +295,7 @@ export function GodRays({
   density = GOD_RAYS_DENSITY,
   centerIntensity,
   centerSize,
+  paper = false,
   label = "GodRays",
 }: GodRaysProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -159,6 +311,7 @@ export function GodRays({
     density,
     centerIntensity,
     centerSize,
+    paper,
     reduced,
   });
   options.current = {
@@ -169,6 +322,7 @@ export function GodRays({
     density,
     centerIntensity,
     centerSize,
+    paper,
     reduced,
   };
 
@@ -177,8 +331,16 @@ export function GodRays({
     if (!canvas) {
       return;
     }
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
     if (!ctx) {
+      return;
+    }
+    if (options.current.paper) {
+      const { width, height } = paperSize(canvas);
+      if (width < 2 || height < 2) {
+        return;
+      }
+      paintPaper(ctx, width, height, options.current.reduced !== false ? 0 : time, options.current);
       return;
     }
     const { width, height } = fit(canvas);
@@ -189,8 +351,8 @@ export function GodRays({
   }, []);
 
   useEffect(() => {
-    draw(0);
     const canvas = canvasRef.current;
+    draw(0);
     const frame = canvas?.parentElement ?? canvas;
     if (!frame) {
       return;

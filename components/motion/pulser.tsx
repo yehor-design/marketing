@@ -12,6 +12,7 @@ export function Pulser() {
   // canvasPreview false did not force speed to 0. The published canvas was moving.
   return (
     <GodRays
+      paper
       spotty={PULSER_SPOTTY}
       offsetY={PULSER_OFFSET_Y}
       density={PULSER_DENSITY}

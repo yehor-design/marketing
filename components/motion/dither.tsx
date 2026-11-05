@@ -68,17 +68,6 @@ type DitherProps = {
   label: string;
 };
 
-function mulberry32(seed: number) {
-  let state = seed >>> 0;
-  return () => {
-    state |= 0;
-    state = (state + 0x6d2b79f5) | 0;
-    let t = Math.imul(state ^ (state >>> 15), 1 | state);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
 function sourceSize(source: CanvasImageSource) {
   if (source instanceof HTMLCanvasElement || source instanceof HTMLImageElement) {
     const width = source instanceof HTMLImageElement ? source.naturalWidth : source.width;
@@ -105,79 +94,49 @@ function drawDither(
     midtones: number;
   },
 ) {
-  const { width, height } = sourceSize(source);
-  if (width < 1 || height < 1) {
+  const natural = sourceSize(source);
+  if (natural.width < 1 || natural.height < 1) {
     return;
   }
-  const sample = document.createElement("canvas");
-  sample.width = width;
-  sample.height = height;
-  const sampleCtx = sample.getContext("2d", { willReadFrequently: true });
-  if (!sampleCtx) {
-    return;
-  }
-  sampleCtx.drawImage(source, 0, 0, width, height);
-  const src = sampleCtx.getImageData(0, 0, width, height).data;
+  const ratio = natural.width / natural.height;
+  const long = Math.max(1, Math.floor(800 / Math.max(1, props.pixelSize)));
+  const width = ratio >= 1 ? long : Math.max(1, Math.floor(long * ratio));
+  const height = ratio >= 1 ? Math.max(1, Math.floor(long / ratio)) : long;
   canvas.width = width;
   canvas.height = height;
-  const out = canvas.getContext("2d");
+  const out = canvas.getContext("2d", { willReadFrequently: true });
   if (!out) {
     return;
   }
-  const image = out.createImageData(width, height);
+  out.imageSmoothingEnabled = false;
+  out.drawImage(source, 0, 0, width, height);
+  const image = out.getImageData(0, 0, width, height);
   const data = image.data;
-  const pixelSize = Math.max(1, Math.round(props.pixelSize));
-  const random = mulberry32(
-    (width * 73856093) ^
-      (height * 19349663) ^
-      (props.threshold * 83492791) ^
-      (props.brightness * 50331653) ^
-      (props.midtones * 2654435761) ^
-      (props.algorithm === "ordered" ? 0 : 97),
-  );
-
-  for (let y0 = 0; y0 < height; y0 += pixelSize) {
-    for (let x0 = 0; x0 < width; x0 += pixelSize) {
-      let r = 0;
-      let g = 0;
-      let b = 0;
-      let count = 0;
-      const y1 = Math.min(y0 + pixelSize, height);
-      const x1 = Math.min(x0 + pixelSize, width);
-      for (let y = y0; y < y1; y += 1) {
-        for (let x = x0; x < x1; x += 1) {
-          const index = (y * width + x) * 4;
-          r += src[index];
-          g += src[index + 1];
-          b += src[index + 2];
-          count += 1;
-        }
-      }
-      r /= count;
-      g /= count;
-      b /= count;
-      const luma = Math.min(
-        255,
-        Math.max(0, 0.2126 * r + 0.7152 * g + 0.0722 * b + props.brightness),
+  const gain = 1 + props.brightness / 100;
+  for (let index = 0; index < data.length; index += 4) {
+    data[index] = Math.min(255, Math.max(0, Math.round(data[index] * gain)));
+    data[index + 1] = Math.min(255, Math.max(0, Math.round(data[index + 1] * gain)));
+    data[index + 2] = Math.min(255, Math.max(0, Math.round(data[index + 2] * gain)));
+  }
+  const limit = Math.round((props.threshold * props.midtones) / 50);
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const index = (y * width + x) * 4;
+      const luma = Math.round(
+        0.299 * data[index] + 0.587 * data[index + 1] + 0.114 * data[index + 2],
       );
-      const row = Math.floor(y0 / pixelSize) % 4;
-      const col = Math.floor(x0 / pixelSize) % 4;
-      const pattern =
-        props.algorithm === "ordered" ? (BAYER_4[row][col] + 0.5) / 16 : random();
-      const limit = props.threshold + (pattern - 0.5) * props.midtones;
-      const value = luma >= limit ? 255 : 0;
-      for (let y = y0; y < y1; y += 1) {
-        for (let x = x0; x < x1; x += 1) {
-          const index = (y * width + x) * 4;
-          data[index] = value;
-          data[index + 1] = value;
-          data[index + 2] = value;
-          data[index + 3] = 255;
-        }
-      }
+      const bias =
+        props.algorithm === "ordered"
+          ? (BAYER_4[y % 4][x % 4] - 7.5) * 16
+          : (Math.random() - 0.5) * 100;
+      const on = luma > limit + bias;
+      const value = on ? 255 : 0;
+      data[index] = value;
+      data[index + 1] = value;
+      data[index + 2] = value;
+      data[index + 3] = 255;
     }
   }
-
   out.putImageData(image, 0, 0);
 }
 

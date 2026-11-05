@@ -445,8 +445,10 @@ button {
   height: 34px;
   margin: 0;
   color: #fff;
+  font-family: var(--font-display);
   font-size: 12px;
   font-weight: 500;
+  font-variation-settings: "opsz" 14, "wght" 500;
   line-height: 1.6;
   letter-spacing: 0;
 }
@@ -457,8 +459,10 @@ button {
   align-items: center;
   min-height: 26px;
   color: var(--muted);
+  font-family: var(--font-display);
   font-size: 12px;
   font-weight: 500;
+  font-variation-settings: "opsz" 14, "wght" 500;
   line-height: 1.6;
   letter-spacing: 0;
 }
@@ -475,6 +479,7 @@ button {
 .copyright {
   margin: 0;
   color: var(--faint);
+  font-family: var(--font-display);
   font-size: 12px;
   font-weight: 1000;
   font-variation-settings: "opsz" 14, "wght" 550;
@@ -566,6 +571,32 @@ button {
 }
 
 @media (min-width: 1200px) {
+  .footer-inner {
+    height: 250px;
+    gap: 0;
+    justify-content: space-between;
+  }
+
+  .footer-top {
+    height: 112px;
+    align-items: center;
+  }
+
+  .footer-columns {
+    width: 480px;
+    gap: 43px;
+  }
+
+  .footer-column {
+    width: 131px;
+  }
+
+  .footer-bottom {
+    align-items: flex-end;
+    height: 138px;
+    padding-top: 0;
+  }
+
   .site-header.is-open {
     display: block;
     height: auto;
@@ -619,8 +650,10 @@ button {
     height: 30px;
     padding: 0 12px;
     color: var(--muted);
+    font-family: var(--font-display);
     font-size: 12px;
     font-weight: 500;
+    font-variation-settings: "opsz" 14, "wght" 500;
     line-height: 1.6;
     letter-spacing: 0;
   }
