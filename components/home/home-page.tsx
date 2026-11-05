@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { Pulser, PulseGradient, RollingText, orderedDither, randomDither } from "@/components/motion";
+import { Pulser, PulseGradient, RollingText, orderedDither } from "@/components/motion";
 import { usePrefersReducedMotion } from "@/components/motion/use-reduced-motion";
 import { Announcement } from "@/components/announcement";
 import { DitherImage } from "@/components/home/dither-image";
@@ -17,25 +17,25 @@ const benefits = [
   {
     title: "Better user experience",
     body: "Load pages in milliseconds.\nKeep visitors coming back.",
-    src: "/home/benefit-wand.png",
+    field: "/home/benefit-field-wand.png",
     label: "Dithered version of web screen with a magic wand with random dithering applied",
   },
   {
     title: "Improved SEO",
     body: "Rank higher on Google.\nStand out from competitors.",
-    src: "/home/benefit-podium.png",
+    field: "/home/benefit-field-podium.png",
     label: "Dithered version of podium with #1 text with random dithering applied",
   },
   {
     title: "Increased conversion",
     body: "Turn visitors into customers.\nBoost your bottom line.",
-    src: "/home/benefit-lightning.png",
+    field: "/home/benefit-field-lightning.png",
     label: "Dithered version of lightning with lines around with random dithering applied",
   },
   {
     title: "Cost savings",
     body: "Reduce hosting expenses.\nEliminate performance headaches.",
-    src: "/home/benefit-coins.png",
+    field: "/home/benefit-field-coins.png",
     label: "Dithered version of stacked coins with random dithering applied",
   },
 ] as const;
@@ -414,7 +414,7 @@ export function HomePage() {
           <div className={styles.benefitGrid}>
             {benefits.map((benefit) => (
               <article className={styles.benefit} key={benefit.title}>
-                <DitherImage src={benefit.src} label={benefit.label} preset={randomDither} />
+                <img className={styles.benefitField} src={benefit.field} alt={benefit.label} />
                 <div className={styles.benefitCopy}>
                   <h3>{benefit.title}</h3>
                   <p>{benefit.body}</p>
