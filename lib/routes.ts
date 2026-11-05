@@ -3,16 +3,41 @@ export const navLinks = [
   { href: "/updates", label: "Updates" },
   { href: "/pricing", label: "Pricing" },
   { href: "/about", label: "About" },
-  { href: "/careers", label: "Careers" },
-  { href: "/waitlist", label: "Join waitlist" },
+  { href: "/careers", label: "Careers", badge: "8" },
 ] as const;
 
-export const footerLinks = [
-  { href: "/about", label: "About" },
-  { href: "/careers", label: "Careers" },
-  { href: "/contact", label: "Contact" },
-  { href: "/legal/terms-of-service", label: "Terms" },
-  { href: "/legal/privacy-policy", label: "Privacy" },
+export const footerColumns = [
+  {
+    title: "Product",
+    links: [
+      { href: "/blog", label: "Blog" },
+      { href: "/updates", label: "Updates" },
+      { href: "/pricing", label: "Pricing" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { href: "/about", label: "About us" },
+      { href: "/careers", label: "Careers", badge: "HIRING" },
+      { href: "/contact", label: "Contact" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { href: "/legal/terms-of-service", label: "Terms of service" },
+      { href: "/legal/privacy-policy", label: "Privacy policy" },
+    ],
+  },
+] as const;
+
+export const socialLinks = [
+  { href: "https://facebook.com", label: "Facebook", icon: "facebook" },
+  { href: "https://instagram.com", label: "Instagram", icon: "instagram" },
+  { href: "https://tiktok.com", label: "TikTok", icon: "tiktok" },
+  { href: "https://youtube.com", label: "YouTube", icon: "youtube" },
+  { href: "https://x.com", label: "X", icon: "x" },
 ] as const;
 
 export const blogSlugs = [
