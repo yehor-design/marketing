@@ -1,6 +1,7 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { PageHeading } from "@/components/page-heading";
-import { updateSlugs, titleFromSlug } from "@/lib/routes";
+import { UpdateArticle } from "@/components/updates/changelog";
+import { getUpdate, updates } from "@/lib/updates";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -9,14 +10,31 @@ type PageProps = {
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return updateSlugs.map((slug) => ({ slug }));
+  return updates.map((note) => ({ slug: note.slug }));
 }
 
-export default async function UpdatePage({ params }: PageProps) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  if (!(updateSlugs as readonly string[]).includes(slug)) {
+  const note = getUpdate(slug);
+  if (!note) {
+    return {};
+  }
+
+  return {
+    title: note.title,
+    description: note.description,
+    alternates: {
+      canonical: `https://jet.framer.website/updates/${note.slug}`,
+    },
+  };
+}
+
+export default async function Page({ params }: PageProps) {
+  const { slug } = await params;
+  const note = getUpdate(slug);
+  if (!note) {
     notFound();
   }
 
-  return <PageHeading title={titleFromSlug(slug)} />;
+  return <UpdateArticle note={note} />;
 }
