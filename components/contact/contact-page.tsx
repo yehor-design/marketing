@@ -49,9 +49,18 @@ function Rays() {
   return (
     <div className={styles.band} aria-hidden="true">
       <div className={styles.rays}>
-        <GodRays label="" />
+        <GodRays
+          label=""
+          shader
+          speed={5}
+          spotty={0.8}
+          offsetY={0.54}
+          density={1}
+          centerIntensity={0.47}
+          centerSize={0.8}
+        />
+        <div className={styles.grain} />
       </div>
-      <div className={styles.grain} />
     </div>
   );
 }

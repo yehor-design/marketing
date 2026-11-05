@@ -156,6 +156,7 @@ export function CheckoutPage() {
               muted
               loop
               playsInline
+              poster="/checkout/poster.png"
               aria-label="Website template preview"
             />
           </div>

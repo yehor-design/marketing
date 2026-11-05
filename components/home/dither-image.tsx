@@ -3,7 +3,18 @@
 import { useEffect, useState } from "react";
 import { Dither, orderedDither, randomDither } from "@/components/motion";
 
-type Preset = typeof orderedDither | typeof randomDither;
+type Preset = {
+  algorithm: "ordered" | "random";
+  animation: boolean;
+  intensity: number;
+  interval: number;
+  brightness: number;
+  pixelSize: number;
+  threshold: number;
+  midtones: number;
+  glow?: number;
+  radius?: number;
+};
 
 export function DitherImage({
   src,

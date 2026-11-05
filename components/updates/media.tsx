@@ -4,44 +4,16 @@ import { useEffect, useState } from "react";
 import { Dither, orderedDither } from "@/components/motion";
 import styles from "@/components/updates/updates.module.css";
 
-/**
- * The live dither sizes the bitmap to 800 / pixelSize.
- * Measured canvas on the June note was 200×111, so pixelSize is 4.
- * This component downsamples first, then dithers one pixel at a time
- * with the same Bayer span the source uses at threshold 128.
- */
-const SOURCE_PIXEL_SIZE = 4;
-const LONG_EDGE = Math.floor(800 / SOURCE_PIXEL_SIZE);
-
+/** Live update covers: ordered, pixel size 4, brightness 100, threshold 87, midtones 77. */
 const coverDither = {
   ...orderedDither,
   animation: false,
-  brightness: 0,
-  pixelSize: 1,
-  threshold: 128,
-  midtones: 256,
+  brightness: 100,
+  pixelSize: 4,
+  threshold: 87,
+  midtones: 77,
   glow: 0,
 };
-
-function downsample(image: HTMLImageElement) {
-  const landscape = image.naturalWidth >= image.naturalHeight;
-  const width = landscape
-    ? LONG_EDGE
-    : Math.max(1, Math.floor(LONG_EDGE * (image.naturalWidth / image.naturalHeight)));
-  const height = landscape
-    ? Math.max(1, Math.floor(LONG_EDGE * (image.naturalHeight / image.naturalWidth)))
-    : LONG_EDGE;
-  const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
-  const context = canvas.getContext("2d");
-  if (!context) {
-    return null;
-  }
-  context.imageSmoothingEnabled = false;
-  context.drawImage(image, 0, 0, width, height);
-  return canvas;
-}
 
 export function UpdateCover({
   src,
@@ -52,7 +24,7 @@ export function UpdateCover({
   alt: string;
   fallback: string;
 }) {
-  const [source, setSource] = useState<HTMLCanvasElement | null>(null);
+  const [source, setSource] = useState<HTMLImageElement | null>(null);
 
   useEffect(() => {
     const image = new Image();
@@ -60,7 +32,7 @@ export function UpdateCover({
     image.src = src;
     const ready = () => {
       if (image.naturalWidth > 0) {
-        setSource(downsample(image));
+        setSource(image);
       }
     };
     if (image.complete && image.naturalWidth > 0) {

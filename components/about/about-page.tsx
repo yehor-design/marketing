@@ -11,11 +11,20 @@ const NBSP = "\u00A0";
 const portraitDither = {
   ...orderedDither,
   animation: false,
+  intensity: 10,
+  interval: 0.08,
   brightness: -20,
   pixelSize: 3,
   threshold: 84,
   midtones: 100,
   glow: 30,
+};
+
+const portraitHoverDither = {
+  ...portraitDither,
+  animation: true,
+  intensity: 5,
+  interval: 0.08,
 };
 
 const postDither = {
@@ -100,6 +109,36 @@ const posts = [
     image: "/about/post-images.png",
   },
 ] as const;
+
+function Portrait({
+  person,
+}: {
+  person: (typeof people)[number];
+}) {
+  const [hot, setHot] = useState(false);
+
+  return (
+    <a
+      href="https://x.com"
+      target="_blank"
+      rel="noreferrer"
+      onPointerEnter={() => setHot(true)}
+      onPointerLeave={() => setHot(false)}
+      onFocus={() => setHot(true)}
+      onBlur={() => setHot(false)}
+    >
+      <span className={styles.photo}>
+        <DitherImage
+          src={person.image}
+          label={`Portrait of ${person.name}`}
+          preset={hot ? portraitHoverDither : portraitDither}
+        />
+      </span>
+      <h3>{person.name}</h3>
+      <p className="visually-hidden">{person.role}</p>
+    </a>
+  );
+}
 
 function RollLink({
   href,
@@ -267,17 +306,7 @@ export function AboutPage() {
           <ul className={styles.team}>
             {people.map((person) => (
               <li key={person.name}>
-                <a href="https://x.com" target="_blank" rel="noreferrer">
-                  <span className={styles.photo}>
-                    <DitherImage
-                      src={person.image}
-                      label={`Portrait of ${person.name}`}
-                      preset={portraitDither}
-                    />
-                  </span>
-                  <h3>{person.name}</h3>
-                  <p className="visually-hidden">{person.role}</p>
-                </a>
+                <Portrait person={person} />
               </li>
             ))}
           </ul>

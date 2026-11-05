@@ -83,6 +83,10 @@ function sourceSize(source: CanvasImageSource) {
   return { width: 360, height: 240 };
 }
 
+function mapIntensity(intensity: number) {
+  return 0.001 + (intensity / 100) * (10 - 0.001);
+}
+
 function drawDither(
   canvas: HTMLCanvasElement,
   source: CanvasImageSource,
@@ -103,9 +107,14 @@ function drawDither(
   const long = Math.max(1, Math.floor(800 / Math.max(1, props.pixelSize)));
   const width = ratio >= 1 ? long : Math.max(1, Math.floor(long * ratio));
   const height = ratio >= 1 ? Math.max(1, Math.floor(long / ratio)) : long;
-  canvas.width = width;
-  canvas.height = height;
-  const out = canvas.getContext("2d", { willReadFrequently: true });
+  // Process off the visible canvas. Reading the display canvas back after
+  // the glow filter reused the previous dither instead of the photo, so the
+  // hover brightness never moved a pixel. Resizing the display canvas also
+  // dropped :hover.
+  const buffer = document.createElement("canvas");
+  buffer.width = width;
+  buffer.height = height;
+  const out = buffer.getContext("2d", { willReadFrequently: true });
   if (!out) {
     return;
   }
@@ -139,20 +148,20 @@ function drawDither(
     }
   }
   out.putImageData(image, 0, 0);
+  let final = image;
   if (props.glow > 0) {
-    const scratch = document.createElement("canvas");
-    scratch.width = width;
-    scratch.height = height;
-    const blurred = scratch.getContext("2d");
-    if (blurred) {
-      blurred.putImageData(image, 0, 0);
-      out.filter = `blur(${props.glow / 4}px)`;
-      out.globalCompositeOperation = "lighter";
-      out.drawImage(scratch, 0, 0);
-      out.filter = "none";
-      out.globalCompositeOperation = "source-over";
-    }
+    out.filter = `blur(${props.glow / 4}px)`;
+    out.globalCompositeOperation = "lighter";
+    out.drawImage(buffer, 0, 0);
+    out.filter = "none";
+    final = out.getImageData(0, 0, width, height);
   }
+  if (canvas.width !== width || canvas.height !== height) {
+    canvas.width = width;
+    canvas.height = height;
+  }
+  const display = canvas.getContext("2d", { willReadFrequently: true });
+  display?.putImageData(final, 0, 0);
 }
 
 export function Dither({
@@ -176,19 +185,40 @@ export function Dither({
     if (!canvas) {
       return;
     }
-    // animation, interval, intensity, and glow belong to the redraw that
-    // ditherAnimationLoop leaves unused. This draws the still frame once.
-    void animation;
-    void intensity;
-    void interval;
-    drawDither(canvas, source, {
-      algorithm,
-      brightness,
-      pixelSize,
-      threshold,
-      midtones,
-      glow,
-    });
+    const paint = (amount: number) => {
+      drawDither(canvas, source, {
+        algorithm,
+        brightness: amount,
+        pixelSize,
+        threshold,
+        midtones,
+        glow,
+      });
+    };
+    if (!animation) {
+      paint(brightness);
+      return;
+    }
+    // The published loop jitters brightness by the mapped intensity and redraws.
+    // Random dither also reseeds its dots on that same interval.
+    const span = Math.abs(mapIntensity(intensity));
+    let frame = 0;
+    let last = 0;
+    let elapsed = 0;
+    const tick = (now: number) => {
+      if (last === 0) {
+        last = now;
+      }
+      elapsed += now - last;
+      last = now;
+      if (elapsed >= interval * 1000) {
+        elapsed = 0;
+        paint(brightness + (Math.random() * 2 - 1) * span);
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
   }, [
     source,
     algorithm,

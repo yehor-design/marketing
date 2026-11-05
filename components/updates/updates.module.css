@@ -225,16 +225,16 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
-  filter: hue-rotate(1deg) brightness(4) contrast(1.45);
+  filter: hue-rotate(1deg);
   pointer-events: none;
-  mask-image: url("/about/cta-mask.svg");
+  mask-image: url("/contact/pulser-mask.svg");
   mask-repeat: no-repeat;
-  mask-position: center;
-  mask-size: 100% 100%;
-  -webkit-mask-image: url("/about/cta-mask.svg");
+  mask-position: bottom center;
+  mask-size: cover;
+  -webkit-mask-image: url("/contact/pulser-mask.svg");
   -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  -webkit-mask-size: 100% 100%;
+  -webkit-mask-position: bottom center;
+  -webkit-mask-size: cover;
 }
 
 .ctaMedia > :first-child {
@@ -304,8 +304,8 @@
     padding-left: 20px;
   }
 
-  .pageHead h1 {
-    font-size: 1.55rem;
+  .pageHead {
+    min-height: 0;
   }
 
   .item {

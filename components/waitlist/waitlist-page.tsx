@@ -1,10 +1,80 @@
 "use client";
 
-import { useState } from "react";
-import { GodRays, RollingText } from "@/components/motion";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { DitherImage } from "@/components/home/dither-image";
+import { RollingText, orderedDither, randomDither } from "@/components/motion";
 import styles from "@/components/waitlist/waitlist.module.css";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const artBase = {
+  ...orderedDither,
+  animation: false,
+  intensity: 10,
+  interval: 0.1,
+  brightness: -10,
+  pixelSize: 1,
+  threshold: 125,
+  midtones: 50,
+  glow: 0,
+};
+
+const artHighlight = {
+  ...randomDither,
+  animation: true,
+  intensity: 100,
+  interval: 0.08,
+  brightness: 50,
+  pixelSize: 1,
+  threshold: 55,
+  midtones: 65,
+  glow: 0,
+};
+
+function Flashlight({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const point = useRef({ x: 0, y: 0, radius: 0, target: 0 });
+
+  useEffect(() => {
+    let frame = 0;
+    const tick = () => {
+      const state = point.current;
+      const next = state.radius + (state.target - state.radius) * 0.28;
+      state.radius = Math.abs(state.target - next) < 0.4 ? state.target : next;
+      const node = ref.current;
+      if (node) {
+        node.style.maskImage = `radial-gradient(circle ${state.radius}px at ${state.x}px ${state.y}px, black 40%, transparent 100%)`;
+        node.style.webkitMaskImage = node.style.maskImage;
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={styles.flashlight}
+      onPointerEnter={(event) => {
+        const bounds = event.currentTarget.getBoundingClientRect();
+        point.current.x = event.clientX - bounds.left;
+        point.current.y = event.clientY - bounds.top;
+        point.current.target = 400;
+      }}
+      onPointerLeave={() => {
+        point.current.target = 0;
+      }}
+      onPointerMove={(event) => {
+        const bounds = event.currentTarget.getBoundingClientRect();
+        point.current.x = event.clientX - bounds.left;
+        point.current.y = event.clientY - bounds.top;
+      }}
+    >
+      {children}
+    </div>
+  );
+}
 
 function emailError(value: string) {
   if (!value) {
@@ -24,26 +94,31 @@ export function WaitlistPage() {
   return (
     <div className={styles.page}>
       <section className={styles.hero} aria-labelledby="waitlist-title">
-        <div className={styles.art} aria-hidden="true">
-          <div className={styles.rays}>
-            <GodRays label="" offsetY={0.5} density={0.7} frequency={12} spotty={2.2} />
+        <div className={styles.art}>
+          <div className={styles.artBase}>
+            <DitherImage src="/waitlist/art.png" label="waitlist art" preset={artBase} />
           </div>
-          <div className={styles.grain} />
-          <img className={styles.mark} src="/brand/logo-mark.svg" alt="" width={88} height={88} />
+          <Flashlight>
+            <div className={styles.artHighlight}>
+              <DitherImage src="/waitlist/art.png" label="" preset={artHighlight} />
+            </div>
+          </Flashlight>
         </div>
         <div className={styles.copy}>
-          <p className={styles.badge}>
-            <span className="shimmer-text">
-              WAITLIST IS NOW OPEN
-              <span className="shimmer-text-glow" aria-hidden="true">
+          <div className={styles.text}>
+            <p className={styles.badge}>
+              <span className="shimmer-text">
                 WAITLIST IS NOW OPEN
+                <span className="shimmer-text-glow" aria-hidden="true">
+                  WAITLIST IS NOW OPEN
+                </span>
               </span>
-            </span>
-          </p>
-          <h1 id="waitlist-title">Jet is launching soon.</h1>
-          <p className={styles.lede}>
-            Get on the waitlist and be among the first to get access to Jet.
-          </p>
+            </p>
+            <h1 id="waitlist-title">Jet is launching soon.</h1>
+            <p className={styles.lede}>
+              Get on the waitlist and be among the first to get access to Jet.
+            </p>
+          </div>
           <form
             className={styles.form}
             noValidate

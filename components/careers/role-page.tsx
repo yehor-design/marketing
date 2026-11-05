@@ -24,17 +24,19 @@ export function RolePage({ role }: { role: CareerRole }) {
     <article className={styles.careers}>
       <header className={styles.frame}>
         <div className={styles.roleHead}>
-          <Link className={styles.back} href="/careers#open-roles">
-            <Chevron direction="left" />
-            Back
-          </Link>
-          <div className={styles.roleHeading}>
+          <div className={styles.roleIdentity}>
+            <Link className={styles.back} href="/careers#open-roles">
+              <Chevron direction="left" />
+              Back
+            </Link>
+            <div className={styles.roleHeading}>
             <h1>{role.title}</h1>
             <p className={styles.slash} aria-hidden="true">
               /
             </p>
             <p className={styles.department}>{role.department}</p>
             <p className={styles.pill}>{role.location}</p>
+            </div>
           </div>
           <div className={styles.roleLead}>
             <p>{role.summary}</p>

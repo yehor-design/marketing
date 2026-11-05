@@ -13,11 +13,21 @@ export function CareersPage() {
   return (
     <div className={styles.careers}>
       <section className={styles.hero} aria-labelledby="careers-title">
-        <div className={styles.heroMedia}>
-          <div className={styles.heroRays}>
-            <GodRays label="Careers hero background" offsetY={0.32} density={0.85} />
+        <div className={styles.band} aria-hidden="true">
+          <div className={styles.bandRays}>
+            <GodRays
+              label=""
+              shader
+              speed={5}
+              frequency={0.5}
+              offsetY={0.96}
+              spotty={0.05}
+              density={0.87}
+              centerIntensity={0}
+              centerSize={1}
+            />
+            <div className={styles.grain} />
           </div>
-          <div className={styles.grain} />
         </div>
         <div className={styles.heroCopy}>
           <h1 id="careers-title">Build a faster web for everyone</h1>
@@ -34,6 +44,22 @@ export function CareersPage() {
               text={`Open${NBSP}positions`}
               className={styles.buttonSecondary}
             />
+          </div>
+        </div>
+        <div className={styles.band} aria-hidden="true">
+          <div className={styles.bandRays}>
+            <GodRays
+              label=""
+              shader
+              speed={5}
+              frequency={0.5}
+              offsetY={0.96}
+              spotty={0.05}
+              density={0.87}
+              centerIntensity={0}
+              centerSize={1}
+            />
+            <div className={styles.grain} />
           </div>
         </div>
       </section>

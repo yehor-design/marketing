@@ -46,6 +46,42 @@ type Options = {
   reduced: boolean | null;
 };
 
+const shaderClock = {
+  elapsed: 0,
+  last: 0,
+  frame: 0,
+  listeners: new Set<(elapsedMs: number) => void>(),
+};
+
+function pumpShaderClock(now: number) {
+  if (shaderClock.last === 0) {
+    shaderClock.last = now;
+  }
+  shaderClock.elapsed += now - shaderClock.last;
+  shaderClock.last = now;
+  for (const listener of shaderClock.listeners) {
+    listener(shaderClock.elapsed);
+  }
+  shaderClock.frame = requestAnimationFrame(pumpShaderClock);
+}
+
+/** One elapsed clock for every shader band on the page. */
+function subscribeShaderClock(listener: (elapsedMs: number) => void) {
+  shaderClock.listeners.add(listener);
+  listener(shaderClock.elapsed);
+  if (shaderClock.frame === 0) {
+    shaderClock.frame = requestAnimationFrame(pumpShaderClock);
+  }
+  return () => {
+    shaderClock.listeners.delete(listener);
+    if (shaderClock.listeners.size === 0) {
+      cancelAnimationFrame(shaderClock.frame);
+      shaderClock.frame = 0;
+      shaderClock.last = 0;
+    }
+  };
+}
+
 function rgba(rgb: Rgb, alpha: number) {
   return `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha})`;
 }
@@ -370,7 +406,7 @@ export function GodRays({
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    draw(0);
+    draw(timeRef.current);
     const frame = canvas?.parentElement ?? canvas;
     if (!frame) {
       return;
@@ -383,7 +419,22 @@ export function GodRays({
     return () => observer.disconnect();
   }, [draw]);
 
+  useEffect(() => {
+    if (!shader) {
+      return;
+    }
+    return subscribeShaderClock((elapsedMs) => {
+      const time =
+        options.current.reduced !== false ? 0 : (elapsedMs / 1000) * options.current.speed;
+      timeRef.current = time;
+      draw(time);
+    });
+  }, [shader, draw]);
+
   const onFrame = useCallback((_timestamp: number, deltaMs: number) => {
+    if (options.current.shader) {
+      return;
+    }
     if (options.current.reduced !== false) {
       if (!drewStatic.current) {
         timeRef.current = 0;

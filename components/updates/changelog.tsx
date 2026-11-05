@@ -103,7 +103,16 @@ export function UpdateArticle({ note }: { note: UpdateNote }) {
       </article>
       <section className={styles.cta} aria-labelledby="updates-cta">
         <div className={styles.ctaMedia} aria-hidden="true">
-          <GodRays label="" />
+          <GodRays
+            label=""
+            shader
+            speed={5}
+            spotty={0.8}
+            offsetY={0.54}
+            density={1}
+            centerIntensity={0.47}
+            centerSize={0.8}
+          />
           <div className={styles.grain} />
         </div>
         <div className={styles.ctaCopy}>

@@ -29,50 +29,65 @@
 
 .art {
   position: relative;
-  height: 220px;
+  height: 300px;
   overflow: hidden;
   border-bottom: 1px dashed #1c1c1c;
 }
 
-.rays,
-.grain {
+.artBase,
+.artHighlight,
+.flashlight {
   position: absolute;
   inset: 0;
-  pointer-events: none;
 }
 
-.rays {
-  filter: grayscale(1) brightness(1.25) contrast(1.55);
-  mask-image: radial-gradient(circle at 50% 52%, #000 8%, transparent 68%);
+.artBase,
+.artHighlight {
+  mask-image:
+    url("/waitlist/art-mask.svg"),
+    linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25));
+  mask-repeat: no-repeat, no-repeat;
+  mask-position: center, 0 0;
+  mask-size: cover, 100% 100%;
+  mask-composite: add, add;
+  -webkit-mask-image:
+    url("/waitlist/art-mask.svg"),
+    linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25));
+  -webkit-mask-repeat: no-repeat, no-repeat;
+  -webkit-mask-position: center, 0 0;
+  -webkit-mask-size: cover, 100% 100%;
+  -webkit-mask-composite: plus-lighter, plus-lighter;
 }
 
-.rays > :first-child {
+.artBase {
+  opacity: 0.7;
+}
+
+.artBase canvas,
+.artHighlight canvas {
   width: 100%;
   height: 100%;
-  aspect-ratio: auto;
+  object-fit: cover;
 }
 
-.grain {
-  background-image: url("/home/grain.png");
-  background-repeat: repeat;
-  background-size: 40px;
-  opacity: 0.45;
-}
-
-.mark {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 88px;
-  height: 88px;
-  transform: translate(-50%, -46%);
+.flashlight {
+  mask-image: radial-gradient(circle 0px at 50% 50%, black 40%, transparent 100%);
 }
 
 .copy {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 28px 16px 48px;
+  gap: 34px;
+  padding: 60px 24px 100px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
 }
 
 .badge {
@@ -94,7 +109,7 @@
 }
 
 .hero h1 {
-  margin: 16px 0 0;
+  margin: 0;
   font-size: 3.5rem;
   letter-spacing: -0.04em;
   line-height: 1.1;
@@ -102,7 +117,7 @@
 
 .lede {
   max-width: 340px;
-  margin: 16px 0 0;
+  margin: 0;
   color: var(--muted);
   font-size: 16px;
   font-variation-settings: "opsz" 14, "wght" 450;
@@ -112,7 +127,7 @@
 
 .form {
   width: min(350px, 100%);
-  margin-top: 28px;
+  margin: 0;
 }
 
 .row {
@@ -195,20 +210,20 @@
 
 @media (min-width: 810px) {
   .art {
-    height: 280px;
+    height: 320px;
   }
 
   .copy {
-    padding: 36px 24px 64px;
+    padding: 60px 34px;
   }
 }
 
 @media (min-width: 1200px) {
   .art {
-    height: 353px;
+    height: 351px;
   }
 
   .copy {
-    padding: 28px 24px 72px;
+    padding: 60px 34px;
   }
 }
