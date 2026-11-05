@@ -1,6 +1,7 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { PageHeading } from "@/components/page-heading";
-import { legalSlugs, titleFromSlug } from "@/lib/routes";
+import { LegalPage } from "@/components/legal/legal-page";
+import { getLegal, legalDocuments } from "@/lib/legal";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -9,14 +10,31 @@ type PageProps = {
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return legalSlugs.map((slug) => ({ slug }));
+  return legalDocuments.map((document) => ({ slug: document.slug }));
 }
 
-export default async function LegalPage({ params }: PageProps) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  if (!(legalSlugs as readonly string[]).includes(slug)) {
+  const document = getLegal(slug);
+  if (!document) {
+    return {};
+  }
+
+  return {
+    title: document.title,
+    description: document.description,
+    alternates: {
+      canonical: document.canonical,
+    },
+  };
+}
+
+export default async function Page({ params }: PageProps) {
+  const { slug } = await params;
+  const document = getLegal(slug);
+  if (!document) {
     notFound();
   }
 
-  return <PageHeading title={titleFromSlug(slug)} />;
+  return <LegalPage doc={document} />;
 }
