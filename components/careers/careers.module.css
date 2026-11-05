@@ -672,7 +672,11 @@
   }
 
   .apply {
-    padding-top: 22px;
+    padding-top: 24px;
+  }
+
+  header.frame {
+    margin-bottom: -2px;
   }
 
   .roleHead {
@@ -720,6 +724,18 @@
 }
 
 @media (max-width: 809.98px) {
+  .hero + .frame {
+    margin-top: 98px;
+  }
+
+  .benefitsHead {
+    padding: 50px 24px;
+  }
+
+  .rolesIntro {
+    padding-top: 47px;
+  }
+
   .roleHeading {
     display: grid;
     grid-template-columns: max-content max-content;

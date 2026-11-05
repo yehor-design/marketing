@@ -90,7 +90,7 @@
   width: 100%;
 }
 
-.badge {
+.page .badge {
   display: inline-flex;
   align-items: center;
   height: 26px;

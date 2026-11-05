@@ -202,43 +202,55 @@ export function CheckoutPage() {
           </article>
           <h2 className={styles.saying}>What people are saying</h2>
           <a className={styles.quote} href={TWEET} target="_blank" rel="noreferrer">
-            <img src="/checkout/kris.png" alt="" width={34} height={34} />
-            <span>
-              <strong>Kris</strong>
-              <span className={styles.handle}>@WebsitesByKris</span>
-              <span className={styles.quoteBody}>
-                I think you&apos;ve set a new bar here, not just in terms of design, but the whole
-                experience from buying to customising!
+            <span className={styles.quoteTop}>
+              <img src="/checkout/kris.png" alt="" width={34} height={34} />
+              <span>
+                <strong>Kris</strong>
+                <span className={styles.handle}>@WebsitesByKris</span>
               </span>
+            </span>
+            <span className={styles.quoteBody}>
+              I think you&apos;ve set a new bar here, not just in terms of design, but the whole
+              experience from buying to customising!
             </span>
           </a>
           <article className={styles.thread}>
-            <img src="/checkout/dylan.png" alt="" width={34} height={34} />
-            <div>
+            <div className={styles.threadHead}>
+              <img src="/checkout/dylan.png" alt="" width={34} height={34} />
               <strong>Dylan Ott</strong>
-              <p>I love the template bro it&apos;s awesome genuinely the best one so far</p>
+            </div>
+            <div className={styles.note}>
+              <p className={styles.incoming}>
+                I love the template bro it&apos;s awesome genuinely the best one so far
+              </p>
               <time>12:34 AM</time>
+            </div>
+            <div className={styles.note}>
               <figure>
-                <img src="/checkout/blueprint.png" alt="Blueprint" />
+                <img src="/checkout/blueprint.png" alt="Blueprint" width={230} height={121} />
                 <figcaption>
                   Blueprint
                   <span>https://satisfy-shapeed-402151.framer.app/</span>
                 </figcaption>
               </figure>
               <time>12:57 AM</time>
-              <p>yo man thank you so much!</p>
+            </div>
+            <div className={styles.noteEnd}>
+              <p className={styles.outgoing}>yo man thank you so much!</p>
               <time>09:18 AM</time>
             </div>
           </article>
           <a className={styles.quote} href={TWEET} target="_blank" rel="noreferrer">
-            <img src="/checkout/anikin.png" alt="" width={34} height={34} />
-            <span>
-              <strong>Anikin Jaywalker</strong>
-              <span className={styles.handle}>@TJae</span>
-              <span className={styles.quoteBody}>
-                Beyond me how well you made this template and I’m always paying attention to what’s
-                dropping on the marketplace.
+            <span className={styles.quoteTop}>
+              <img src="/checkout/anikin.png" alt="" width={34} height={34} />
+              <span>
+                <strong>Anikin Jaywalker</strong>
+                <span className={styles.handle}>@TJae</span>
               </span>
+            </span>
+            <span className={styles.quoteBody}>
+              Beyond me how well you made this template and I’m always paying attention to what’s
+              dropping on the marketplace.
             </span>
           </a>
           <p className={styles.support}>Lifetime updates & email support</p>
