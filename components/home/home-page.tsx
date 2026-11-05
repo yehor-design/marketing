@@ -217,11 +217,11 @@ const cardColumns: Person[][] = [
 
 const phases = [
   { ms: 2500, cols: [0, 0, 0], featured: 0 },
-  { ms: 100, cols: [1, 0, 0], featured: 1 },
-  { ms: 100, cols: [1, 1, 0], featured: 1 },
-  { ms: 5000, cols: [1, 1, 1], featured: 1 },
-  { ms: 100, cols: [2, 1, 1], featured: 2 },
-  { ms: 100, cols: [2, 2, 1], featured: 2 },
+  { ms: 100, cols: [1, 0, 0], featured: 0 },
+  { ms: 100, cols: [1, 1, 0], featured: 0 },
+  { ms: 5000, cols: [1, 1, 1], featured: 0 },
+  { ms: 100, cols: [2, 1, 1], featured: 0 },
+  { ms: 100, cols: [2, 2, 1], featured: 0 },
   { ms: 2500, cols: [0, 0, 0], featured: 0 },
 ] as const;
 
@@ -330,28 +330,52 @@ export function HomePage() {
   const [logoPhase, setLogoPhase] = useState(0);
   const [phase, setPhase] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [logosPlaying, setLogosPlaying] = useState(false);
+  const [quotesPlaying, setQuotesPlaying] = useState(false);
   const drag = useRef<{ x: number; id: number } | null>(null);
+  const logoStageRef = useRef<HTMLDivElement>(null);
+  const quotesRef = useRef<HTMLDivElement>(null);
   const active = phases[phase];
 
   useEffect(() => {
-    if (reduced !== false) {
+    const nodes: Array<[HTMLElement, (playing: boolean) => void]> = [];
+    if (logoStageRef.current) {
+      nodes.push([logoStageRef.current, setLogosPlaying]);
+    }
+    if (quotesRef.current) {
+      nodes.push([quotesRef.current, setQuotesPlaying]);
+    }
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        const update = nodes.find(([node]) => node === entry.target)?.[1];
+        update?.(entry.isIntersecting);
+      }
+    });
+    for (const [node] of nodes) {
+      observer.observe(node);
+    }
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (reduced !== false || !logosPlaying) {
       return;
     }
     const timer = window.setTimeout(() => {
       setLogoPhase((current) => (current + 1) % logoPhases.length);
     }, logoWaits[logoPhase]);
     return () => window.clearTimeout(timer);
-  }, [logoPhase, reduced]);
+  }, [logoPhase, logosPlaying, reduced]);
 
   useEffect(() => {
-    if (reduced !== false) {
+    if (reduced !== false || !quotesPlaying) {
       return;
     }
     const timer = window.setTimeout(() => {
       setPhase((current) => (current + 1) % phases.length);
     }, active.ms);
     return () => window.clearTimeout(timer);
-  }, [active.ms, phase, reduced]);
+  }, [active.ms, phase, quotesPlaying, reduced]);
 
   function stepCarousel(direction: number) {
     setPhase((current) => (current + direction + phases.length) % phases.length);
@@ -386,7 +410,7 @@ export function HomePage() {
       <section className={styles.social} aria-label="Trusted by some of the biggest companies">
         <div className={`${styles.frame} ${styles.dash} ${styles.socialFrame}`}>
           <p>Trusted by some of the biggest companies</p>
-          <div className={styles.logoStage}>
+          <div className={styles.logoStage} ref={logoStageRef}>
             {logoColumns.map((column, index) => (
               <div className={styles.logoCol} key={column[0]}>
                 <motion.div
@@ -509,7 +533,7 @@ export function HomePage() {
           drag.current = null;
         }}
       >
-        <div className={`${styles.frame} ${styles.dash}`}>
+        <div className={`${styles.frame} ${styles.dash}`} ref={quotesRef}>
         <div className={styles.bandHead}>
           <h2 id="quotes-title">Customers see instant results.</h2>
         </div>
@@ -526,6 +550,7 @@ export function HomePage() {
                 <motion.div
                   key={`${slide.name}-${index}`}
                   className={index === active.featured ? styles.slideOn : styles.slideOff}
+                  initial={false}
                   animate={{ opacity: index === active.featured ? 1 : 0 }}
                   transition={reduced === false ? spring : { duration: 0 }}
                   aria-hidden={index === active.featured ? undefined : true}
@@ -551,6 +576,7 @@ export function HomePage() {
                   <motion.div
                     key={`${slide.name}-${index}`}
                     className={index === active.cols[columnIndex] ? styles.slideOn : styles.slideOff}
+                    initial={false}
                     animate={{ opacity: index === active.cols[columnIndex] ? 1 : 0 }}
                     transition={reduced === false ? spring : { duration: 0 }}
                     aria-hidden={index === active.cols[columnIndex] ? undefined : true}

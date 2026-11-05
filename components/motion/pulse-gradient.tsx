@@ -1,9 +1,7 @@
 "use client";
 
-import { useAnimationFrame } from "motion/react";
 import { useCallback, useEffect, useRef } from "react";
 import styles from "./motion.module.css";
-import { usePrefersReducedMotion } from "./use-reduced-motion";
 
 /**
  * Paper Gradient, Pulse preset, custom hero colors.
@@ -258,9 +256,6 @@ export function PulseGradient() {
   const programRef = useRef<WebGLProgram | null>(null);
   const timeRef = useRef(PULSE_SEED);
   const lastFallback = useRef(0);
-  const reduced = usePrefersReducedMotion();
-  const reducedRef = useRef(reduced);
-  reducedRef.current = reduced;
 
   const draw = useCallback((time: number) => {
     const canvas = canvasRef.current;
@@ -362,17 +357,56 @@ export function PulseGradient() {
     return () => observer.disconnect();
   }, [draw]);
 
-  useAnimationFrame((timestamp, deltaMs) => {
-    if (reducedRef.current !== false) {
+  useEffect(() => {
+    const node = canvasRef.current?.parentElement;
+    if (!node) {
       return;
     }
-    timeRef.current += (deltaMs / 1000) * SPEED;
-    if (!glRef.current && timestamp - lastFallback.current < 240) {
-      return;
-    }
-    lastFallback.current = timestamp;
-    draw(timeRef.current);
-  });
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const visibleRatio = () => {
+      const rect = node.getBoundingClientRect();
+      if (rect.height < 2) {
+        return 0;
+      }
+      const visible = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+      return visible / rect.height;
+    };
+    let visible = visibleRatio() >= 0.1;
+    let last = performance.now();
+    let frame = 0;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        visible = entries.some((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.1);
+        last = performance.now();
+      },
+      { threshold: [0, 0.1] },
+    );
+    observer.observe(node);
+    const tick = (now: number) => {
+      const delta = now - last;
+      last = now;
+      if (!motionQuery.matches && visible && delta > 0) {
+        timeRef.current += delta * SPEED * 0.001;
+      }
+      if (glRef.current || now - lastFallback.current >= 240) {
+        if (!glRef.current) {
+          lastFallback.current = now;
+        }
+        draw(timeRef.current);
+      }
+      frame = window.requestAnimationFrame(tick);
+    };
+    const onMotion = () => {
+      last = performance.now();
+    };
+    motionQuery.addEventListener("change", onMotion);
+    frame = window.requestAnimationFrame(tick);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      observer.disconnect();
+      motionQuery.removeEventListener("change", onMotion);
+    };
+  }, [draw]);
 
   return (
     <div className={styles.pulse}>
