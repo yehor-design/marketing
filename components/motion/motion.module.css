@@ -1,0 +1,101 @@
+.glitch {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 1000;
+  font-variation-settings: "opsz" 14, "wght" 500;
+  line-height: 1.6;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.glitch:focus-visible {
+  outline: 1px solid var(--text);
+  outline-offset: 3px;
+}
+
+.shimmer {
+  position: relative;
+  display: inline-block;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  font-variation-settings: normal;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+}
+
+.shimmerText,
+.shimmerOverlay {
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+}
+
+.shimmerOverlay {
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  pointer-events: none;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.roll {
+  display: inline-flex;
+  color: inherit;
+  font-family: var(--font-display);
+  font-weight: 1000;
+  font-variation-settings: "opsz" 14, "wght" 1000;
+  letter-spacing: 0;
+}
+
+.clip {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.letter {
+  display: block;
+}
+
+.rollButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 18px;
+  border: 0;
+  border-radius: 20px;
+  background: #fff;
+  color: #000;
+  cursor: pointer;
+  font: inherit;
+}
+
+.rollButton:focus-visible {
+  outline: 1px solid var(--text);
+  outline-offset: 3px;
+}
+
+.dither {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #000;
+  image-rendering: pixelated;
+}
+
+.raysFrame {
+  width: 100%;
+  aspect-ratio: 1168 / 382;
+  background: #000;
+}
+
+.rays {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
