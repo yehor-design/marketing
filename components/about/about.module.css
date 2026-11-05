@@ -61,7 +61,9 @@
 }
 
 .hero h1 {
+  width: min(650px, 100%);
   max-width: 650px;
+  min-width: 0;
 }
 
 .mission h2,

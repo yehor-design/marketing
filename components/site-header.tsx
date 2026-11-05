@@ -3,7 +3,33 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { RollingText, TextGlitch } from "@/components/motion";
 import { navLinks } from "@/lib/routes";
+
+function NavRoll({
+  href,
+  text,
+  className,
+}: {
+  href: string;
+  text: string;
+  className: string;
+}) {
+  const [rolling, setRolling] = useState(false);
+
+  return (
+    <Link
+      href={href}
+      className={className}
+      onPointerEnter={() => setRolling(true)}
+      onPointerLeave={() => setRolling(false)}
+      onFocus={() => setRolling(true)}
+      onBlur={() => setRolling(false)}
+    >
+      <RollingText text={text} rolling={rolling} fontSize={12} />
+    </Link>
+  );
+}
 
 function isCurrent(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -109,7 +135,9 @@ export function SiteHeader() {
                       aria-current={current ? "page" : undefined}
                       data-framer-page-link-current={current ? "true" : undefined}
                     >
-                      {link.label}
+                      <TextGlitch restingColor={current ? "#fff" : undefined}>
+                        {link.label}
+                      </TextGlitch>
                       {"badge" in link ? (
                         <span className="count-badge">{link.badge}</span>
                       ) : null}
@@ -120,19 +148,20 @@ export function SiteHeader() {
             </ul>
           </nav>
           <div className="desktop-actions">
-            <Link className="nav-button nav-button-secondary" href="/contact">
-              Contact
-            </Link>
-            <Link
+            <NavRoll
+              href="/contact"
+              text="Contact"
+              className="nav-button nav-button-secondary"
+            />
+            <NavRoll
+              href="/waitlist"
+              text={"Join\u00A0waitlist"}
               className={
                 home
                   ? "nav-button nav-button-secondary"
                   : "nav-button nav-button-primary"
               }
-              href="/waitlist"
-            >
-              Join&nbsp;waitlist
-            </Link>
+            />
           </div>
           <button
             type="button"
@@ -160,7 +189,7 @@ export function SiteHeader() {
       {open ? (
         <div id="mobile-menu" className="mobile-panel">
           <Link className="mobile-cta" href="/waitlist" onClick={closeSoon}>
-            Join&nbsp;waitlist
+            <RollingText text={"Join\u00A0waitlist"} />
           </Link>
           <nav aria-label="Primary">
             <ul className="mobile-links">

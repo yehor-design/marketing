@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { CSSProperties } from "react";
+import { TextGlitch } from "@/components/motion";
 import { footerColumns, socialLinks } from "@/lib/routes";
 
 function isCurrent(pathname: string, href: string) {
@@ -53,7 +54,9 @@ export function SiteFooter() {
                             current ? "true" : undefined
                           }
                         >
-                          {link.label}
+                          <TextGlitch restingColor={current ? "#fff" : undefined}>
+                            {link.label}
+                          </TextGlitch>
                           {"badge" in link ? <HiringMark /> : null}
                         </Link>
                       </li>

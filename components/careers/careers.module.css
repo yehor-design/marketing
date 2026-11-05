@@ -100,7 +100,9 @@
 }
 
 .hero h1 {
+  width: min(650px, 100%);
   max-width: 650px;
+  min-width: 0;
   font-size: 3.5rem;
   letter-spacing: -0.04em;
   line-height: 1.1;

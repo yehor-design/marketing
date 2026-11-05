@@ -37,9 +37,12 @@ function scrambleText(text: string) {
 export function TextGlitch({
   children,
   tabIndex,
+  restingColor = TEXT_GLITCH_REST_COLOR,
 }: {
   children: string;
   tabIndex?: number;
+  /** Current-page links rest at full white. Others rest at 50% white. */
+  restingColor?: string;
 }) {
   const reduced = usePrefersReducedMotion();
   const [active, setActive] = useState(false);
@@ -97,7 +100,7 @@ export function TextGlitch({
       onPointerLeave={() => setActive(false)}
       onFocus={() => setActive(true)}
       onBlur={() => setActive(false)}
-      style={{ color: active ? TEXT_GLITCH_HOVER_COLOR : TEXT_GLITCH_REST_COLOR }}
+      style={{ color: active ? TEXT_GLITCH_HOVER_COLOR : restingColor }}
     >
       <span className="visually-hidden">{children}</span>
       <span aria-hidden="true">{shown}</span>

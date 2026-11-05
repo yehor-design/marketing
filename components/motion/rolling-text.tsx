@@ -35,9 +35,12 @@ function letterDelay(index: number, count: number) {
 export function RollingText({
   text,
   rolling,
+  fontSize = ROLLING_TEXT_FONT_SIZE_PX,
 }: {
   text: string;
   rolling?: boolean;
+  /** Nav buttons are 12px. Hero and form buttons are 14px. */
+  fontSize?: number;
 }) {
   const reduced = usePrefersReducedMotion();
   const [hovered, setHovered] = useState(false);
@@ -45,13 +48,14 @@ export function RollingText({
   const move = active && reduced === false;
   const letters = Array.from(text);
   const controlled = rolling !== undefined;
+  const lineHeight = fontSize * ROLLING_TEXT_LINE_HEIGHT_EM;
 
   return (
     <span
       className={styles.roll}
       style={{
-        fontSize: ROLLING_TEXT_FONT_SIZE_PX,
-        lineHeight: `${ROLLING_TEXT_LINE_HEIGHT_PX}px`,
+        fontSize,
+        lineHeight: `${lineHeight}px`,
       }}
       onPointerEnter={controlled ? undefined : () => setHovered(true)}
       onPointerLeave={controlled ? undefined : () => setHovered(false)}
@@ -62,12 +66,12 @@ export function RollingText({
           className={styles.clip}
           key={`${letter}-${index}`}
           aria-hidden="true"
-          style={{ height: ROLLING_TEXT_LINE_HEIGHT_PX }}
+          style={{ height: lineHeight }}
         >
           <motion.span
             className={styles.letter}
             initial={{ y: 0 }}
-            animate={{ y: move ? -ROLLING_TEXT_LINE_HEIGHT_PX : 0 }}
+            animate={{ y: move ? -lineHeight : 0 }}
             transition={{
               type: ROLLING_TEXT_SPRING.type,
               duration: ROLLING_TEXT_SPRING.duration,
@@ -75,7 +79,7 @@ export function RollingText({
               delay: letterDelay(index, letters.length),
             }}
             style={{
-              textShadow: `0 ${ROLLING_TEXT_LINE_HEIGHT_PX}px 0 currentColor`,
+              textShadow: `0 ${lineHeight}px 0 currentColor`,
               willChange: move ? "transform" : "auto",
             }}
           >

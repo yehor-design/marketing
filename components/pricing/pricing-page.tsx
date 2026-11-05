@@ -277,10 +277,48 @@ function Cross() {
   );
 }
 
-function Bolt() {
+function PlanMark({ id, size }: { id: Plan["id"]; size: number }) {
+  const accent = id === "pro";
   return (
-    <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" className={styles.bolt}>
-      <path d="M9 1.5 3.5 9H8l-1 5.5L12.5 7H8l1-5.5Z" fill="currentColor" />
+    <svg
+      viewBox="0 0 44 44"
+      width={size}
+      height={size}
+      aria-hidden="true"
+      className={accent ? styles.markAccent : styles.mark}
+    >
+      {id === "starter" ? (
+        <path
+          d="M15 0H21M15 36H21M8 4H28M8 32H28M3 8H33M3 28H33M1 12H35M0 16H36M0 20H36M1 24H35"
+          transform="translate(4 4)"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        />
+      ) : null}
+      {id === "pro" ? (
+        <>
+          <path d="M0 0H6" transform="translate(19 4)" fill="none" stroke="currentColor" strokeWidth="2" />
+          <path d="M0 0H8" transform="translate(17 8)" fill="none" stroke="currentColor" strokeWidth="2" />
+          <path d="M0 0H10" transform="translate(15 12)" fill="none" stroke="currentColor" strokeWidth="2" />
+          <path d="M0 0H26" transform="translate(12 16)" fill="none" stroke="currentColor" strokeWidth="2" />
+          <path d="M0 0H26" transform="translate(10 20)" fill="none" stroke="currentColor" strokeWidth="2" />
+          <path d="M0 0H26" transform="translate(8 24)" fill="none" stroke="currentColor" strokeWidth="2" />
+          <path d="M0 0H26" transform="translate(6 28)" fill="none" stroke="currentColor" strokeWidth="2" />
+          <path d="M0 0H10" transform="translate(19 32)" fill="none" stroke="currentColor" strokeWidth="2" />
+          <path d="M0 0H8" transform="translate(19 36)" fill="none" stroke="currentColor" strokeWidth="2" />
+          <path d="M0 0H6" transform="translate(19 40)" fill="none" stroke="currentColor" strokeWidth="2" />
+        </>
+      ) : null}
+      {id === "agency" ? (
+        <path
+          d="M11 0H29M7 4H33M3 8H37M0 12H40M2 16H38M6 20H34M11 24H29M14 28H26M18 32H22"
+          transform="translate(2 6)"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        />
+      ) : null}
     </svg>
   );
 }
@@ -380,7 +418,10 @@ export function PricingPage() {
                 <span className={`${styles.corner} ${styles.se}`} aria-hidden="true" />
                 <span className={styles.cardBody}>
                   <span className={styles.nameRow}>
-                    <span className={styles.planName}>{plan.name}</span>
+                    <span className={styles.planTitle}>
+                      <PlanMark id={plan.id} size={28} />
+                      <span className={styles.planName}>{plan.name}</span>
+                    </span>
                     {plan.popular ? <span className={styles.badge}>Most popular</span> : null}
                   </span>
                   <span className={styles.description}>{plan.description}</span>
@@ -445,7 +486,7 @@ export function PricingPage() {
             {plans.map((plan) => (
               <div className={styles.headPlan} key={plan.id}>
                 <h3>
-                  <Bolt />
+                  <PlanMark id={plan.id} size={20} />
                   {plan.name}
                 </h3>
                 <RollLink href={CHECKOUT_HREF} text={plan.cta} tone={plan.tone} className={styles.smallButton} />
