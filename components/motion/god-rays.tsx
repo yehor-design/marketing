@@ -2,6 +2,7 @@
 
 import { useAnimationFrame } from "motion/react";
 import { useCallback, useEffect, useRef } from "react";
+import { drawSourceGodRays } from "./god-rays-shader";
 import styles from "./motion.module.css";
 import { usePrefersReducedMotion } from "./use-reduced-motion";
 
@@ -27,6 +28,8 @@ export type GodRaysProps = {
   centerSize?: number;
   /** Paper GodRays shader. The homepage hero and Pulser use this. */
   paper?: boolean;
+  /** The published GodRays shader. The about hero shafts use this. */
+  shader?: boolean;
   label?: string;
 };
 
@@ -39,6 +42,7 @@ type Options = {
   centerIntensity?: number;
   centerSize?: number;
   paper: boolean;
+  shader: boolean;
   reduced: boolean | null;
 };
 
@@ -195,6 +199,19 @@ function raysShape(x: number, y: number, radiusTerm: number, freq: number, densi
   return noise ** density;
 }
 
+function shaderFallbackSize(canvas: HTMLCanvasElement) {
+  const rect = canvas.getBoundingClientRect();
+  const longest = Math.max(rect.width, rect.height, 1);
+  const scale = Math.min(1, 720 / longest);
+  const width = Math.max(1, Math.round(rect.width * scale));
+  const height = Math.max(1, Math.round(rect.height * scale));
+  if (canvas.width !== width || canvas.height !== height) {
+    canvas.width = width;
+    canvas.height = height;
+  }
+  return { width, height };
+}
+
 function paperSize(canvas: HTMLCanvasElement) {
   const rect = canvas.getBoundingClientRect();
   const longest = Math.max(rect.width, rect.height, 1);
@@ -280,6 +297,7 @@ export function GodRays({
   centerIntensity,
   centerSize,
   paper = false,
+  shader = false,
   label = "GodRays",
 }: GodRaysProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -296,6 +314,7 @@ export function GodRays({
     centerIntensity,
     centerSize,
     paper,
+    shader,
     reduced,
   });
   options.current = {
@@ -307,12 +326,27 @@ export function GodRays({
     centerIntensity,
     centerSize,
     paper,
+    shader,
     reduced,
   };
 
   const draw = useCallback((time: number) => {
     const canvas = canvasRef.current;
     if (!canvas) {
+      return;
+    }
+    if (options.current.shader) {
+      const frame = canvas.parentElement?.getBoundingClientRect();
+      if (!frame || frame.width < 2 || frame.height < 2) {
+        return;
+      }
+      const clock = options.current.reduced !== false ? 0 : time;
+      if (!drawSourceGodRays(canvas, clock, options.current)) {
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        if (!ctx) return;
+        const { width, height } = shaderFallbackSize(canvas);
+        paintPaper(ctx, width, height, clock, options.current);
+      }
       return;
     }
     const ctx = canvas.getContext("2d", { willReadFrequently: true });

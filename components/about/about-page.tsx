@@ -10,18 +10,22 @@ const NBSP = "\u00A0";
 
 const portraitDither = {
   ...orderedDither,
-  brightness: -6,
-  pixelSize: 5,
-  threshold: 148,
-  midtones: 84,
+  animation: false,
+  brightness: -20,
+  pixelSize: 3,
+  threshold: 84,
+  midtones: 100,
+  glow: 30,
 };
 
 const postDither = {
   ...orderedDither,
-  brightness: 4,
-  pixelSize: 6,
-  threshold: 136,
-  midtones: 42,
+  animation: false,
+  brightness: -46,
+  pixelSize: 2,
+  threshold: 116,
+  midtones: 56,
+  glow: 2,
 };
 
 const people = [
@@ -169,7 +173,7 @@ export function AboutPage() {
             <div className={styles.bandRays}>
               <GodRays
                 label=""
-                paper
+                shader
                 speed={5}
                 frequency={0.1}
                 offsetY={1.2}
@@ -178,8 +182,8 @@ export function AboutPage() {
                 centerIntensity={0.57}
                 centerSize={0.8}
               />
+              <div className={styles.grain} />
             </div>
-            <div className={styles.grain} />
           </div>
           <div className={styles.heroCopy}>
             <h1 id="about-title">Jet is unlocking a faster, simpler web for everyone.</h1>
@@ -192,7 +196,7 @@ export function AboutPage() {
             <div className={styles.bandRays}>
               <GodRays
                 label=""
-                paper
+                shader
                 speed={5}
                 frequency={0.1}
                 offsetY={1.2}
@@ -201,8 +205,8 @@ export function AboutPage() {
                 centerIntensity={0.57}
                 centerSize={0.8}
               />
+              <div className={styles.grain} />
             </div>
-            <div className={styles.grain} />
           </div>
         </div>
       </section>

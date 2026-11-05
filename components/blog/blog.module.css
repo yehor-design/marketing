@@ -113,9 +113,9 @@
 }
 
 .featureGrid,
-.grid,
-.related {
-  border: 1px dashed var(--rule);
+.grid {
+  outline: 1px dashed var(--rule);
+  outline-offset: -1px;
 }
 
 .featureGrid,
@@ -161,6 +161,7 @@
   aspect-ratio: 16 / 9;
   overflow: hidden;
   background: #000;
+  filter: brightness(0.7);
 }
 
 .art canvas {
@@ -174,12 +175,25 @@
   flex: 1;
   flex-direction: column;
   align-items: flex-start;
-  gap: 16px;
-  padding: 40px 34px 42px;
+  gap: 14px;
+  padding: 36px 34px 34px;
 }
 
 .feature .copy {
-  padding: 40px 50px 42px;
+  gap: 20px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.tagRow,
+.date {
+  display: flex;
+  align-items: center;
+  min-height: 34px;
 }
 
 .copy h3 {
@@ -216,7 +230,7 @@
   display: inline-flex;
   align-items: center;
   height: 24px;
-  padding: 0 8px;
+  padding: 0 6px;
   border-radius: 4px;
   background: #171717;
   font-size: 12px;
@@ -672,13 +686,6 @@
     padding-left: 20px;
   }
 
-  .kicker h1,
-  .kicker h2,
-  .allHead h2,
-  .intro h1 {
-    font-size: 1.55rem;
-  }
-
   .allHead {
     flex-direction: column;
     align-items: flex-start;
@@ -688,9 +695,46 @@
     justify-content: flex-start;
   }
 
+  .copy,
   .feature .copy,
   .small .copy {
-    padding: 24px 20px 28px;
+    padding: 24px;
+  }
+
+  .feature .copy {
+    gap: 20px;
+  }
+
+  .small .copy {
+    gap: 12px;
+  }
+
+  .small .tagRow,
+  .small .date {
+    min-height: 32px;
+  }
+
+  .featureGrid > .small,
+  .grid li {
+    position: relative;
+    border-top: 0;
+  }
+
+  .featureGrid > .small::before,
+  .grid li + li::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    border-top: 1px dashed var(--rule);
+    pointer-events: none;
+  }
+
+  .small .copy h3 {
+    font-size: 14px;
+    line-height: 21px;
+    letter-spacing: -0.01em;
   }
 
   .cta h2 {

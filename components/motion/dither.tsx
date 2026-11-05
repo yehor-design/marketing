@@ -92,6 +92,7 @@ function drawDither(
     pixelSize: number;
     threshold: number;
     midtones: number;
+    glow: number;
   },
 ) {
   const natural = sourceSize(source);
@@ -138,6 +139,20 @@ function drawDither(
     }
   }
   out.putImageData(image, 0, 0);
+  if (props.glow > 0) {
+    const scratch = document.createElement("canvas");
+    scratch.width = width;
+    scratch.height = height;
+    const blurred = scratch.getContext("2d");
+    if (blurred) {
+      blurred.putImageData(image, 0, 0);
+      out.filter = `blur(${props.glow / 4}px)`;
+      out.globalCompositeOperation = "lighter";
+      out.drawImage(scratch, 0, 0);
+      out.filter = "none";
+      out.globalCompositeOperation = "source-over";
+    }
+  }
 }
 
 export function Dither({
@@ -166,13 +181,13 @@ export function Dither({
     void animation;
     void intensity;
     void interval;
-    void glow;
     drawDither(canvas, source, {
       algorithm,
       brightness,
       pixelSize,
       threshold,
       midtones,
+      glow,
     });
   }, [
     source,
