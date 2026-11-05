@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { GodRays, Pulser, RollingText, orderedDither, randomDither } from "@/components/motion";
+import { Pulser, PulseGradient, RollingText, orderedDither, randomDither } from "@/components/motion";
 import { usePrefersReducedMotion } from "@/components/motion/use-reduced-motion";
 import { Announcement } from "@/components/announcement";
 import { DitherImage } from "@/components/home/dither-image";
@@ -366,14 +366,9 @@ export function HomePage() {
           <div className={styles.heroMedia}>
             <div className={styles.heroShafts}>
               <div className={styles.heroGlow}>
-                <GodRays
-                  paper
-                  centerIntensity={0.57}
-                  centerSize={0.8}
-                  label="Hero background"
-                />
+                <PulseGradient />
+                <div className={styles.grain} />
               </div>
-              <div className={styles.grain} />
             </div>
           </div>
           <Announcement />

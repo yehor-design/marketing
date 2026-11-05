@@ -107,7 +107,7 @@
     bottom center,
     center;
   mask-size: cover;
-  mask-composite: add;
+  mask-composite: add, add;
   -webkit-mask-image:
     url("/home/rays-mask.svg"),
     linear-gradient(0deg, rgba(0, 0, 0, 0) 46%, rgba(0, 0, 0, 0.7) 100%);
@@ -116,7 +116,7 @@
     bottom center,
     center;
   -webkit-mask-size: cover;
-  -webkit-mask-composite: source-over, source-over;
+  -webkit-mask-composite: plus-lighter, plus-lighter;
 }
 
 .heroGlow {
@@ -350,6 +350,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  mask-image: linear-gradient(24deg, rgba(0, 0, 0, 0.1) 17%, rgba(0, 0, 0, 0.7) 61%);
+  -webkit-mask-image: linear-gradient(24deg, rgba(0, 0, 0, 0.1) 17%, rgba(0, 0, 0, 0.7) 61%);
 }
 
 .benefitCopy {
@@ -457,7 +459,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 32px 24px;
+  padding: 24px;
 }
 
 .eyebrow {
@@ -502,7 +504,7 @@
   display: flex;
   gap: 8px;
   align-items: center;
-  height: 34px;
+  min-height: 34px;
   color: #fff;
   font-size: 16px;
   font-weight: 1000;
@@ -515,6 +517,11 @@
   flex: none;
 }
 
+.checks li span {
+  flex: 1;
+  min-width: 0;
+}
+
 .featureArt {
   position: relative;
   display: grid;
@@ -525,8 +532,8 @@
 .featureFrame {
   width: 280px;
   height: 280px;
-  mask-image: linear-gradient(0deg, transparent 0%, #000 100%);
-  -webkit-mask-image: linear-gradient(0deg, transparent 0%, #000 100%);
+  mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.8) 100%);
+  -webkit-mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.8) 100%);
 }
 
 .featureFrame canvas,
@@ -544,9 +551,9 @@
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
-  gap: 0;
+  gap: 24px;
   margin: 0;
-  padding: 24px 34px;
+  padding: 50px 34px;
   list-style: none;
 }
 
@@ -556,7 +563,7 @@
   align-items: center;
   gap: 4px;
   width: 100%;
-  padding: 12px 0;
+  padding: 0;
   text-align: center;
 }
 
@@ -605,14 +612,14 @@
   mask-repeat: no-repeat;
   mask-position: center;
   mask-size: cover;
-  mask-composite: add;
+  mask-composite: add, add;
   -webkit-mask-image:
     url("/home/rays-mask.svg"),
     linear-gradient(#000 0%, rgba(0, 0, 0, 0.65) 49.959%, rgba(0, 0, 0, 0) 100%);
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
   -webkit-mask-size: cover;
-  -webkit-mask-composite: source-over, source-over;
+  -webkit-mask-composite: plus-lighter, plus-lighter;
 }
 
 .halftone {
@@ -622,6 +629,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  mask-image: linear-gradient(#000 0%, transparent 100%);
+  -webkit-mask-image: linear-gradient(#000 0%, transparent 100%);
 }
 
 .featuredCopy {
@@ -771,7 +780,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 154px;
+  height: 155px;
   margin: 0;
   text-align: center;
 }
@@ -789,11 +798,12 @@
 
 .faqItem button {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
   width: 100%;
-  height: 82px;
-  padding: 0 24px 0 34px;
+  height: auto;
+  min-height: 82px;
+  padding: 28px 24px 28px 34px;
   border: 0;
   background: transparent;
   color: #fff;
@@ -806,12 +816,17 @@
   cursor: pointer;
 }
 
+.faqItem button > span:first-child {
+  flex: 1 0 0;
+  min-width: 0;
+}
+
 .plus,
 .plusOpen {
   position: relative;
   flex: none;
-  width: 14px;
-  height: 14px;
+  width: 26px;
+  height: 26px;
 }
 
 .plus::before,
@@ -820,8 +835,8 @@
 .plusOpen::after {
   content: "";
   position: absolute;
-  top: 6px;
-  left: 0;
+  top: 12px;
+  left: 6px;
   width: 14px;
   height: 1px;
   background: #fff;

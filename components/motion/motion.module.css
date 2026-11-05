@@ -100,3 +100,14 @@
   width: 100%;
   height: 100%;
 }
+
+.pulse {
+  position: absolute;
+  inset: 0;
+}
+
+.pulse canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

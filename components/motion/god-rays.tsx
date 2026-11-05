@@ -237,21 +237,6 @@ function paintPaper(
         middle = midIntensity ** 0.3 * smoothstep(midSize, 0.02 * midSize, 3 * radius);
         middle **= 5;
       }
-      const aim = Math.atan2(uvX, Math.max(uvY, 0.001));
-      const lobes: Array<[number, number, number]> = [
-        [-0.58, 0.0024, 1],
-        [-0.4, 0.0011, 0.42],
-        [-0.22, 0.0008, 0.28],
-        [0.16, 0.0008, 0.22],
-        [0.4, 0.0012, 0.36],
-        [0.62, 0.0048, 1],
-      ];
-      let shaft = 0;
-      if (uvY > -0.02) {
-        for (const [center, spread, gain] of lobes) {
-          shaft = Math.max(shaft, gain * Math.exp(-((aim - center) ** 2) / spread));
-        }
-      }
       let accumR = 0;
       let accumG = 0;
       let accumB = 0;
@@ -265,7 +250,6 @@ function paintPaper(
         let ray = raysShape(rx, ry, r1, 5 * freq, density);
         ray *= raysShape(rx, ry, r2, 4 * freq, density);
         ray += (1 + 4 * ray) * middle;
-        ray += shaft * (index === 0 ? 0.95 : 0.35);
         ray = Math.min(1, Math.max(0, ray));
         const color = colors[index];
         const srcA = color[3] * ray;
