@@ -3,6 +3,7 @@
 import { useAnimationFrame } from "motion/react";
 import { useCallback, useEffect, useRef } from "react";
 import { drawSourceGodRays } from "./god-rays-shader";
+import { loadMask, punchMask } from "./mask-composite";
 import styles from "./motion.module.css";
 import { usePrefersReducedMotion } from "./use-reduced-motion";
 
@@ -30,6 +31,8 @@ export type GodRaysProps = {
   paper?: boolean;
   /** The published GodRays shader. The about hero shafts use this. */
   shader?: boolean;
+  /** Clip the field with a cover-bottom alpha mask. The CTA uses the streak mask. */
+  maskSrc?: string;
   label?: string;
 };
 
@@ -251,7 +254,7 @@ function shaderFallbackSize(canvas: HTMLCanvasElement) {
 function paperSize(canvas: HTMLCanvasElement) {
   const rect = canvas.getBoundingClientRect();
   const longest = Math.max(rect.width, rect.height, 1);
-  const scale = Math.min(1, 220 / longest);
+  const scale = Math.min(1, 640 / longest);
   const width = Math.max(1, Math.round(rect.width * scale));
   const height = Math.max(1, Math.round(rect.height * scale));
   if (canvas.width !== width || canvas.height !== height) {
@@ -334,10 +337,12 @@ export function GodRays({
   centerSize,
   paper = false,
   shader = false,
+  maskSrc,
   label = "GodRays",
 }: GodRaysProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const bufferRef = useRef<HTMLCanvasElement | null>(null);
+  const maskRef = useRef<HTMLImageElement | null>(null);
   const timeRef = useRef(0);
   const drewStatic = useRef(false);
   const reduced = usePrefersReducedMotion();
@@ -382,6 +387,9 @@ export function GodRays({
         if (!ctx) return;
         const { width, height } = shaderFallbackSize(canvas);
         paintPaper(ctx, width, height, clock, options.current);
+        if (maskRef.current) {
+          punchMask(ctx, width, height, maskRef.current, false);
+        }
       }
       return;
     }
@@ -395,6 +403,9 @@ export function GodRays({
         return;
       }
       paintPaper(ctx, width, height, options.current.reduced !== false ? 0 : time, options.current);
+      if (maskRef.current) {
+        punchMask(ctx, width, height, maskRef.current, false);
+      }
       return;
     }
     const { width, height } = fit(canvas);
@@ -418,6 +429,24 @@ export function GodRays({
     observer.observe(frame);
     return () => observer.disconnect();
   }, [draw]);
+
+  useEffect(() => {
+    if (!maskSrc) {
+      maskRef.current = null;
+      return;
+    }
+    let cancel = false;
+    loadMask(maskSrc).then((image) => {
+      if (cancel || !image) {
+        return;
+      }
+      maskRef.current = image;
+      draw(timeRef.current);
+    });
+    return () => {
+      cancel = true;
+    };
+  }, [draw, maskSrc]);
 
   useEffect(() => {
     if (!shader) {

@@ -1,7 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
+import { loadMask, punchMask } from "./mask-composite";
 import styles from "./motion.module.css";
+
+if (typeof document !== "undefined") {
+  document.documentElement.dataset.rayField = "pulse";
+}
 
 /**
  * Homepage hero. Animated Backgrounds, Radial variant.
@@ -316,10 +321,20 @@ function paintFallback(
   ctx.putImageData(image, 0, 0);
 }
 
-export function PulseGradient({ variant = "pulse" }: { variant?: "pulse" | "dots" } = {}) {
+export function PulseGradient({
+  variant = "pulse",
+  masked = false,
+}: {
+  variant?: "pulse" | "dots";
+  /** Radial hero. Clip the moving field with the published ray mask. */
+  masked?: boolean;
+} = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const glRef = useRef<WebGL2RenderingContext | null>(null);
   const programRef = useRef<WebGLProgram | null>(null);
+  const maskRef = useRef<HTMLImageElement | null>(null);
+  const maskedRef = useRef(masked);
+  maskedRef.current = masked;
   const configRef = useRef(variant === "dots" ? DOTS_CONFIG : PULSE_CONFIG);
   configRef.current = variant === "dots" ? DOTS_CONFIG : PULSE_CONFIG;
   const timeRef = useRef(configRef.current.seed);
@@ -368,7 +383,8 @@ export function PulseGradient({ variant = "pulse" }: { variant?: "pulse" | "dots
       return;
     }
     const longest = Math.max(rect.width, rect.height);
-    const scale = Math.min(1, 520 / longest);
+    const cap = maskedRef.current ? 360 : 520;
+    const scale = Math.min(1, cap / longest);
     const width = Math.max(1, Math.round(rect.width * scale));
     const height = Math.max(1, Math.round(rect.height * scale));
     if (canvas.width !== width || canvas.height !== height) {
@@ -380,6 +396,10 @@ export function PulseGradient({ variant = "pulse" }: { variant?: "pulse" | "dots
       return;
     }
     paintFallback(ctx, width, height, rect.width, rect.height, time, config);
+    const mask = maskRef.current;
+    if (maskedRef.current && mask) {
+      punchMask(ctx, width, height, mask, true);
+    }
   }, []);
 
   useEffect(() => {
@@ -457,8 +477,9 @@ export function PulseGradient({ variant = "pulse" }: { variant?: "pulse" | "dots
       if (!motionQuery.matches && visible && delta > 0) {
         timeRef.current += delta * configRef.current.speed * 0.001;
       }
-      if (glRef.current || now - lastFallback.current >= 240) {
-        if (!glRef.current) {
+      const everyFrame = Boolean(glRef.current) || maskedRef.current;
+      if (everyFrame || now - lastFallback.current >= 240) {
+        if (!everyFrame) {
           lastFallback.current = now;
         }
         draw(timeRef.current);
@@ -476,6 +497,23 @@ export function PulseGradient({ variant = "pulse" }: { variant?: "pulse" | "dots
       motionQuery.removeEventListener("change", onMotion);
     };
   }, [draw]);
+
+  useEffect(() => {
+    if (!masked) {
+      return;
+    }
+    let cancel = false;
+    loadMask("/home/rays-mask.svg").then((image) => {
+      if (cancel || !image) {
+        return;
+      }
+      maskRef.current = image;
+      draw(timeRef.current);
+    });
+    return () => {
+      cancel = true;
+    };
+  }, [draw, masked]);
 
   return (
     <div className={styles.pulse}>

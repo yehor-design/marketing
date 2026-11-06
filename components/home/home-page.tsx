@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import {
+  LineAnimator,
   Pulser,
   PulseGradient,
   RollingText,
@@ -480,7 +481,7 @@ export function HomePage() {
             <div className={styles.heroMedia}>
               <div className={styles.heroShafts}>
                 <div className={styles.heroGlow}>
-                  <PulseGradient />
+                  <PulseGradient masked />
                   <div className={styles.grain} />
                 </div>
               </div>
@@ -727,6 +728,7 @@ export function HomePage() {
             <Pulser />
             <div className={styles.grain} />
           </div>
+          <LineAnimator />
           <div className={styles.ctaCopy}>
             <h2 id="cta-title">Boost your site speed today.</h2>
             <p>Try Jet now—one click, instant performance. No risk, cancel anytime.</p>
