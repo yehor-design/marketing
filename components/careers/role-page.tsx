@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ApplyForm } from "@/components/careers/apply-form";
 import { BenefitIcon, Chevron } from "@/components/careers/icons";
 import { RollLink } from "@/components/careers/roll-link";
+import { CornerMarks } from "@/components/motion/corner-marks";
 import { benefits, type CareerRole } from "@/lib/careers";
 import styles from "@/components/careers/careers.module.css";
 
@@ -69,11 +70,14 @@ export function RolePage({ role }: { role: CareerRole }) {
             <h2>Benefits</h2>
             <ul className={styles.perks}>
               {benefits.map((benefit) => (
-                <li key={benefit.title}>
+                <li key={benefit.title} className="corner-host">
+                  <CornerMarks />
                   <BenefitIcon name={benefit.icon} />
                   <div>
                     <h3>{benefit.title}</h3>
-                    <p>{benefit.body}</p>
+                    <div className={styles.perkReveal}>
+                      <p>{benefit.body}</p>
+                    </div>
                   </div>
                 </li>
               ))}

@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useId, useState } from "react";
-import { Pulser, PulseGradient, RollingText } from "@/components/motion";
+import { useEffect, useId, useState } from "react";
+import { useReducedMotion } from "motion/react";
+import { PulseGradient, RollingText } from "@/components/motion";
+import { GrayRing } from "@/components/motion/gray-ring";
+import { SiteCta } from "@/components/site-cta";
 import styles from "@/components/pricing/pricing.module.css";
 
 const NBSP = "\u00A0";
@@ -13,7 +16,6 @@ const NBSP = "\u00A0";
  * The local route for that checkout is /checkout. The closing CTA is /waitlist.
  */
 const CHECKOUT_HREF = "/checkout";
-const WAITLIST_HREF = "/waitlist";
 
 type Period = "monthly" | "yearly";
 type Mark = "check" | "x";
@@ -209,14 +211,74 @@ const groups: { title: string; rows: Row[] }[] = [
 
 function CardCta({ text, tone }: { text: string; tone: "primary" | "secondary" }) {
   const [rolling, setRolling] = useState(false);
+  const gray = tone === "secondary";
 
   return (
     <span
-      className={tone === "primary" ? styles.cardButtonPrimary : styles.cardButton}
+      className={gray ? `${styles.cardButton} gray-pill` : styles.cardButtonPrimary}
       onPointerEnter={() => setRolling(true)}
       onPointerLeave={() => setRolling(false)}
     >
       <RollingText text={text} rolling={rolling} />
+      {gray ? <GrayRing /> : null}
+    </span>
+  );
+}
+
+function PriceDigits({ value }: { value: string }) {
+  const reduced = useReducedMotion();
+  const [shown, setShown] = useState(value);
+  const [scrambled, setScrambled] = useState<boolean[]>([]);
+
+  useEffect(() => {
+    if (reduced) {
+      setShown(value);
+      setScrambled([]);
+      return;
+    }
+    const start = performance.now();
+    let timer = 0;
+    let frame = 0;
+    const tick = (now: number) => {
+      if (now - start >= 500) {
+        setShown(value);
+        setScrambled([]);
+        return;
+      }
+      let next = "";
+      const flags: boolean[] = [];
+      for (const char of value) {
+        const keep = char === " " || Math.random() * 100 > 50;
+        if (keep) {
+          next += char;
+          flags.push(false);
+        } else {
+          next += "1234567890"[Math.floor(Math.random() * 10)];
+          flags.push(true);
+        }
+      }
+      setShown(next);
+      setScrambled(flags);
+      timer = window.setTimeout(() => {
+        frame = requestAnimationFrame(tick);
+      }, 40);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(timer);
+    };
+  }, [reduced, value]);
+
+  return (
+    <span className={styles.digits} aria-label={value}>
+      <span aria-hidden="true">
+        {shown.split("").map((char, index) => (
+          <span key={`${value}-${index}`} className={scrambled[index] ? styles.digitScramble : undefined}>
+            {char}
+          </span>
+        ))}
+      </span>
     </span>
   );
 }
@@ -241,13 +303,14 @@ function RollLink({
   return (
     <Link
       href={href}
-      className={`${tone === "primary" ? styles.primary : styles.secondary} ${className ?? ""}`}
+      className={`${tone === "primary" ? styles.primary : `${styles.secondary} gray-pill`} ${className ?? ""}`}
       onPointerEnter={() => setRolling(true)}
       onPointerLeave={() => setRolling(false)}
       onFocus={() => setRolling(true)}
       onBlur={() => setRolling(false)}
     >
       <RollingText text={text} rolling={rolling} fontSize={fontSize} letterSpacing={letterSpacing} />
+      {tone === "secondary" ? <GrayRing /> : null}
     </Link>
   );
 }
@@ -399,6 +462,13 @@ export function PricingPage() {
 
       <section className={styles.plans} aria-labelledby="pricing-title">
         <div className={styles.toggle} role="group" aria-label="Billing period">
+          <span
+            className={styles.togglePill}
+            style={{
+              width: period === "monthly" ? 74 : 107,
+              transform: period === "monthly" ? "translateX(0)" : "translateX(78px)",
+            }}
+          />
           <button
             type="button"
             className={period === "monthly" ? styles.toggleOn : styles.toggleOff}
@@ -444,7 +514,7 @@ export function PricingPage() {
                     <span className={styles.price}>
                       <span className={styles.amount}>
                         <span className={styles.currency}>$</span>
-                        <span>{price}</span>
+                        <PriceDigits value={String(price)} />
                       </span>
                       <span className={styles.suffix}>{suffix}</span>
                     </span>
@@ -543,23 +613,7 @@ export function PricingPage() {
         </div>
       </section>
 
-      <div className={styles.spacer} aria-hidden="true" />
-
-      <section className={styles.cta} aria-labelledby="pricing-cta">
-        <div className={styles.ctaCard}>
-          <div className={styles.ctaMedia} aria-hidden="true">
-            <Pulser />
-            <div className={styles.grain} />
-          </div>
-          <div className={styles.ctaCopy}>
-            <div className={styles.ctaText}>
-              <h2 id="pricing-cta">Boost your site speed today.</h2>
-              <p>Try Jet now—one click, instant performance. No risk, cancel anytime.</p>
-            </div>
-            <RollLink href={WAITLIST_HREF} text={`Join${NBSP}waitlist`} tone="primary" />
-          </div>
-        </div>
-      </section>
+      <SiteCta titleId="pricing-cta" />
     </div>
   );
 }

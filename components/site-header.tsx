@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { RollingText, TextGlitch } from "@/components/motion";
+import { RollingText } from "@/components/motion";
+import { GrayRing } from "@/components/motion/gray-ring";
 import { navLinks } from "@/lib/routes";
 
 function NavRoll({
@@ -27,6 +28,7 @@ function NavRoll({
       onBlur={() => setRolling(false)}
     >
       <RollingText text={text} rolling={rolling} fontSize={12} />
+      {className.includes("gray-pill") ? <GrayRing /> : null}
     </Link>
   );
 }
@@ -135,9 +137,7 @@ export function SiteHeader() {
                       aria-current={current ? "page" : undefined}
                       data-framer-page-link-current={current ? "true" : undefined}
                     >
-                      <TextGlitch restingColor={current ? "#fff" : undefined}>
-                        {link.label}
-                      </TextGlitch>
+                      {link.label}
                       {"badge" in link ? (
                         <span className="count-badge">{link.badge}</span>
                       ) : null}
@@ -151,14 +151,14 @@ export function SiteHeader() {
             <NavRoll
               href="/contact"
               text="Contact"
-              className="nav-button nav-button-secondary"
+              className="nav-button nav-button-secondary gray-pill"
             />
             <NavRoll
               href="/waitlist"
               text={"Join\u00A0waitlist"}
               className={
                 home
-                  ? "nav-button nav-button-secondary"
+                  ? "nav-button nav-button-secondary gray-pill"
                   : "nav-button nav-button-primary"
               }
             />

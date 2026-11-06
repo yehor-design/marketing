@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { RollingText } from "@/components/motion";
+import { GrayRing } from "@/components/motion/gray-ring";
 import { blogCategories, posts } from "@/lib/blog";
 import { PostCard } from "@/components/blog/post-card";
 import styles from "@/components/blog/blog.module.css";
@@ -62,7 +63,7 @@ export function BlogIndex() {
           <div className={styles.more}>
             <button
               type="button"
-              className={styles.moreButton}
+              className={`${styles.moreButton} gray-pill`}
               onClick={() => setVisible((count) => count + PAGE_SIZE)}
               onPointerEnter={() => setRolling(true)}
               onPointerLeave={() => setRolling(false)}
@@ -70,6 +71,7 @@ export function BlogIndex() {
               onBlur={() => setRolling(false)}
             >
               <RollingText text={`Load${NBSP}more`} rolling={rolling} />
+              <GrayRing />
             </button>
           </div>
         ) : null}

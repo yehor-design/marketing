@@ -34,6 +34,7 @@
 }
 
 .dash {
+  animation: dash-frame 1s linear infinite;
   background-image:
     repeating-linear-gradient(90deg, var(--rule) 0 12px, transparent 12px 18px),
     repeating-linear-gradient(90deg, var(--rule) 0 12px, transparent 12px 18px),
@@ -305,6 +306,11 @@
   height: 1px;
   background: repeating-linear-gradient(90deg, var(--rule) 0 12px, transparent 12px 18px);
   pointer-events: none;
+  animation: dash-x 1s linear infinite;
+}
+
+.bandHead::after {
+  animation-name: dash-x-rev;
 }
 
 .bandHead::after,
@@ -928,6 +934,11 @@
   line-height: 24px;
 }
 
+.faqOpen button {
+  min-height: 0;
+  padding-bottom: 12px;
+}
+
 .faqItem button {
   display: flex;
   align-items: flex-start;
@@ -936,6 +947,7 @@
   height: auto;
   min-height: 82px;
   padding: 28px 24px 28px 34px;
+  transition: padding 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   border: 0;
   background: transparent;
   color: #fff;
@@ -971,6 +983,14 @@
   left: 6px;
   width: 14px;
   height: 1px;
+  background: rgba(255, 255, 255, 0.5);
+  transition: background-color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.faqItem:hover .plus::before,
+.faqItem:hover .plus::after,
+.plusOpen::before,
+.plusOpen::after {
   background: #fff;
 }
 
@@ -988,7 +1008,9 @@
 }
 
 .faqAnswer p {
-  padding: 0 34px 28px;
+  max-width: 440px;
+  margin-left: 34px;
+  padding: 0 44px 28px 0;
   font-size: 16px;
   line-height: 24px;
 }
@@ -1359,6 +1381,7 @@
   }
 
   .benefitGrid {
+    animation: dash-cross 1s linear infinite;
     background-image:
       repeating-linear-gradient(var(--rule) 0 12px, transparent 12px 18px),
       repeating-linear-gradient(90deg, var(--rule) 0 12px, transparent 12px 18px);
@@ -1373,6 +1396,7 @@
 
   .steps,
   .cards {
+    animation: dash-cols 1s linear infinite;
     background-image:
       repeating-linear-gradient(var(--rule) 0 12px, transparent 12px 18px),
       repeating-linear-gradient(var(--rule) 0 12px, transparent 12px 18px);
@@ -1403,6 +1427,7 @@
     width: 1px;
     background: repeating-linear-gradient(var(--rule) 0 12px, transparent 12px 18px);
     pointer-events: none;
+    animation: dash-y 1s linear infinite;
   }
 
   .feature::before {
@@ -1438,6 +1463,7 @@
     left: 0;
     height: 1px;
     background: repeating-linear-gradient(90deg, var(--rule) 0 12px, transparent 12px 18px);
+    animation: dash-x 1s linear infinite;
   }
 
   .vLine {
@@ -1445,6 +1471,71 @@
     bottom: 0;
     width: 1px;
     background: repeating-linear-gradient(var(--rule) 0 12px, transparent 12px 18px);
+    animation: dash-y 1s linear infinite;
+  }
+}
+
+@keyframes dash-frame {
+  from {
+    background-position:
+      0 0,
+      0 100%,
+      0 0,
+      100% 0;
+  }
+
+  to {
+    background-position:
+      18px 0,
+      -18px 100%,
+      0 -18px,
+      100% 18px;
+  }
+}
+
+@keyframes dash-x {
+  to {
+    background-position: 18px 0;
+  }
+}
+
+@keyframes dash-x-rev {
+  to {
+    background-position: -18px 0;
+  }
+}
+
+@keyframes dash-y {
+  to {
+    background-position: 0 18px;
+  }
+}
+
+@keyframes dash-cols {
+  from {
+    background-position:
+      33.333% 0,
+      66.666% 0;
+  }
+
+  to {
+    background-position:
+      33.333% 18px,
+      66.666% 18px;
+  }
+}
+
+@keyframes dash-cross {
+  from {
+    background-position:
+      center 0,
+      0 center;
+  }
+
+  to {
+    background-position:
+      center 18px,
+      -18px center;
   }
 }
 
@@ -1454,8 +1545,30 @@
     filter: none;
   }
 
-  .benefitReveal {
+  .benefitReveal,
+  .faqItem button,
+  .plus::before,
+  .plus::after,
+  .plusOpen::before,
+  .plusOpen::after {
     transition: none;
+  }
+
+  .dash,
+  .bandHead::after,
+  .feature + .feature::after,
+  .tiles::before,
+  .cards::before,
+  .benefitGrid,
+  .steps,
+  .cards,
+  .feature::before,
+  .featureFlip::before,
+  .featured::before,
+  .faqGrid::before,
+  .hLine,
+  .vLine {
+    animation: none;
   }
 }
 

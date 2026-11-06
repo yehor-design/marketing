@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { CornerMarks } from "@/components/motion/corner-marks";
 import { GodRays } from "@/components/motion";
 import { BenefitIcon, Chevron } from "@/components/careers/icons";
 import { RollLink } from "@/components/careers/roll-link";
@@ -42,7 +43,7 @@ export function CareersPage() {
             <RollLink
               href="/careers#open-roles"
               text={`Open${NBSP}positions`}
-              className={styles.buttonSecondary}
+              className={`${styles.buttonSecondary} gray-pill`}
             />
           </div>
         </div>
@@ -82,7 +83,8 @@ export function CareersPage() {
         </div>
         <ul className={styles.benefitGrid}>
           {benefits.map((benefit) => (
-            <li key={benefit.title}>
+            <li key={benefit.title} className="corner-host">
+              <CornerMarks />
               <BenefitIcon name={benefit.icon} />
               <div>
                 <h3>{benefit.title}</h3>

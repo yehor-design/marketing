@@ -185,6 +185,7 @@
 
 .benefits {
   border: 0;
+  animation: dash-rb 1s linear infinite;
   background-image:
     repeating-linear-gradient(to right, var(--rule) 0 12px, transparent 12px 18px),
     repeating-linear-gradient(to bottom, var(--rule) 0 12px, transparent 12px 18px);
@@ -202,6 +203,7 @@
   flex-direction: column;
   gap: 24px;
   padding: 50px 0;
+  animation: dash-rb 1s linear infinite;
   background-image:
     repeating-linear-gradient(to bottom, var(--rule) 0 12px, transparent 12px 18px),
     repeating-linear-gradient(to right, var(--rule) 0 12px, transparent 12px 18px);
@@ -263,6 +265,8 @@
   height: 76px;
   min-height: 76px;
   padding: 24px;
+  overflow: visible;
+  animation: dash-rb 1s linear infinite;
   background-image:
     repeating-linear-gradient(to bottom, var(--rule) 0 12px, transparent 12px 18px),
     repeating-linear-gradient(to right, var(--rule) 0 12px, transparent 12px 18px);
@@ -589,11 +593,25 @@
 }
 
 .perks li {
+  position: relative;
   display: grid;
   grid-template-columns: 28px minmax(0, 1fr);
   column-gap: 12px;
   align-items: start;
   min-height: 95px;
+  padding: 33px 24px 0;
+  overflow: visible;
+  background-image:
+    repeating-linear-gradient(to bottom, var(--rule) 0 12px, transparent 12px 18px),
+    repeating-linear-gradient(to right, var(--rule) 0 12px, transparent 12px 18px);
+  background-repeat: no-repeat;
+  background-position:
+    right top,
+    left bottom;
+  background-size:
+    1px 100%,
+    100% 1px;
+  animation: dash-rb 1s linear infinite;
 }
 
 .perks svg {
@@ -604,27 +622,43 @@
 
 .perks li > div {
   position: relative;
-  height: 24px;
+  min-width: 0;
 }
 
 .perks h3 {
   line-height: 1.5;
 }
 
+.perkReveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin-top: 0;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    margin-top 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.perks li:hover .perkReveal,
+.perks li:focus-within .perkReveal {
+  grid-template-rows: 1fr;
+  margin-top: 10px;
+  opacity: 1;
+}
+
+.perkReveal p,
 .perks p {
-  position: absolute;
-  bottom: -58px;
-  left: 0;
   width: 240px;
   max-width: 100%;
+  min-height: 0;
   margin: 0;
-  overflow: visible;
+  overflow: hidden;
   color: var(--muted);
   font-size: 14px;
   font-variation-settings: "opsz" 14, "wght" 450;
   letter-spacing: 0;
   line-height: 1.5;
-  opacity: 1;
 }
 
 .apply {
@@ -944,7 +978,7 @@
 
   .details {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 243px;
+    grid-template-columns: minmax(0, 1fr) 311px;
     gap: 68px;
     align-items: start;
   }
@@ -953,16 +987,20 @@
     margin-top: 0;
   }
 
+  .perkColumn h2 {
+    width: 243px;
+  }
+
   .perks {
     margin-top: 70px;
-    margin-left: -34px;
-    width: calc(100% + 68px);
+    margin-left: 0;
+    width: 100%;
   }
 
   .perks li {
-    height: 95.3px;
-    min-height: 95.3px;
-    padding-left: 24px;
+    height: auto;
+    min-height: 95px;
+    padding-left: 0;
   }
 
   .frame.applySection {
@@ -1082,8 +1120,8 @@
   }
 
   .perks li {
-    height: 97px;
-    min-height: 97px;
+    height: auto;
+    min-height: 95px;
     column-gap: 2px;
     padding-left: 0;
   }
@@ -1120,13 +1158,65 @@
     padding-right: 33px;
     padding-left: 33px;
   }
+
+  .details {
+    grid-template-columns: minmax(0, 1fr) 311px;
+    gap: 34px;
+    padding: 34px 0 0 34px;
+  }
+
+  .perkColumn h2 {
+    width: 243px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .perks {
+    margin-top: 34px;
+  }
+
+  .perks li {
+    padding: 33px 24px 0;
+  }
+
+  .frame.applySection {
+    margin-top: 100px;
+  }
+}
+
+@keyframes dash-rb {
+  from {
+    background-position:
+      100% 0,
+      0 100%;
+  }
+
+  to {
+    background-position:
+      100% 18px,
+      -18px 100%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .benefitReveal,
   .benefitGrid p,
   .benefitGrid li::before,
-  .benefitGrid li::after {
+  .benefitGrid li::after,
+  .perkReveal {
     transition: none;
+  }
+
+  .benefits,
+  .benefitsHead,
+  .benefitGrid li,
+  .perks li {
+    animation: none;
+  }
+
+  .perkReveal {
+    grid-template-rows: 1fr;
+    margin-top: 10px;
+    opacity: 1;
   }
 }

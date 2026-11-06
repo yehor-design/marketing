@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { RollingText } from "@/components/motion";
+import { GrayRing } from "@/components/motion/gray-ring";
 
 export function RollLink({
   href,
@@ -25,6 +26,7 @@ export function RollLink({
       onBlur={() => setRolling(false)}
     >
       <RollingText text={text} rolling={rolling} />
+      {className.includes("gray-pill") ? <GrayRing /> : null}
     </Link>
   );
 }

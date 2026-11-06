@@ -11,6 +11,7 @@ import {
   orderedDither,
   randomDither,
 } from "@/components/motion";
+import { GrayRing } from "@/components/motion/gray-ring";
 import { usePrefersReducedMotion } from "@/components/motion/use-reduced-motion";
 import { Announcement } from "@/components/announcement";
 import { DitherImage } from "@/components/home/dither-image";
@@ -303,13 +304,16 @@ function RollLink({
   return (
     <Link
       href={href}
-      className={tone === "primary" ? styles.buttonPrimary : styles.buttonSecondary}
+      className={
+        tone === "primary" ? styles.buttonPrimary : `${styles.buttonSecondary} gray-pill`
+      }
       onPointerEnter={() => setRolling(true)}
       onPointerLeave={() => setRolling(false)}
       onFocus={() => setRolling(true)}
       onBlur={() => setRolling(false)}
     >
       <RollingText text={text} rolling={rolling} />
+      {tone === "secondary" ? <GrayRing /> : null}
     </Link>
   );
 }
@@ -691,7 +695,7 @@ export function HomePage() {
             const open = openFaq === index;
             const answerId = `faq-answer-${index}`;
             return (
-              <div className={styles.faqItem} key={item.q}>
+              <div className={open ? `${styles.faqItem} ${styles.faqOpen}` : styles.faqItem} key={item.q}>
                 <h3>
                   <button
                     type="button"

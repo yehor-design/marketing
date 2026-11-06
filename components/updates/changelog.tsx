@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { GodRays } from "@/components/motion";
-import { JoinButton } from "@/components/updates/join-button";
+import { SiteCta } from "@/components/site-cta";
 import { UpdateCover, VideoCover } from "@/components/updates/media";
 import { updates, type UpdateNote } from "@/lib/updates";
 import styles from "@/components/updates/updates.module.css";
@@ -121,26 +120,7 @@ export function UpdateArticle({ note }: { note: UpdateNote }) {
           <Body note={note} />
         </div>
       </article>
-      <section className={styles.cta} aria-labelledby="updates-cta">
-        <div className={styles.ctaMedia} aria-hidden="true">
-          <GodRays
-            label=""
-            shader
-            speed={5}
-            spotty={0.8}
-            offsetY={0.54}
-            density={1}
-            centerIntensity={0.47}
-            centerSize={0.8}
-          />
-          <div className={styles.grain} />
-        </div>
-        <div className={styles.ctaCopy}>
-          <h2 id="updates-cta">Boost your site speed today.</h2>
-          <p>Try Jet now—one click, instant performance. No risk, cancel anytime.</p>
-          <JoinButton />
-        </div>
-      </section>
+      <SiteCta titleId="updates-cta" />
     </div>
   );
 }

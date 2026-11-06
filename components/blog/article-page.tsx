@@ -1,13 +1,8 @@
-"use client";
-
 import Link from "next/link";
-import { useState } from "react";
-import { GodRays, RollingText } from "@/components/motion";
 import { getPost, posts, type Block, type Post } from "@/lib/blog";
 import { CoverImage, PostCard } from "@/components/blog/post-card";
+import { SiteCta } from "@/components/site-cta";
 import styles from "@/components/blog/blog.module.css";
-
-const NBSP = "\u00A0";
 
 function Blocks({ blocks }: { blocks: Block[] }) {
   return (
@@ -74,23 +69,6 @@ function Blocks({ blocks }: { blocks: Block[] }) {
         );
       })}
     </div>
-  );
-}
-
-function RollLink({ href, text }: { href: string; text: string }) {
-  const [rolling, setRolling] = useState(false);
-
-  return (
-    <Link
-      href={href}
-      className={styles.button}
-      onPointerEnter={() => setRolling(true)}
-      onPointerLeave={() => setRolling(false)}
-      onFocus={() => setRolling(true)}
-      onBlur={() => setRolling(false)}
-    >
-      <RollingText text={text} rolling={rolling} />
-    </Link>
   );
 }
 
@@ -173,27 +151,7 @@ export function ArticlePage({ slug }: { slug: string }) {
         </ul>
       </section>
 
-      <section className={styles.cta} aria-labelledby="blog-cta">
-        <div className={styles.ctaMedia} aria-hidden="true">
-          <GodRays
-            label=""
-            shader
-            speed={5}
-            frequency={0}
-            spotty={0.8}
-            offsetY={0.54}
-            density={1}
-            centerIntensity={0.47}
-            centerSize={0.8}
-          />
-          <div className={styles.grain} />
-        </div>
-        <div className={styles.ctaCopy}>
-          <h2 id="blog-cta">Boost your site speed today.</h2>
-          <p>Try Jet now—one click, instant performance. No risk, cancel anytime.</p>
-          <RollLink href="/waitlist" text={`Join${NBSP}waitlist`} />
-        </div>
-      </section>
+      <SiteCta titleId="blog-cta" />
     </article>
   );
 }

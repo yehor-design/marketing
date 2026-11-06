@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import { DitherImage } from "@/components/home/dither-image";
-import { GodRays, Pulser, RollingText, orderedDither } from "@/components/motion";
+import { GodRays, RollingText, orderedDither } from "@/components/motion";
+import { CornerMarks } from "@/components/motion/corner-marks";
+import { SiteCta } from "@/components/site-cta";
 import styles from "@/components/about/about.module.css";
 
 const NBSP = "\u00A0";
@@ -120,6 +122,7 @@ function Portrait({
   return (
     <a
       href="https://x.com"
+      className="corner-host"
       target="_blank"
       rel="noreferrer"
       onPointerEnter={() => setHot(true)}
@@ -127,6 +130,7 @@ function Portrait({
       onFocus={() => setHot(true)}
       onBlur={() => setHot(false)}
     >
+      <CornerMarks />
       <span className={styles.photo}>
         <DitherImage
           src={person.image}
@@ -144,6 +148,35 @@ function Portrait({
         </p>
       </div>
     </a>
+  );
+}
+
+function ViewAll() {
+  const [rolling, setRolling] = useState(false);
+
+  return (
+    <Link
+      href="/blog"
+      className={styles.viewAll}
+      onPointerEnter={() => setRolling(true)}
+      onPointerLeave={() => setRolling(false)}
+      onFocus={() => setRolling(true)}
+      onBlur={() => setRolling(false)}
+    >
+      <RollingText text="View all" rolling={rolling} fontSize={12} />
+      <span className={styles.viewIcon} aria-hidden="true">
+        <svg viewBox="0 0 12 12" width="12" height="12">
+          <path
+            d="M4.2 2.2 L7.8 6 L4.2 9.8"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </span>
+    </Link>
   );
 }
 
@@ -331,26 +364,13 @@ export function AboutPage() {
         <div className={styles.frame}>
           <div className={styles.postsHead}>
             <h2 id="posts-title">Read our posts</h2>
-            <Link href="/blog" className={styles.viewAll}>
-              View all
-              <span className={styles.viewIcon} aria-hidden="true">
-                <svg viewBox="0 0 12 12" width="12" height="12">
-                  <path
-                    d="M4.2 2.2 L7.8 6 L4.2 9.8"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
-            </Link>
+            <ViewAll />
           </div>
           <ul className={styles.posts}>
             {posts.map((post) => (
               <li key={post.href}>
-                <Link href={post.href}>
+                <Link href={post.href} className="corner-host">
+                  <CornerMarks />
                   <span className={styles.postArt} aria-hidden="true">
                     <DitherImage src={post.image} label="" preset={postDither} />
                   </span>
@@ -366,19 +386,7 @@ export function AboutPage() {
         </div>
       </section>
 
-      <section className={styles.block} aria-labelledby="about-cta">
-        <div className={`${styles.frame} ${styles.cta}`}>
-          <div className={styles.ctaMedia} aria-hidden="true">
-            <Pulser />
-            <div className={styles.grain} />
-          </div>
-          <div className={styles.ctaCopy}>
-            <h2 id="about-cta">Boost your site speed today.</h2>
-            <p>Try Jet now—one click, instant performance. No risk, cancel anytime.</p>
-            <RollLink href="/waitlist" text={`Join${NBSP}waitlist`} />
-          </div>
-        </div>
-      </section>
+      <SiteCta titleId="about-cta" />
     </div>
   );
 }
