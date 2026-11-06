@@ -15,6 +15,7 @@ type Preset = {
   glow?: number;
   radius?: number;
   dot?: string;
+  background?: string;
 };
 
 export function DitherImage({

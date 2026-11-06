@@ -3,7 +3,14 @@
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { Pulser, PulseGradient, RollingText, orderedDither, randomDither } from "@/components/motion";
+import {
+  Pulser,
+  PulseGradient,
+  RollingText,
+  nestedDither,
+  orderedDither,
+  randomDither,
+} from "@/components/motion";
 import { usePrefersReducedMotion } from "@/components/motion/use-reduced-motion";
 import { Announcement } from "@/components/announcement";
 import { DitherImage } from "@/components/home/dither-image";
@@ -253,9 +260,18 @@ const faqs = [
 ] as const;
 
 const logoColumns = [
-  ["/home/logo-1.svg", "/home/logo-4.svg"],
-  ["/home/logo-2.svg", "/home/logo-5.svg"],
-  ["/home/logo-3.svg", "/home/logo-6.svg"],
+  [
+    { src: "/home/logo-1.svg", width: 127 },
+    { src: "/home/logo-4.svg", width: 42 },
+  ],
+  [
+    { src: "/home/logo-2.svg", width: 109 },
+    { src: "/home/logo-5.svg", width: 78 },
+  ],
+  [
+    { src: "/home/logo-3.svg", width: 88 },
+    { src: "/home/logo-6.svg", width: 117 },
+  ],
 ] as const;
 
 const logoPhases = [
@@ -321,29 +337,29 @@ function LogoColumn({
   showSecond,
   reduced,
 }: {
-  logos: readonly [string, string];
+  logos: (typeof logoColumns)[number];
   showSecond: boolean;
   reduced: boolean;
 }) {
-  const src = logos[showSecond ? 1 : 0];
+  const logo = logos[showSecond ? 1 : 0];
 
   return (
     <div className={styles.logoCol}>
       {reduced ? (
         <div className={styles.logoSlot}>
-          <img src={src} alt="" height={20} />
+          <img src={logo.src} alt="" width={logo.width} height={20} />
         </div>
       ) : (
-        <AnimatePresence initial={false}>
+        <AnimatePresence initial={false} mode="sync">
           <motion.div
-            key={src}
+            key={logo.src}
             className={styles.logoSlot}
             initial={{ y: 86, opacity: 0, filter: "blur(6px)" }}
             animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
             exit={{ y: -86, opacity: 0, filter: "blur(6px)" }}
             transition={logoSpring}
           >
-            <img src={src} alt="" height={20} />
+            <img src={logo.src} alt="" width={logo.width} height={20} />
           </motion.div>
         </AnimatePresence>
       )}
@@ -368,7 +384,14 @@ function BenefitCard({ benefit }: { benefit: (typeof benefits)[number] }) {
       onBlur={() => setHot(false)}
     >
       <div className={styles.benefitField}>
-        <DitherImage src={benefit.src} label={benefit.label} preset={preset} />
+        {hot && reduced === false ? (
+          <div className={styles.benefitOrdered}>
+            <DitherImage src={benefit.src} label="" preset={nestedDither} />
+          </div>
+        ) : null}
+        <div className={styles.benefitAccent}>
+          <DitherImage src={benefit.src} label={benefit.label} preset={preset} />
+        </div>
       </div>
       <div className={styles.benefitCopy}>
         <h3>{benefit.title}</h3>
@@ -481,7 +504,7 @@ export function HomePage() {
           <div className={styles.logoStage} ref={logoStageRef}>
             {logoColumns.map((column, index) => (
               <LogoColumn
-                key={column[0]}
+                key={column[0].src}
                 logos={column}
                 showSecond={logos[index] === 1}
                 reduced={reduced !== false}

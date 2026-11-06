@@ -347,13 +347,29 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
-  filter: grayscale(1);
-  opacity: 0.64;
+  opacity: 0.8;
   mask-image: linear-gradient(24deg, rgba(0, 0, 0, 0.1) 17%, rgba(0, 0, 0, 0.7) 61%);
   -webkit-mask-image: linear-gradient(24deg, rgba(0, 0, 0, 0.1) 17%, rgba(0, 0, 0, 0.7) 61%);
 }
 
-.benefitField canvas {
+.benefitAccent,
+.benefitOrdered {
+  position: absolute;
+  inset: 0;
+}
+
+.benefitAccent {
+  z-index: 3;
+  filter: grayscale(1);
+  opacity: 0.8;
+}
+
+.benefitOrdered {
+  z-index: 1;
+}
+
+.benefitAccent canvas,
+.benefitOrdered canvas {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -363,8 +379,11 @@
 }
 
 .benefitHot .benefitField {
+  opacity: 1;
+}
+
+.benefitHot .benefitAccent {
   filter: none;
-  opacity: 0.8;
 }
 
 .benefitCopy {
@@ -1361,22 +1380,14 @@
 
   .logoStage {
     width: 100%;
-    height: 172px;
-    flex-wrap: wrap;
-  }
-
-  .logoCol {
-    flex: 0 0 50%;
-    height: 86px;
-  }
-
-  .logoCol:last-child {
-    flex-basis: 100%;
   }
 
   .benefitField {
+    opacity: 1;
+  }
+
+  .benefitAccent {
     filter: none;
-    opacity: 0.8;
   }
 
   .cta {

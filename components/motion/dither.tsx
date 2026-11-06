@@ -66,6 +66,7 @@ type DitherProps = {
   glow?: number;
   radius?: number;
   dot?: string;
+  background?: string;
   label: string;
 };
 
@@ -88,13 +89,13 @@ function mapIntensity(intensity: number) {
   return 0.001 + (intensity / 100) * (10 - 0.001);
 }
 
-function parseDot(color: string | undefined) {
+function parseColor(color: string | undefined, fallback: readonly [number, number, number]) {
   if (!color) {
-    return [255, 255, 255] as const;
+    return fallback;
   }
   const hex = /^#([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(color.trim());
   if (!hex) {
-    return [255, 255, 255] as const;
+    return fallback;
   }
   return [
     Number.parseInt(hex[1], 16),
@@ -114,6 +115,7 @@ function drawDither(
     midtones: number;
     glow: number;
     dot?: string;
+    background?: string;
   },
 ) {
   const natural = sourceSize(source);
@@ -146,7 +148,8 @@ function drawDither(
     data[index + 2] = Math.min(255, Math.max(0, Math.round(data[index + 2] * gain)));
   }
   const limit = Math.round((props.threshold * props.midtones) / 50);
-  const dot = parseDot(props.dot);
+  const dot = parseColor(props.dot, [255, 255, 255]);
+  const background = parseColor(props.background, [0, 0, 0]);
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
       const index = (y * width + x) * 4;
@@ -158,10 +161,10 @@ function drawDither(
           ? (BAYER_4[y % 4][x % 4] - 7.5) * 16
           : (Math.random() - 0.5) * 100;
       const on = luma > limit + bias;
-      data[index] = on ? dot[0] : 0;
-      data[index + 1] = on ? dot[1] : 0;
-      data[index + 2] = on ? dot[2] : 0;
-      data[index + 3] = 255;
+      const ink = on ? dot : background;
+      data[index] = ink[0];
+      data[index + 1] = ink[1];
+      data[index + 2] = ink[2];
     }
   }
   out.putImageData(image, 0, 0);
@@ -194,6 +197,7 @@ export function Dither({
   glow = 0,
   radius = 0,
   dot,
+  background,
   label,
 }: DitherProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -212,14 +216,16 @@ export function Dither({
         midtones,
         glow,
         dot,
+        background,
       });
     };
     if (!animation) {
       paint(brightness);
       return;
     }
-    // The published loop jitters brightness by the mapped intensity and redraws.
-    // Random dither also reseeds its dots on that same interval.
+    // Paint the resting frame first. The published loop then jitters brightness,
+    // and random dither reseeds its dots on the same interval.
+    paint(brightness);
     const span = Math.abs(mapIntensity(intensity));
     let frame = 0;
     let last = 0;
@@ -250,6 +256,7 @@ export function Dither({
     midtones,
     glow,
     dot,
+    background,
   ]);
 
   return (

@@ -216,6 +216,10 @@
     margin-bottom: calc(-1 * var(--header-height));
   }
 
+  .art {
+    height: 300px;
+  }
+
   .copy {
     padding-right: 23px;
     padding-left: 23px;
@@ -234,7 +238,7 @@
 
 @media (min-width: 810px) {
   .art {
-    height: 320px;
+    height: 359px;
   }
 
   .copy {
@@ -245,9 +249,5 @@
 @media (min-width: 1200px) {
   .art {
     height: 351px;
-  }
-
-  .copy {
-    padding: 60px 34px;
   }
 }
