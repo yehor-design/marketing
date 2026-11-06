@@ -371,3 +371,9 @@
     font-size: 3.5rem;
   }
 }
+
+@media (min-width: 1200px) {
+  .ctaCopy {
+    padding-bottom: 43px;
+  }
+}

@@ -44,18 +44,26 @@
 }
 
 .roll {
-  display: inline-flex;
+  position: relative;
+  display: inline-block;
   color: inherit;
   font-family: var(--font-display);
   font-weight: 1000;
-  font-variation-settings: "opsz" 14, "wght" 1000;
+  font-variation-settings: "opsz" 14, "wght" 550;
   letter-spacing: 0;
+  white-space: pre;
+}
+
+.sizer {
+  visibility: hidden;
+  white-space: pre;
 }
 
 .clip {
-  display: inline-block;
+  position: absolute;
+  top: 0;
+  display: block;
   overflow: hidden;
-  vertical-align: top;
 }
 
 .letter {

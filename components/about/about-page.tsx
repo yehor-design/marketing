@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { DitherImage } from "@/components/home/dither-image";
-import { GodRays, RollingText, orderedDither } from "@/components/motion";
+import { GodRays, Pulser, RollingText, orderedDither } from "@/components/motion";
 import styles from "@/components/about/about.module.css";
 
 const NBSP = "\u00A0";
@@ -362,7 +362,7 @@ export function AboutPage() {
       <section className={styles.block} aria-labelledby="about-cta">
         <div className={`${styles.frame} ${styles.cta}`}>
           <div className={styles.ctaMedia} aria-hidden="true">
-            <GodRays label="" />
+            <Pulser />
             <div className={styles.grain} />
           </div>
           <div className={styles.ctaCopy}>

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import styles from "./motion.module.css";
 import { usePrefersReducedMotion } from "./use-reduced-motion";
 
@@ -49,6 +49,48 @@ export function RollingText({
   const letters = Array.from(text);
   const controlled = rolling !== undefined;
   const lineHeight = fontSize * ROLLING_TEXT_LINE_HEIGHT_EM;
+  const sizerRef = useRef<HTMLSpanElement>(null);
+  const [offsets, setOffsets] = useState<number[] | null>(null);
+
+  useLayoutEffect(() => {
+    const sizer = sizerRef.current;
+    const node = sizer?.firstChild;
+    if (!sizer || !node) {
+      return;
+    }
+
+    let cancelled = false;
+    const place = () => {
+      if (cancelled) return;
+      const origin = sizer.getBoundingClientRect().left;
+      const range = document.createRange();
+      const next = Array.from(text, (_, index) => {
+        range.setStart(node, index);
+        range.setEnd(node, index + 1);
+        return range.getBoundingClientRect().left - origin;
+      });
+      range.detach();
+      setOffsets((current) => {
+        if (
+          current &&
+          current.length === next.length &&
+          current.every((value, index) => Math.abs(value - next[index]) < 0.05)
+        ) {
+          return current;
+        }
+        return next;
+      });
+    };
+
+    place();
+    const observer = new ResizeObserver(place);
+    observer.observe(sizer);
+    document.fonts?.ready.then(place).catch(() => undefined);
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+    };
+  }, [text, fontSize]);
 
   return (
     <span
@@ -60,13 +102,16 @@ export function RollingText({
       onPointerEnter={controlled ? undefined : () => setHovered(true)}
       onPointerLeave={controlled ? undefined : () => setHovered(false)}
     >
+      <span className={styles.sizer} ref={sizerRef} aria-hidden="true">
+        {text}
+      </span>
       <span className="visually-hidden">{text}</span>
       {letters.map((letter, index) => (
         <span
           className={styles.clip}
           key={`${letter}-${index}`}
           aria-hidden="true"
-          style={{ height: lineHeight }}
+          style={{ height: lineHeight, left: offsets?.[index] ?? 0 }}
         >
           <motion.span
             className={styles.letter}

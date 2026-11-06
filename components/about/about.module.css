@@ -456,7 +456,7 @@
 }
 
 .ctaMedia {
-  filter: hue-rotate(1deg) brightness(4) contrast(1.45);
+  filter: hue-rotate(1deg);
   mask-image: url("/about/cta-mask.svg");
   mask-repeat: no-repeat;
   mask-position: center;
