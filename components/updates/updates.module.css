@@ -312,8 +312,35 @@
     margin-top: 24px;
   }
 
+  .sheet:not(:has(.crumb)) {
+    margin-bottom: -2px;
+  }
+
+  .sheet:not(:has(.crumb)) .item:nth-child(5) .copy {
+    padding-top: 27px;
+  }
+
+  .sheet:not(:has(.crumb)) .item:last-child .cover {
+    margin-top: 4px;
+  }
+
+  .sheet:not(:has(.crumb)) .item:last-child .copy {
+    padding-top: 29px;
+  }
+
   .cover {
-    padding: 3px;
+    margin-top: 2px;
+    padding: 2px 3px 0;
+  }
+
+  .sheet:not(:has(.crumb)) .cover:has(canvas[height="112"]) {
+    padding-top: 0;
+  }
+
+  .sheet:not(:has(.crumb)) .pageHead,
+  .sheet:not(:has(.crumb)) .sideLink {
+    padding-right: 23px;
+    padding-left: 23px;
   }
 
   .pageHead,
@@ -326,6 +353,10 @@
 
   .copy {
     padding: 28px 23px 24px;
+  }
+
+  .sheet:not(:has(.crumb)) .copy {
+    padding-top: 26px;
   }
 
   .sideLink {

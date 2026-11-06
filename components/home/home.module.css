@@ -1259,7 +1259,7 @@
 }
 
 @media (max-width: 809.98px) {
-  .bandHead h2 {
+  .bandHead h2:not(:global(#quotes-title)) {
     width: min(240px, calc(100% - 48px));
   }
 

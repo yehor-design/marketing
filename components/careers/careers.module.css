@@ -772,6 +772,10 @@
 }
 
 @media (max-width: 809.98px) {
+  .careers {
+    margin-bottom: -2px;
+  }
+
   .heroCopy {
     padding-bottom: 50px;
   }

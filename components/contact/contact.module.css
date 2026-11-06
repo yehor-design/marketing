@@ -252,6 +252,16 @@
 }
 
 @media (max-width: 809.98px) {
+  .page {
+    margin-bottom: -3px;
+  }
+
+  .introCopy {
+    padding-right: 23px;
+    padding-left: 23px;
+    text-align: center;
+  }
+
   .heading h2 {
     font-size: 14px;
     line-height: 1.5;

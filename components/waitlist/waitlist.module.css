@@ -212,7 +212,7 @@
 
 @media (max-width: 809.98px) {
   .hero {
-    margin-top: calc(-1 * var(--header-height));
+    margin-top: calc(-1 * var(--header-height) + 3px);
     margin-bottom: calc(-1 * var(--header-height));
   }
 }

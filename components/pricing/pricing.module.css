@@ -774,6 +774,20 @@
 }
 
 @media (max-width: 809.98px) {
+  .suffix {
+    position: relative;
+    top: 6px;
+  }
+
+  .cardPopular .divider,
+  .cardPopular .dividerAccent {
+    margin-top: 25px;
+  }
+
+  .cards {
+    margin-bottom: 2px;
+  }
+
   .card,
   .cardPopular {
     min-height: 0;
@@ -787,7 +801,7 @@
   .switcher {
     align-items: flex-start;
     height: 86px;
-    padding-top: 30px;
+    padding-top: 26px;
   }
 }
 
