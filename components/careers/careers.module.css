@@ -243,8 +243,7 @@
   line-height: 1.4;
 }
 
-.benefitGrid p,
-.perks p {
+.benefitGrid p {
   max-height: 0;
   margin: 0;
   overflow: hidden;
@@ -257,9 +256,7 @@
 }
 
 .benefitGrid li:hover p,
-.benefitGrid li:focus-within p,
-.perks li:hover p,
-.perks li:focus-within p {
+.benefitGrid li:focus-within p {
   max-height: 4.5em;
   margin-top: 8px;
   opacity: 1;
@@ -470,8 +467,43 @@
   margin-top: 24px;
 }
 
-.perks li + li {
-  margin-top: 28px;
+.perks li {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: start;
+  min-height: 95px;
+}
+
+.perks svg {
+  width: 28px;
+  height: 28px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.perks li > div {
+  position: relative;
+  height: 24px;
+}
+
+.perks h3 {
+  line-height: 1.5;
+}
+
+.perks p {
+  position: absolute;
+  bottom: -58px;
+  left: 0;
+  width: 240px;
+  max-width: 100%;
+  margin: 0;
+  overflow: visible;
+  color: var(--muted);
+  font-size: 14px;
+  font-variation-settings: "opsz" 14, "wght" 450;
+  letter-spacing: 0;
+  line-height: 1.5;
+  opacity: 1;
 }
 
 .apply {
@@ -711,6 +743,22 @@
     margin-top: 0;
   }
 
+  .perks {
+    margin-top: 70px;
+    margin-left: -34px;
+    width: calc(100% + 68px);
+  }
+
+  .perks li {
+    height: 95.3px;
+    min-height: 95.3px;
+    padding-left: 24px;
+  }
+
+  .frame.applySection {
+    margin-top: 22px;
+  }
+
   .apply {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 532px);
@@ -737,17 +785,69 @@
   }
 
   .roleHeading {
-    display: grid;
-    grid-template-columns: max-content max-content;
-    justify-content: start;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     column-gap: 8px;
-    row-gap: 8px;
+    row-gap: 0;
   }
 
-  .roleHead h1,
-  .pill {
-    grid-column: 1 / -1;
-    width: fit-content;
+  .roleHead,
+  .details,
+  .apply {
+    padding: 34px;
+  }
+
+  .apply {
+    display: flex;
+    flex-direction: column;
+    gap: 59px;
+    padding: 34px 24px;
+  }
+
+  .apply h2 {
+    margin: 0 10px;
+  }
+
+  .form {
+    width: 100%;
+  }
+
+  .roleHead {
+    gap: 26px;
+  }
+
+  .roleLead {
+    gap: 32px;
+  }
+
+  .perkColumn {
+    margin-top: 74px;
+  }
+
+  .perks {
+    margin-top: 70px;
+    padding-left: 0;
+  }
+
+  .perks li {
+    height: 97px;
+    min-height: 97px;
+    column-gap: 2px;
+    padding-left: 0;
+  }
+
+  .perks p {
+    width: min(240px, 100%);
+  }
+
+  .frame.applySection {
+    margin-top: 26px;
+  }
+
+  .roleHead h1 {
+    flex-basis: 100%;
+    width: auto;
     max-width: 100%;
   }
 }

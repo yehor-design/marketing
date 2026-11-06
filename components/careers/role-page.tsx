@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ApplyForm } from "@/components/careers/apply-form";
-import { Chevron } from "@/components/careers/icons";
+import { BenefitIcon, Chevron } from "@/components/careers/icons";
 import { RollLink } from "@/components/careers/roll-link";
 import { benefits, type CareerRole } from "@/lib/careers";
 import styles from "@/components/careers/careers.module.css";
@@ -70,8 +70,11 @@ export function RolePage({ role }: { role: CareerRole }) {
             <ul className={styles.perks}>
               {benefits.map((benefit) => (
                 <li key={benefit.title}>
-                  <h3>{benefit.title}</h3>
-                  <p>{benefit.body}</p>
+                  <BenefitIcon name={benefit.icon} />
+                  <div>
+                    <h3>{benefit.title}</h3>
+                    <p>{benefit.body}</p>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -79,7 +82,11 @@ export function RolePage({ role }: { role: CareerRole }) {
         </div>
       </section>
 
-      <section className={`${styles.frame} ${styles.section}`} id="application" aria-labelledby="apply-title">
+      <section
+        className={`${styles.frame} ${styles.section} ${styles.applySection}`}
+        id="application"
+        aria-labelledby="apply-title"
+      >
         <div className={styles.apply}>
           <h2 id="apply-title">Apply for this job.</h2>
           <ApplyForm title={role.title} slug={role.slug} />

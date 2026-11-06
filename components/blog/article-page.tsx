@@ -124,6 +124,7 @@ export function ArticlePage({ slug }: { slug: string }) {
         </div>
         <CoverImage src={post.image} label={post.imageAlt} />
         <div className={styles.intro}>
+          <p className={styles.mobileDate}>{post.date}</p>
           <h1>{post.title}</h1>
           <p className={styles.lede}>{post.description}</p>
           <ul className={styles.authors}>
@@ -174,7 +175,17 @@ export function ArticlePage({ slug }: { slug: string }) {
 
       <section className={styles.cta} aria-labelledby="blog-cta">
         <div className={styles.ctaMedia} aria-hidden="true">
-          <GodRays label="" />
+          <GodRays
+            label=""
+            shader
+            speed={5}
+            frequency={0}
+            spotty={0.8}
+            offsetY={0.54}
+            density={1}
+            centerIntensity={0.47}
+            centerSize={0.8}
+          />
           <div className={styles.grain} />
         </div>
         <div className={styles.ctaCopy}>

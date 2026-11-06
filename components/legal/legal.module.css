@@ -1,6 +1,7 @@
 .legal {
   width: min(1200px, calc(100% - 32px));
   margin: 1px auto 0;
+  padding: 0 34px;
   color: #fff;
   font-family: var(--font-display);
   font-weight: 1000;
@@ -26,6 +27,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: calc(100% + 68px);
+  margin: 0 -34px;
   padding: 24px 34px;
 }
 
