@@ -387,19 +387,100 @@
 }
 
 .benefitCopy {
+  --reveal-ease: linear(
+    0,
+    0.011,
+    0.0399,
+    0.0811,
+    0.1305,
+    0.1849,
+    0.2418,
+    0.2993,
+    0.3561,
+    0.4111,
+    0.4637,
+    0.5134,
+    0.56,
+    0.6032,
+    0.6432,
+    0.6799,
+    0.7135,
+    0.7441,
+    0.7718,
+    0.7969,
+    0.8194,
+    0.8397,
+    0.858,
+    0.8743,
+    0.8888,
+    0.9018,
+    0.9133,
+    0.9236,
+    0.9327,
+    0.9408,
+    0.9479,
+    0.9543,
+    0.9598,
+    0.9648,
+    0.9691,
+    0.9729,
+    0.9763,
+    0.9792,
+    0.9818,
+    0.9841,
+    0.9861,
+    0.9879,
+    0.9894,
+    0.9908,
+    0.9919,
+    0.993,
+    0.9939,
+    0.9947,
+    0.9953,
+    0.9959,
+    0.9965,
+    0.9969,
+    0.9973,
+    0.9977,
+    0.998,
+    0.9982,
+    0.9985,
+    0.9987,
+    0.9988,
+    1
+  );
   position: absolute;
   right: 34px;
   bottom: 34px;
   left: 34px;
   z-index: 1;
-  height: 34px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.benefitReveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  min-height: 0;
+  margin-top: 0;
+  transition:
+    grid-template-rows 600ms var(--reveal-ease),
+    margin-top 600ms var(--reveal-ease);
+}
+
+.benefit:hover .benefitReveal,
+.benefit:focus-within .benefitReveal,
+.benefitHot .benefitReveal {
+  grid-template-rows: 1fr;
+  margin-top: 6px;
 }
 
 .benefitCopy p {
-  position: absolute;
-  top: 41px;
-  right: 0;
-  left: 0;
+  position: static;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
 }
 
 .benefit h3 {
@@ -1372,6 +1453,10 @@
     transform: none;
     filter: none;
   }
+
+  .benefitReveal {
+    transition: none;
+  }
 }
 
 @media (max-width: 809.98px) {
@@ -1425,9 +1510,15 @@
     height: auto;
   }
 
+  .benefitReveal {
+    grid-template-rows: 1fr;
+    margin-top: 6px;
+    transition: none;
+  }
+
   .benefitCopy p {
     position: static;
-    margin-top: 6px;
+    margin-top: 0;
   }
 
   .halftone {

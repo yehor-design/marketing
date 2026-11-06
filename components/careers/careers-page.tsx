@@ -86,7 +86,9 @@ export function CareersPage() {
               <BenefitIcon name={benefit.icon} />
               <div>
                 <h3>{benefit.title}</h3>
-                <p>{benefit.body}</p>
+                <div className={styles.benefitReveal}>
+                  <p>{benefit.body}</p>
+                </div>
               </div>
             </li>
           ))}

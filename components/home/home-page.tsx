@@ -395,7 +395,9 @@ function BenefitCard({ benefit }: { benefit: (typeof benefits)[number] }) {
       </div>
       <div className={styles.benefitCopy}>
         <h3>{benefit.title}</h3>
-        <p>{benefit.body}</p>
+        <div className={styles.benefitReveal}>
+          <p>{benefit.body}</p>
+        </div>
       </div>
     </article>
   );

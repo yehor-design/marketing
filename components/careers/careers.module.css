@@ -298,28 +298,89 @@
   line-height: 24px;
 }
 
+.benefitGrid {
+  --reveal-ease: linear(
+    0,
+    0.011,
+    0.0399,
+    0.0811,
+    0.1305,
+    0.1849,
+    0.2418,
+    0.2993,
+    0.3561,
+    0.4111,
+    0.4637,
+    0.5134,
+    0.56,
+    0.6032,
+    0.6432,
+    0.6799,
+    0.7135,
+    0.7441,
+    0.7718,
+    0.7969,
+    0.8194,
+    0.8397,
+    0.858,
+    0.8743,
+    0.8888,
+    0.9018,
+    0.9133,
+    0.9236,
+    0.9327,
+    0.9408,
+    0.9479,
+    0.9543,
+    0.9598,
+    0.9648,
+    0.9691,
+    0.9729,
+    0.9763,
+    0.9792,
+    0.9818,
+    0.9841,
+    0.9861,
+    0.9879,
+    0.9894,
+    0.9908,
+    0.9919,
+    0.993,
+    0.9939,
+    0.9947,
+    0.9953,
+    0.9959,
+    0.9965,
+    0.9969,
+    0.9973,
+    0.9977,
+    0.998,
+    0.9982,
+    0.9985,
+    0.9987,
+    0.9988,
+    1
+  );
+}
+
+.benefitReveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  min-height: 0;
+}
+
 .benefitGrid p {
-  position: absolute;
-  bottom: -58px;
-  left: 0;
   width: 240px;
   max-width: 240px;
+  min-height: 0;
   margin: 0;
+  overflow: hidden;
   color: var(--muted);
   font-size: 14px;
   font-variation-settings: "opsz" 14, "wght" 550;
   letter-spacing: 0;
   line-height: 21px;
   opacity: 0;
-  transition: opacity 0.25s ease;
-}
-
-.benefitGrid li:hover p,
-.benefitGrid li:focus-within p {
-  position: relative;
-  bottom: auto;
-  left: auto;
-  opacity: 1;
 }
 
 .rolesIntro {
@@ -705,10 +766,90 @@
   .benefitGrid li > div {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0;
     width: 100%;
     padding: 0 0 34px;
     overflow: hidden;
+  }
+
+  .benefitGrid li::before,
+  .benefitGrid li::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .benefitGrid li::before {
+    background-image: url("/careers/benefit-dots.png");
+    background-repeat: repeat;
+    background-position: left top;
+    background-size: 20px auto;
+    opacity: 0.1;
+    mask-image: radial-gradient(
+      99.3865% 162% at 1% 100%,
+      rgba(0, 0, 0, 0) 0%,
+      #000 77%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    mask-repeat: no-repeat;
+    mask-position: left bottom;
+    mask-size: 3% 3%;
+    -webkit-mask-image: radial-gradient(
+      99.3865% 162% at 1% 100%,
+      rgba(0, 0, 0, 0) 0%,
+      #000 77%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: left bottom;
+    -webkit-mask-size: 3% 3%;
+    transition:
+      mask-size 600ms var(--reveal-ease),
+      -webkit-mask-size 600ms var(--reveal-ease);
+  }
+
+  .benefitGrid li::after {
+    background: rgba(255, 255, 255, 0.03);
+    opacity: 0;
+    transition: opacity 600ms var(--reveal-ease);
+  }
+
+  .benefitGrid li:hover::before,
+  .benefitGrid li:focus-within::before {
+    mask-size: 100% 100%;
+    -webkit-mask-size: 100% 100%;
+  }
+
+  .benefitGrid li:hover::after,
+  .benefitGrid li:focus-within::after {
+    opacity: 1;
+  }
+
+  .benefitReveal {
+    margin-top: 0;
+    transition:
+      grid-template-rows 600ms var(--reveal-ease),
+      margin-top 600ms var(--reveal-ease);
+  }
+
+  .benefitGrid p {
+    transform: translateY(24px);
+    transition:
+      opacity 600ms var(--reveal-ease),
+      transform 600ms var(--reveal-ease);
+  }
+
+  .benefitGrid li:hover .benefitReveal,
+  .benefitGrid li:focus-within .benefitReveal {
+    grid-template-rows: 1fr;
+    margin-top: 10px;
+  }
+
+  .benefitGrid li:hover p,
+  .benefitGrid li:focus-within p {
+    opacity: 1;
+    transform: none;
   }
 
   .benefitGrid svg {
@@ -978,5 +1119,14 @@
   .rolesIntro {
     padding-right: 33px;
     padding-left: 33px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .benefitReveal,
+  .benefitGrid p,
+  .benefitGrid li::before,
+  .benefitGrid li::after {
+    transition: none;
   }
 }
