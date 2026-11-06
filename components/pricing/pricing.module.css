@@ -803,6 +803,28 @@
     height: 86px;
     padding-top: 26px;
   }
+
+  .tabs {
+    gap: 0;
+    margin-left: 20px;
+  }
+
+  .category {
+    padding-left: 12px;
+  }
+
+  .price {
+    gap: 4px;
+  }
+
+  .currency {
+    margin-right: 0;
+  }
+
+  .amount > span:last-child {
+    font-weight: 550;
+    font-feature-settings: "tnum";
+  }
 }
 
 @media (min-width: 810px) {

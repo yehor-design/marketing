@@ -63,6 +63,8 @@
 .cta h2 {
   margin: 0;
   font-size: 3.5rem;
+  font-weight: 1000;
+  font-feature-settings: "tnum";
   letter-spacing: -0.04em;
   line-height: 1.1;
 }
@@ -562,15 +564,17 @@
   }
 
   .ctaCopy {
-    padding: 24px 20px 24px 24px;
+    padding: 24px 22px;
   }
 
   .cta h2 {
     max-width: 310px;
+    white-space: pre-wrap;
   }
 
   .cta p {
-    max-width: 270px;
+    max-width: 310px;
+    margin-top: 24px;
   }
 }
 
