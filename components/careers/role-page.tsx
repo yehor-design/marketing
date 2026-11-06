@@ -4,7 +4,6 @@ import Link from "next/link";
 import { ApplyForm } from "@/components/careers/apply-form";
 import { BenefitIcon, Chevron } from "@/components/careers/icons";
 import { RollLink } from "@/components/careers/roll-link";
-import { CornerMarks } from "@/components/motion/corner-marks";
 import { benefits, type CareerRole } from "@/lib/careers";
 import styles from "@/components/careers/careers.module.css";
 
@@ -68,10 +67,9 @@ export function RolePage({ role }: { role: CareerRole }) {
           </div>
           <div className={styles.perkColumn}>
             <h2>Benefits</h2>
-            <ul className={styles.perks}>
+            <ul className={`${styles.perks} ${styles.rolePerks}`}>
               {benefits.map((benefit) => (
-                <li key={benefit.title} className="corner-host">
-                  <CornerMarks />
+                <li key={benefit.title}>
                   <BenefitIcon name={benefit.icon} />
                   <div>
                     <h3>{benefit.title}</h3>

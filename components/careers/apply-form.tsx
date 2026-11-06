@@ -104,14 +104,10 @@ export function ApplyForm({ title, slug }: { title: string; slug: string }) {
   return (
     <form
       className={styles.form}
-      noValidate
       onSubmit={(event) => {
         event.preventDefault();
-        const next = validate(new FormData(event.currentTarget));
-        setErrors(next);
-        if (Object.keys(next).length === 0) {
-          setDone(true);
-        }
+        setErrors({});
+        setDone(true);
       }}
     >
       <div className={styles.fields}>

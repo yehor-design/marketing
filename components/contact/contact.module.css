@@ -33,6 +33,7 @@
 .intro {
   display: flex;
   flex-direction: column;
+  background: #000;
 }
 
 .band,

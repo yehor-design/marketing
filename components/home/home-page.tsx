@@ -4,10 +4,9 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import {
-  LineAnimator,
   PulseGradient,
+  Pulser,
   RollingText,
-  nestedDither,
   orderedDither,
   randomDither,
 } from "@/components/motion";
@@ -289,6 +288,7 @@ const logoWaits = [1000, 100, 100, 2000, 100, 100, 1000];
 
 const spring = { type: "spring" as const, duration: 0.6, bounce: 0 };
 const logoSpring = { type: "spring" as const, duration: 0.6, bounce: 0 };
+const faqSpring = { type: "spring" as const, duration: 0.4, bounce: 0 };
 
 function RollLink({
   href,
@@ -372,27 +372,11 @@ function LogoColumn({
 }
 
 function BenefitCard({ benefit }: { benefit: (typeof benefits)[number] }) {
-  const reduced = usePrefersReducedMotion();
-  const [hot, setHot] = useState(false);
-  const preset =
-    hot && reduced === false
-      ? { ...randomDither, animation: true, intensity: 5, interval: 0.2, dot: benefit.color }
-      : { ...randomDither, dot: benefit.color };
+  const preset = { ...randomDither, dot: benefit.color };
 
   return (
-    <article
-      className={hot ? `${styles.benefit} ${styles.benefitHot}` : styles.benefit}
-      onPointerEnter={() => setHot(true)}
-      onPointerLeave={() => setHot(false)}
-      onFocus={() => setHot(true)}
-      onBlur={() => setHot(false)}
-    >
+    <article className={styles.benefit}>
       <div className={styles.benefitField}>
-        {hot && reduced === false ? (
-          <div className={styles.benefitOrdered}>
-            <DitherImage src={benefit.src} label="" preset={nestedDither} />
-          </div>
-        ) : null}
         <div className={styles.benefitAccent}>
           <DitherImage src={benefit.src} label={benefit.label} preset={preset} />
         </div>
@@ -695,32 +679,51 @@ export function HomePage() {
             const open = openFaq === index;
             const answerId = `faq-answer-${index}`;
             return (
-              <div className={open ? `${styles.faqItem} ${styles.faqOpen}` : styles.faqItem} key={item.q}>
+              <motion.div
+                className={open ? `${styles.faqItem} ${styles.faqOpen}` : styles.faqItem}
+                key={item.q}
+                initial={false}
+                animate={{
+                  backgroundColor: open ? "#171717" : "rgba(12, 12, 12, 0)",
+                }}
+                whileHover={{
+                  backgroundColor: open ? "#171717" : "rgba(12, 12, 12, 0.3)",
+                }}
+                whileFocus={{
+                  backgroundColor: open ? "#171717" : "rgba(12, 12, 12, 0.3)",
+                }}
+                transition={reduced === false ? faqSpring : { duration: 0 }}
+              >
                 <h3>
-                  <button
+                  <motion.button
                     type="button"
                     aria-expanded={open}
                     aria-controls={answerId}
                     onClick={() => setOpenFaq(open ? null : index)}
+                    initial={false}
+                    animate={{ paddingBottom: open ? 12 : 28 }}
+                    transition={reduced === false ? faqSpring : { duration: 0 }}
                   >
                     <span>{item.q}</span>
-                    <span className={open ? styles.plusOpen : styles.plus} aria-hidden="true" />
-                  </button>
+                    <motion.span
+                      className={styles.plus}
+                      aria-hidden="true"
+                      initial={false}
+                      animate={{ rotate: open ? 45 : 0 }}
+                      transition={reduced === false ? faqSpring : { duration: 0 }}
+                    />
+                  </motion.button>
                 </h3>
                 <motion.div
                   id={answerId}
                   className={styles.faqAnswer}
                   initial={false}
-                  animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
-                  transition={
-                    reduced === false
-                      ? { type: "spring", duration: 0.4, bounce: 0 }
-                      : { duration: 0 }
-                  }
+                  animate={{ height: open ? "auto" : 0 }}
+                  transition={reduced === false ? faqSpring : { duration: 0 }}
                 >
                   <p>{item.a}</p>
                 </motion.div>
-              </div>
+              </motion.div>
             );
           })}
         </div>
@@ -730,10 +733,9 @@ export function HomePage() {
       <section className={styles.cta} aria-labelledby="cta-title">
         <div className={`${styles.frame} ${styles.dash} ${styles.ctaCard}`}>
           <div className={styles.ctaMedia}>
-            <PulseGradient label="Footer background" />
+            <Pulser />
             <div className={styles.grain} />
           </div>
-          <LineAnimator />
           <div className={styles.ctaCopy}>
             <h2 id="cta-title">Boost your site speed today.</h2>
             <p>Try Jet now—one click, instant performance. No risk, cancel anytime.</p>

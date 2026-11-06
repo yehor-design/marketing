@@ -31,9 +31,33 @@ const artHighlight = {
   glow: 0,
 };
 
+function unitBezier(x1: number, y1: number, x2: number, y2: number, time: number) {
+  const cx = 3 * x1;
+  const bx = 3 * (x2 - x1) - cx;
+  const ax = 1 - cx - bx;
+  const cy = 3 * y1;
+  const by = 3 * (y2 - y1) - cy;
+  const ay = 1 - cy - by;
+  const sampleX = (u: number) => ((ax * u + bx) * u + cx) * u;
+  const sampleY = (u: number) => ((ay * u + by) * u + cy) * u;
+  const slope = (u: number) => (3 * ax * u + 2 * bx) * u + cx;
+  let u = time;
+  for (let step = 0; step < 6; step += 1) {
+    const delta = sampleX(u) - time;
+    const derivative = slope(u);
+    if (Math.abs(delta) < 1e-5 || derivative === 0) {
+      break;
+    }
+    u -= delta / derivative;
+  }
+  return sampleY(Math.min(1, Math.max(0, u)));
+}
+
 function easeRadius(kind: "in" | "out", progress: number) {
   const t = Math.min(1, Math.max(0, progress));
-  return kind === "out" ? 1 - (1 - t) ** 3 : t ** 3;
+  return kind === "out"
+    ? unitBezier(0, 0, 0.58, 1, t)
+    : unitBezier(0.42, 0, 1, 1, t);
 }
 
 function Flashlight({ children }: { children: ReactNode }) {
@@ -61,6 +85,8 @@ function Flashlight({ children }: { children: ReactNode }) {
       if (node) {
         node.style.maskImage = `radial-gradient(circle ${state.radius}px at ${state.x}px ${state.y}px, rgb(0, 0, 0), rgb(0, 0, 0) 40%, rgba(0, 0, 0, 0) 100%)`;
         node.style.webkitMaskImage = node.style.maskImage;
+        node.style.maskComposite = "destination-out";
+        node.style.webkitMaskComposite = "destination-out";
       }
       frame = requestAnimationFrame(tick);
     };
@@ -146,13 +172,10 @@ export function WaitlistPage() {
           </div>
           <form
             className={styles.form}
-            noValidate
             onSubmit={(event) => {
               event.preventDefault();
-              const data = new FormData(event.currentTarget);
-              const next = emailError(String(data.get("Email") ?? "").trim());
-              setError(next);
-              setDone(next === "");
+              setError("");
+              setDone(true);
             }}
           >
             <div className={styles.row}>

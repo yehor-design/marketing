@@ -70,7 +70,7 @@
   align-items: center;
   justify-content: center;
   gap: 34px;
-  height: 760px;
+  height: 810px;
   padding: 100px 20px 130px;
   overflow: hidden;
 }
@@ -168,7 +168,8 @@
 }
 
 .hero h1 {
-  width: 100%;
+  width: min(400px, 100%);
+  margin-inline: auto;
   font-feature-settings: "tnum" on;
 }
 
@@ -220,7 +221,7 @@
 }
 
 .buttonSecondary {
-  background: #171717;
+  background: #000;
   color: #fff;
 }
 
@@ -473,13 +474,6 @@
   transition:
     grid-template-rows 600ms var(--reveal-ease),
     margin-top 600ms var(--reveal-ease);
-}
-
-.benefit:hover .benefitReveal,
-.benefit:focus-within .benefitReveal,
-.benefitHot .benefitReveal {
-  grid-template-rows: 1fr;
-  margin-top: 6px;
 }
 
 .benefitCopy p {
@@ -924,7 +918,23 @@
 }
 
 .faqItem {
+  position: relative;
   border-top: 0;
+  background-color: transparent;
+}
+
+.faqItem::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  height: 1px;
+  background-image: repeating-linear-gradient(90deg, var(--rule) 0 12px, transparent 12px 18px);
+  background-size: 18px 1px;
+  animation: dash-x 1s linear infinite;
+  pointer-events: none;
 }
 
 .faqItem h3 {
@@ -936,7 +946,6 @@
 
 .faqOpen button {
   min-height: 0;
-  padding-bottom: 12px;
 }
 
 .faqItem button {
@@ -947,7 +956,6 @@
   height: auto;
   min-height: 82px;
   padding: 28px 24px 28px 34px;
-  transition: padding 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   border: 0;
   background: transparent;
   color: #fff;
@@ -965,8 +973,7 @@
   min-width: 0;
 }
 
-.plus,
-.plusOpen {
+.plus {
   position: relative;
   flex: none;
   width: 26px;
@@ -974,9 +981,7 @@
 }
 
 .plus::before,
-.plus::after,
-.plusOpen::before,
-.plusOpen::after {
+.plus::after {
   content: "";
   position: absolute;
   top: 12px;
@@ -984,23 +989,10 @@
   width: 14px;
   height: 1px;
   background: rgba(255, 255, 255, 0.5);
-  transition: background-color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.faqItem:hover .plus::before,
-.faqItem:hover .plus::after,
-.plusOpen::before,
-.plusOpen::after {
-  background: #fff;
-}
-
-.plus::after,
-.plusOpen::after {
+.plus::after {
   transform: rotate(90deg);
-}
-
-.plusOpen::after {
-  opacity: 0;
 }
 
 .faqAnswer {
@@ -1034,26 +1026,9 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
-  filter: brightness(1.5) contrast(0.85) hue-rotate(1deg);
   pointer-events: none;
-  mask-image:
-    url("/home/rays-mask.svg"),
-    linear-gradient(0deg, rgba(0, 0, 0, 0) 46%, rgba(0, 0, 0, 0.7) 100%);
-  mask-repeat: no-repeat, no-repeat;
-  mask-position:
-    bottom center,
-    center;
-  mask-size: cover, 100% 100%;
-  mask-composite: add, add;
-  -webkit-mask-image:
-    url("/home/rays-mask.svg"),
-    linear-gradient(0deg, rgba(0, 0, 0, 0) 46%, rgba(0, 0, 0, 0.7) 100%);
-  -webkit-mask-repeat: no-repeat, no-repeat;
-  -webkit-mask-position:
-    bottom center,
-    center;
-  -webkit-mask-size: cover, 100% 100%;
-  -webkit-mask-composite: plus-lighter, plus-lighter;
+  background: #000;
+  filter: brightness(0.22);
 }
 
 .ctaCopy {
@@ -1083,7 +1058,7 @@
 
 @media (min-width: 810px) {
   .heroFrame {
-    height: 720px;
+    height: 810px;
   }
 
   .hero h1 {
@@ -1545,13 +1520,12 @@
     filter: none;
   }
 
-  .benefitReveal,
-  .faqItem button,
-  .plus::before,
-  .plus::after,
-  .plusOpen::before,
-  .plusOpen::after {
+  .benefitReveal {
     transition: none;
+  }
+
+  .faqItem::after {
+    animation: none;
   }
 
   .dash,
@@ -1604,16 +1578,20 @@
   }
 
   .faqGrid > h2 {
-    justify-content: flex-start;
-    padding-left: 36px;
-    text-align: left;
+    width: 286px;
+    height: auto;
+    margin-right: auto;
+    margin-left: auto;
+    justify-content: center;
+    padding: 0;
+    text-align: center;
   }
 
   .faqGrid > h2 span {
     width: 286px;
-    text-align: left;
+    text-align: center;
     text-wrap: wrap;
-    transform: translateY(1.51px);
+    transform: none;
   }
 
   .benefitCopy {

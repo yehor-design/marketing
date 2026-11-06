@@ -210,9 +210,6 @@ export function SiteHeader() {
       </div>
       {open ? (
         <div id="mobile-menu" className="mobile-panel">
-          <Link className="mobile-cta" href="/waitlist" onClick={closeSoon}>
-            <RollingText text={"Join\u00A0waitlist"} />
-          </Link>
           <nav aria-label="Primary">
             <ul className="mobile-links">
               {navLinks.map((link) => {
@@ -235,6 +232,9 @@ export function SiteHeader() {
               })}
             </ul>
           </nav>
+          <Link className="mobile-cta" href="/waitlist" onClick={closeSoon}>
+            <RollingText text={"Join\u00A0waitlist"} />
+          </Link>
         </div>
       ) : null}
     </header>

@@ -647,6 +647,13 @@
   opacity: 1;
 }
 
+.rolePerks li:hover .perkReveal,
+.rolePerks li:focus-within .perkReveal {
+  grid-template-rows: 0fr;
+  margin-top: 0;
+  opacity: 0;
+}
+
 .perkReveal p,
 .perks p {
   width: 240px;
@@ -931,6 +938,44 @@
 
   .fieldWide {
     grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .details {
+    display: grid;
+    grid-template-columns: minmax(0, 684fr) 308px;
+    gap: 0;
+    align-items: start;
+    padding: 100px 0 0;
+  }
+
+  .detailMain,
+  .perkColumn {
+    padding: 34px;
+  }
+
+  .perkColumn {
+    margin-top: 0;
+  }
+
+  .apply {
+    display: grid;
+    grid-template-columns: 290px minmax(0, 1fr);
+    gap: 0;
+    align-items: start;
+    padding: 100px 0 0;
+  }
+
+  .apply h2 {
+    box-sizing: border-box;
+    width: 290px;
+    margin: 0;
+    padding: 34px;
+  }
+
+  .apply .form {
+    padding: 34px;
   }
 }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { GodRays, RollingText } from "@/components/motion";
+import { RollingText } from "@/components/motion";
 import styles from "@/components/contact/contact.module.css";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -45,26 +45,6 @@ function validate(data: FormData): Errors {
   return errors;
 }
 
-function Rays() {
-  return (
-    <div className={styles.band} aria-hidden="true">
-      <div className={styles.rays}>
-        <GodRays
-          label=""
-          shader
-          speed={5}
-          spotty={0.8}
-          offsetY={0.54}
-          density={1}
-          centerIntensity={0.47}
-          centerSize={0.8}
-        />
-        <div className={styles.grain} />
-      </div>
-    </div>
-  );
-}
-
 export function ContactPage() {
   const [errors, setErrors] = useState<Errors>({});
   const [done, setDone] = useState(false);
@@ -75,7 +55,6 @@ export function ContactPage() {
     <div className={styles.page}>
       <section className={styles.frame} aria-labelledby="contact-title">
         <div className={styles.intro}>
-          <Rays />
           <div className={styles.introCopy}>
             <h1 id="contact-title">Get in touch with Jet</h1>
             <p>
@@ -83,19 +62,14 @@ export function ContactPage() {
               team will get back to you as soon as possible.
             </p>
           </div>
-          <div className={styles.bandBottom}>
-            <Rays />
-          </div>
         </div>
         <div className={styles.panel}>
           <form
             className={styles.form}
-            noValidate
             onSubmit={(event) => {
               event.preventDefault();
-              const next = validate(new FormData(event.currentTarget));
-              setErrors(next);
-              setDone(Object.keys(next).length === 0);
+              setErrors({});
+              setDone(true);
             }}
           >
             <div className={styles.heading}>
