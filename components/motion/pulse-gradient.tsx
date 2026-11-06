@@ -103,7 +103,7 @@ const LINES_NO_MASK_CONFIG: PulseConfig = {
   speed: 0,
 };
 
-const SPEED = pulseSpeed(0.36);
+const SPEED = pulseSpeed(0.2);
 PULSE_CONFIG.speed = SPEED;
 DOTS_CONFIG.speed = pulseSpeed(0.24);
 LINES_NO_MASK_CONFIG.speed = pulseSpeed(0.44);

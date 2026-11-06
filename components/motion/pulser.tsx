@@ -8,19 +8,16 @@ export const PULSER_DENSITY = 1;
 export const PULSER_CENTER_INTENSITY = 0.47;
 export const PULSER_CENTER_SIZE = 0.8;
 
-export function Pulser({ speed = 0.2 }: { speed?: number }) {
-  // Same Pulser ray field as the published pre-footer. Frequency is raised just
-  // enough to read as vertical bars and short dashes, and the clock stays slow.
+export function Pulser() {
+  // canvasPreview false did not force speed to 0. The published canvas was moving.
   return (
     <GodRays
       shader
-      speed={speed}
-      frequency={6}
-      spotty={3}
-      offsetY={1.15}
-      density={0.4}
-      centerIntensity={0.05}
-      centerSize={0.2}
+      spotty={PULSER_SPOTTY}
+      offsetY={PULSER_OFFSET_Y}
+      density={PULSER_DENSITY}
+      centerIntensity={PULSER_CENTER_INTENSITY}
+      centerSize={PULSER_CENTER_SIZE}
       label="Pulser"
     />
   );

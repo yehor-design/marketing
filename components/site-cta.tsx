@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Pulser, RollingText } from "@/components/motion";
+import { LineAnimator, PulseGradient, RollingText } from "@/components/motion";
 import styles from "@/components/site-cta.module.css";
 
 const NBSP = "\u00A0";
@@ -15,9 +15,10 @@ export function SiteCta({ titleId = "site-cta" }: { titleId?: string }) {
     <section className={styles.cta} aria-labelledby={titleId}>
       <div className={styles.card}>
         <div className={styles.media}>
-          <Pulser />
+          <PulseGradient label="Footer background" />
           <div className={styles.grain} />
         </div>
+        <LineAnimator />
         <div className={styles.copy}>
           <h2 id={titleId}>Boost your site speed today.</h2>
           <p>Try Jet now—one click, instant performance. No risk, cancel anytime.</p>

@@ -4,8 +4,8 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import {
+  LineAnimator,
   PulseGradient,
-  Pulser,
   RollingText,
   orderedDither,
   randomDither,
@@ -733,9 +733,10 @@ export function HomePage() {
       <section className={styles.cta} aria-labelledby="cta-title">
         <div className={`${styles.frame} ${styles.dash} ${styles.ctaCard}`}>
           <div className={styles.ctaMedia}>
-            <Pulser />
+            <PulseGradient label="Footer background" />
             <div className={styles.grain} />
           </div>
+          <LineAnimator />
           <div className={styles.ctaCopy}>
             <h2 id="cta-title">Boost your site speed today.</h2>
             <p>Try Jet now—one click, instant performance. No risk, cancel anytime.</p>

@@ -59,9 +59,26 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
+  filter: brightness(1.5) contrast(0.85) hue-rotate(1deg);
   pointer-events: none;
-  background: #000;
-  filter: brightness(0.22);
+  mask-image:
+    url("/home/rays-mask.svg"),
+    linear-gradient(0deg, rgba(0, 0, 0, 0) 46%, rgba(0, 0, 0, 0.7) 100%);
+  mask-repeat: no-repeat, no-repeat;
+  mask-position:
+    bottom center,
+    center;
+  mask-size: cover, 100% 100%;
+  mask-composite: add, add;
+  -webkit-mask-image:
+    url("/home/rays-mask.svg"),
+    linear-gradient(0deg, rgba(0, 0, 0, 0) 46%, rgba(0, 0, 0, 0.7) 100%);
+  -webkit-mask-repeat: no-repeat, no-repeat;
+  -webkit-mask-position:
+    bottom center,
+    center;
+  -webkit-mask-size: cover, 100% 100%;
+  -webkit-mask-composite: plus-lighter, plus-lighter;
 }
 
 .media > :first-child {
