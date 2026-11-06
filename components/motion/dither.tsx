@@ -65,6 +65,7 @@ type DitherProps = {
   midtones: number;
   glow?: number;
   radius?: number;
+  dot?: string;
   label: string;
 };
 
@@ -87,6 +88,21 @@ function mapIntensity(intensity: number) {
   return 0.001 + (intensity / 100) * (10 - 0.001);
 }
 
+function parseDot(color: string | undefined) {
+  if (!color) {
+    return [255, 255, 255] as const;
+  }
+  const hex = /^#([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(color.trim());
+  if (!hex) {
+    return [255, 255, 255] as const;
+  }
+  return [
+    Number.parseInt(hex[1], 16),
+    Number.parseInt(hex[2], 16),
+    Number.parseInt(hex[3], 16),
+  ] as const;
+}
+
 function drawDither(
   canvas: HTMLCanvasElement,
   source: CanvasImageSource,
@@ -97,6 +113,7 @@ function drawDither(
     threshold: number;
     midtones: number;
     glow: number;
+    dot?: string;
   },
 ) {
   const natural = sourceSize(source);
@@ -129,6 +146,7 @@ function drawDither(
     data[index + 2] = Math.min(255, Math.max(0, Math.round(data[index + 2] * gain)));
   }
   const limit = Math.round((props.threshold * props.midtones) / 50);
+  const dot = parseDot(props.dot);
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
       const index = (y * width + x) * 4;
@@ -140,10 +158,9 @@ function drawDither(
           ? (BAYER_4[y % 4][x % 4] - 7.5) * 16
           : (Math.random() - 0.5) * 100;
       const on = luma > limit + bias;
-      const value = on ? 255 : 0;
-      data[index] = value;
-      data[index + 1] = value;
-      data[index + 2] = value;
+      data[index] = on ? dot[0] : 0;
+      data[index + 1] = on ? dot[1] : 0;
+      data[index + 2] = on ? dot[2] : 0;
       data[index + 3] = 255;
     }
   }
@@ -176,6 +193,7 @@ export function Dither({
   midtones,
   glow = 0,
   radius = 0,
+  dot,
   label,
 }: DitherProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -193,6 +211,7 @@ export function Dither({
         threshold,
         midtones,
         glow,
+        dot,
       });
     };
     if (!animation) {
@@ -230,6 +249,7 @@ export function Dither({
     threshold,
     midtones,
     glow,
+    dot,
   ]);
 
   return (

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { Pulser, PulseGradient, RollingText, orderedDither } from "@/components/motion";
+import { Pulser, PulseGradient, RollingText, orderedDither, randomDither } from "@/components/motion";
 import { usePrefersReducedMotion } from "@/components/motion/use-reduced-motion";
 import { Announcement } from "@/components/announcement";
 import { DitherImage } from "@/components/home/dither-image";
@@ -17,25 +17,29 @@ const benefits = [
   {
     title: "Better user experience",
     body: "Load pages in milliseconds.\nKeep visitors coming back.",
-    field: "/home/benefit-field-wand.png",
+    src: "/home/benefit-wand.png",
+    color: "#00e6c5",
     label: "Dithered version of web screen with a magic wand with random dithering applied",
   },
   {
     title: "Improved SEO",
     body: "Rank higher on Google.\nStand out from competitors.",
-    field: "/home/benefit-field-podium.png",
+    src: "/home/benefit-podium.png",
+    color: "#d85ce0",
     label: "Dithered version of podium with #1 text with random dithering applied",
   },
   {
     title: "Increased conversion",
     body: "Turn visitors into customers.\nBoost your bottom line.",
-    field: "/home/benefit-field-lightning.png",
+    src: "/home/benefit-lightning.png",
+    color: "#29c2ff",
     label: "Dithered version of lightning with lines around with random dithering applied",
   },
   {
     title: "Cost savings",
     body: "Reduce hosting expenses.\nEliminate performance headaches.",
-    field: "/home/benefit-field-coins.png",
+    src: "/home/benefit-coins.png",
+    color: "#e0cd3a",
     label: "Dithered version of stacked coins with random dithering applied",
   },
 ] as const;
@@ -347,6 +351,33 @@ function LogoColumn({
   );
 }
 
+function BenefitCard({ benefit }: { benefit: (typeof benefits)[number] }) {
+  const reduced = usePrefersReducedMotion();
+  const [hot, setHot] = useState(false);
+  const preset =
+    hot && reduced === false
+      ? { ...randomDither, animation: true, intensity: 5, interval: 0.2, dot: benefit.color }
+      : { ...randomDither, dot: benefit.color };
+
+  return (
+    <article
+      className={hot ? `${styles.benefit} ${styles.benefitHot}` : styles.benefit}
+      onPointerEnter={() => setHot(true)}
+      onPointerLeave={() => setHot(false)}
+      onFocus={() => setHot(true)}
+      onBlur={() => setHot(false)}
+    >
+      <div className={styles.benefitField}>
+        <DitherImage src={benefit.src} label={benefit.label} preset={preset} />
+      </div>
+      <div className={styles.benefitCopy}>
+        <h3>{benefit.title}</h3>
+        <p>{benefit.body}</p>
+      </div>
+    </article>
+  );
+}
+
 function QuoteMark() {
   const bubble =
     "M0 6.988C0 6.926.006 6.866.016 6.807H0V6.698C0 2.999 2.999 0 6.698 0v2.687C4.824 2.687 3.291 4.145 3.17 5.988H6.698V13H0Z";
@@ -467,13 +498,7 @@ export function HomePage() {
           </div>
           <div className={styles.benefitGrid}>
             {benefits.map((benefit) => (
-              <article className={styles.benefit} key={benefit.title}>
-                <img className={styles.benefitField} src={benefit.field} alt={benefit.label} />
-                <div className={styles.benefitCopy}>
-                  <h3>{benefit.title}</h3>
-                  <p>{benefit.body}</p>
-                </div>
-              </article>
+              <BenefitCard benefit={benefit} key={benefit.title} />
             ))}
           </div>
         </div>
@@ -523,6 +548,7 @@ export function HomePage() {
                 </ul>
               </div>
               <div className={styles.featureArt}>
+                <div className={styles.featureDots} aria-hidden="true" />
                 <div className={styles.featureFrame}>
                   <DitherImage src={feature.src} label={feature.label} preset={orderedDither} />
                 </div>

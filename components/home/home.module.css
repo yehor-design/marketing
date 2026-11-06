@@ -346,14 +346,25 @@
 .benefitField {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  image-rendering: pixelated;
+  overflow: hidden;
   filter: grayscale(1);
   opacity: 0.64;
   mask-image: linear-gradient(24deg, rgba(0, 0, 0, 0.1) 17%, rgba(0, 0, 0, 0.7) 61%);
   -webkit-mask-image: linear-gradient(24deg, rgba(0, 0, 0, 0.1) 17%, rgba(0, 0, 0, 0.7) 61%);
+}
+
+.benefitField canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+}
+
+.benefitHot .benefitField {
+  filter: none;
+  opacity: 0.8;
 }
 
 .benefitCopy {
@@ -531,7 +542,23 @@
   min-height: 280px;
 }
 
+.featureDots {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image: url("/home/feature-dots.png");
+  background-repeat: repeat;
+  background-position: left top;
+  background-size: 35px auto;
+  opacity: 0.15;
+  mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, #000 100%);
+  -webkit-mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, #000 100%);
+}
+
 .featureFrame {
+  position: relative;
+  z-index: 1;
   width: 280px;
   height: 280px;
   mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.8) 100%);
@@ -1345,6 +1372,11 @@
 
   .logoCol:last-child {
     flex-basis: 100%;
+  }
+
+  .benefitField {
+    filter: none;
+    opacity: 0.8;
   }
 
   .cta {

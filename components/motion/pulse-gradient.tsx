@@ -4,20 +4,21 @@ import { useCallback, useEffect, useRef } from "react";
 import styles from "./motion.module.css";
 
 /**
- * Paper Gradient, Pulse preset, custom hero colors.
- * proportion 92, distortion 54, swirl 75, iterations 3, softness 28,
- * shape Checks, shape size 79, scale 0, rotation -167, offset -813, speed 20.
- * The homepage hero masks this. It is not the GodRays shader.
+ * Homepage hero. Animated Backgrounds, Radial variant.
+ * The instance overrides the Pulse preset:
+ * proportion 35, distortion 12, swirl 80, iterations 10, softness 100,
+ * shape Checks, shape size 10, scale 1, rotation 0, offset 0, speed 20.
+ * Pricing dots stay on DOTS_CONFIG. This is not the GodRays shader.
  */
 
-const PULSE_ROTATION = (-167 * Math.PI) / 180;
-const PULSE_PROPORTION = 0.92;
-const PULSE_SOFTNESS = 0.28;
-const PULSE_DISTORTION = 54 / 50;
-const PULSE_SWIRL = 0.75;
-const PULSE_ITERATIONS = 3;
-const PULSE_SHAPE_SCALE = 0.79;
-const PULSE_SEED = -8130 * (1000 / 120) * 0.001;
+const PULSE_ROTATION = 0;
+const PULSE_PROPORTION = 0.35;
+const PULSE_SOFTNESS = 1;
+const PULSE_DISTORTION = 12 / 50;
+const PULSE_SWIRL = 0.8;
+const PULSE_ITERATIONS = 10;
+const PULSE_SHAPE_SCALE = 0.1;
+const PULSE_SEED = 0;
 
 type PulseConfig = {
   scale: number;
@@ -33,9 +34,9 @@ type PulseConfig = {
   speed: number;
 };
 
-/** Homepage hero. Paper Gradient Pulse preset, custom colors, Radial variant. */
+/** Homepage hero. Radial variant of Animated Backgrounds, custom Pulse values. */
 const PULSE_CONFIG: PulseConfig = {
-  scale: 0,
+  scale: 1,
   rotation: PULSE_ROTATION,
   proportion: PULSE_PROPORTION,
   softness: PULSE_SOFTNESS,
