@@ -148,6 +148,16 @@
   outline-offset: 3px;
 }
 
+@media (max-width: 809.98px) {
+  .cta {
+    padding-top: 46px;
+  }
+
+  .card {
+    padding-top: 78px;
+  }
+}
+
 @media (min-width: 810px) {
   .card {
     height: 382px;

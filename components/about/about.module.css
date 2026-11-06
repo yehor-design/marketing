@@ -544,6 +544,10 @@
   margin-top: 28px;
 }
 
+:global(.site-body):has(.about) {
+  padding-top: 0;
+}
+
 .about :global(a:focus-visible) {
   outline: 1px solid #fff;
   outline-offset: 3px;
@@ -638,6 +642,10 @@
 }
 
 @media (min-width: 720px) and (max-width: 809.98px) {
+  .hero .frame {
+    min-height: 645px;
+  }
+
   .powers {
     flex-direction: row;
     flex-wrap: wrap;

@@ -554,21 +554,6 @@ button {
   }
 }
 
-@media (min-width: 700px) and (max-width: 809.98px) {
-  .footer-top {
-    flex-direction: row;
-    gap: 0;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
-
-  .footer-columns {
-    flex-direction: row;
-    gap: 44px;
-    justify-content: flex-end;
-    width: auto;
-  }
-}
 
 @media (min-width: 810px) {
   .footer-top {

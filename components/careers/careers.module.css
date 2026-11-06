@@ -942,6 +942,12 @@
 }
 
 @media (min-width: 810px) and (max-width: 1199.98px) {
+  .frame.section,
+  .hero + .frame.section,
+  .frame + .frame.section {
+    margin-top: 0;
+  }
+
   .details {
     display: grid;
     grid-template-columns: minmax(0, 684fr) 308px;
