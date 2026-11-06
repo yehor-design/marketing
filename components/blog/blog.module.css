@@ -812,9 +812,20 @@
     gap: 12px;
   }
 
-  .small .tagRow,
+  .small .tagRow {
+    min-height: 20px;
+  }
+
+  .small .tag {
+    height: 20px;
+  }
+
+  .small .text {
+    min-height: 52px;
+  }
+
   .small .date {
-    min-height: 32px;
+    min-height: 34px;
   }
 
   .featureGrid > .small,
