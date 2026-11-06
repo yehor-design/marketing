@@ -934,12 +934,12 @@
   overflow: hidden;
   filter: hue-rotate(1deg);
   pointer-events: none;
-  mask-image: url("/home/cta-lines.svg");
+  mask-image: url("/home/rays-mask.svg");
   mask-mode: alpha;
   mask-repeat: no-repeat;
   mask-position: bottom center;
   mask-size: cover;
-  -webkit-mask-image: url("/home/cta-lines.svg");
+  -webkit-mask-image: url("/home/rays-mask.svg");
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: bottom center;
   -webkit-mask-size: cover;
@@ -1158,12 +1158,9 @@
   }
 
   .ctaMedia {
-    top: 0;
-    right: auto;
-    bottom: auto;
-    left: 0;
-    width: 1168px;
-    height: 382px;
+    inset: 0;
+    width: 100%;
+    height: 100%;
   }
 }
 

@@ -240,10 +240,8 @@ function raysShape(x: number, y: number, radiusTerm: number, freq: number, densi
 
 function shaderFallbackSize(canvas: HTMLCanvasElement) {
   const rect = canvas.getBoundingClientRect();
-  const longest = Math.max(rect.width, rect.height, 1);
-  const scale = Math.min(1, 720 / longest);
-  const width = Math.max(1, Math.round(rect.width * scale));
-  const height = Math.max(1, Math.round(rect.height * scale));
+  const width = Math.max(1, Math.round(rect.width));
+  const height = Math.max(1, Math.round(rect.height));
   if (canvas.width !== width || canvas.height !== height) {
     canvas.width = width;
     canvas.height = height;
@@ -253,10 +251,8 @@ function shaderFallbackSize(canvas: HTMLCanvasElement) {
 
 function paperSize(canvas: HTMLCanvasElement) {
   const rect = canvas.getBoundingClientRect();
-  const longest = Math.max(rect.width, rect.height, 1);
-  const scale = Math.min(1, 640 / longest);
-  const width = Math.max(1, Math.round(rect.width * scale));
-  const height = Math.max(1, Math.round(rect.height * scale));
+  const width = Math.max(1, Math.round(rect.width));
+  const height = Math.max(1, Math.round(rect.height));
   if (canvas.width !== width || canvas.height !== height) {
     canvas.width = width;
     canvas.height = height;

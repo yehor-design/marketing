@@ -98,8 +98,10 @@
 }
 
 .raysFrame {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  aspect-ratio: 1168 / 382;
+  height: 100%;
   background: #000;
 }
 

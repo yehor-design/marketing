@@ -9,21 +9,20 @@ if (typeof document !== "undefined") {
 }
 
 /**
- * Homepage hero. Animated Backgrounds, Radial variant.
- * The instance overrides the Pulse preset:
- * proportion 35, distortion 12, swirl 80, iterations 10, softness 100,
- * shape Checks, shape size 10, scale 1, rotation 0, offset 0, speed 20.
- * Pricing dots stay on DOTS_CONFIG. This is not the GodRays shader.
+ * Homepage hero. Animated Backgrounds variant Radial, last published as the
+ * ray-masked Pulse field. Preset is Pulse, not custom, so the shader uniforms
+ * come from that preset (colors stay the instance teals). Pricing dots stay
+ * on DOTS_CONFIG.
  */
 
-const PULSE_ROTATION = 0;
-const PULSE_PROPORTION = 0.35;
-const PULSE_SOFTNESS = 1;
-const PULSE_DISTORTION = 12 / 50;
-const PULSE_SWIRL = 0.8;
-const PULSE_ITERATIONS = 10;
-const PULSE_SHAPE_SCALE = 0.1;
-const PULSE_SEED = 0;
+const PULSE_ROTATION = (-167 * Math.PI) / 180;
+const PULSE_PROPORTION = 0.92;
+const PULSE_SOFTNESS = 0.28;
+const PULSE_DISTORTION = 54 / 50;
+const PULSE_SWIRL = 0.75;
+const PULSE_ITERATIONS = 3;
+const PULSE_SHAPE_SCALE = 0.79;
+const PULSE_SEED = (-813 * 10) / 120;
 
 type PulseConfig = {
   scale: number;
@@ -39,9 +38,9 @@ type PulseConfig = {
   speed: number;
 };
 
-/** Homepage hero. Radial variant of Animated Backgrounds, custom Pulse values. */
+/** Homepage hero. Radial variant. Pulse preset scale is 0. */
 const PULSE_CONFIG: PulseConfig = {
-  scale: 1,
+  scale: 0,
   rotation: PULSE_ROTATION,
   proportion: PULSE_PROPORTION,
   softness: PULSE_SOFTNESS,
@@ -382,11 +381,8 @@ export function PulseGradient({
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       return;
     }
-    const longest = Math.max(rect.width, rect.height);
-    const cap = maskedRef.current ? 360 : 520;
-    const scale = Math.min(1, cap / longest);
-    const width = Math.max(1, Math.round(rect.width * scale));
-    const height = Math.max(1, Math.round(rect.height * scale));
+    const width = Math.max(1, Math.round(rect.width));
+    const height = Math.max(1, Math.round(rect.height));
     if (canvas.width !== width || canvas.height !== height) {
       canvas.width = width;
       canvas.height = height;

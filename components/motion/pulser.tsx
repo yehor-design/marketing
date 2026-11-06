@@ -18,7 +18,6 @@ export function Pulser() {
       density={PULSER_DENSITY}
       centerIntensity={PULSER_CENTER_INTENSITY}
       centerSize={PULSER_CENTER_SIZE}
-      maskSrc="/home/cta-lines.svg"
       label="Pulser"
     />
   );
