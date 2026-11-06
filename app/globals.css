@@ -656,7 +656,7 @@ button {
   .desktop-nav a {
     box-sizing: border-box;
     display: inline-flex;
-    gap: 10px;
+    gap: 5px;
     align-items: center;
     width: max-content;
     height: 30px;
