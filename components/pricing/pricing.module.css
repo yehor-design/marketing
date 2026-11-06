@@ -783,6 +783,12 @@
   .cardButtonPrimary {
     margin-top: 34px;
   }
+
+  .switcher {
+    align-items: flex-start;
+    height: 86px;
+    padding-top: 30px;
+  }
 }
 
 @media (min-width: 810px) {

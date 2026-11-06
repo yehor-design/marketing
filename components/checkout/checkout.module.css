@@ -135,8 +135,33 @@
 }
 
 .block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   margin-top: 12px;
-  padding: 14px;
+  padding: 12px;
+}
+
+.inset {
+  margin-right: 12px;
+  margin-left: 12px;
+}
+
+.productIcon {
+  display: block;
+  flex: none;
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seoHead {
+  display: flex;
+  gap: 6px;
+  align-items: flex-end;
 }
 
 .block h2,
@@ -151,6 +176,31 @@
   line-height: 1.4;
 }
 
+.block h2 {
+  display: block;
+  font-size: 12px;
+  font-weight: 1000;
+  letter-spacing: 0;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.seoHead h2 {
+  white-space: normal;
+}
+
+.help {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-bottom: 1px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
 .block h2 span,
 .kit span {
   color: var(--muted);
@@ -158,9 +208,15 @@
   font-variation-settings: "opsz" 14, "wght" 450;
 }
 
+.block h2 span {
+  font-size: 12px;
+  font-weight: 1000;
+  font-variation-settings: "opsz" 14, "wght" 550;
+}
+
 .points,
 .steps {
-  margin: 10px 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
@@ -171,14 +227,14 @@
   gap: 8px;
   align-items: flex-start;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 12px;
   font-variation-settings: "opsz" 14, "wght" 450;
-  line-height: 1.45;
+  line-height: 18px;
 }
 
 .points li + li,
 .steps li + li {
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 .points svg {
@@ -199,7 +255,7 @@
 }
 
 .kit {
-  margin: 16px 0 0;
+  margin: 26px 0 0;
   color: #fff;
   font-size: 13px;
   line-height: 1.4;

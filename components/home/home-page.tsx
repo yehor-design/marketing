@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { Pulser, PulseGradient, RollingText, orderedDither } from "@/components/motion";
 import { usePrefersReducedMotion } from "@/components/motion/use-reduced-motion";
@@ -312,6 +312,41 @@ function Check({ color }: { color: string }) {
   );
 }
 
+function LogoColumn({
+  logos,
+  showSecond,
+  reduced,
+}: {
+  logos: readonly [string, string];
+  showSecond: boolean;
+  reduced: boolean;
+}) {
+  const src = logos[showSecond ? 1 : 0];
+
+  return (
+    <div className={styles.logoCol}>
+      {reduced ? (
+        <div className={styles.logoSlot}>
+          <img src={src} alt="" height={20} />
+        </div>
+      ) : (
+        <AnimatePresence initial={false}>
+          <motion.div
+            key={src}
+            className={styles.logoSlot}
+            initial={{ y: 86, opacity: 0, filter: "blur(6px)" }}
+            animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+            exit={{ y: -86, opacity: 0, filter: "blur(6px)" }}
+            transition={logoSpring}
+          >
+            <img src={src} alt="" height={20} />
+          </motion.div>
+        </AnimatePresence>
+      )}
+    </div>
+  );
+}
+
 function QuoteMark() {
   const bubble =
     "M0 6.988C0 6.926.006 6.866.016 6.807H0V6.698C0 2.999 2.999 0 6.698 0v2.687C4.824 2.687 3.291 4.145 3.17 5.988H6.698V13H0Z";
@@ -414,19 +449,12 @@ export function HomePage() {
           <p>Trusted by some of the biggest companies</p>
           <div className={styles.logoStage} ref={logoStageRef}>
             {logoColumns.map((column, index) => (
-              <div className={styles.logoCol} key={column[0]}>
-                <motion.div
-                  className={styles.logoTrack}
-                  animate={{ y: logos[index] === 0 ? "0%" : "-50%" }}
-                  transition={reduced === false ? logoSpring : { duration: 0 }}
-                >
-                  {column.map((src) => (
-                    <div className={styles.logoSlot} key={src}>
-                      <img src={src} alt="" height={20} />
-                    </div>
-                  ))}
-                </motion.div>
-              </div>
+              <LogoColumn
+                key={column[0]}
+                logos={column}
+                showSecond={logos[index] === 1}
+                reduced={reduced !== false}
+              />
             ))}
           </div>
         </div>

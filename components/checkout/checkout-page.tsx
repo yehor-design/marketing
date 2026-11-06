@@ -84,12 +84,90 @@ function Points({ items }: { items: string[] }) {
   );
 }
 
-function WindowIcon() {
+function ProductIcon({
+  filled,
+  paths,
+}: {
+  filled: boolean;
+  paths: ReadonlyArray<readonly [string, string, boolean]>;
+}) {
   return (
-    <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-      <rect x="1.5" y="2.5" width="13" height="11" rx="1.5" fill="none" stroke="currentColor" />
-      <path d="M1.5 5.5h13" stroke="currentColor" />
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" className={styles.productIcon}>
+      {paths.map(([d, transform, fill]) =>
+        fill && !filled ? null : (
+          <path
+            key={`${fill ? "f" : "s"}-${transform}-${d.slice(0, 12)}`}
+            d={d}
+            transform={transform}
+            fill={fill ? "#fff" : "none"}
+            stroke={fill ? "none" : "#fff"}
+            strokeWidth={fill ? undefined : 1.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        ),
+      )}
     </svg>
+  );
+}
+
+const windowPaths = [
+  ["M 16.5 0 C 17.328 0 18 0.672 18 1.5 L 18 12 C 18 12.828 17.328 13.5 16.5 13.5 L 1.5 13.5 C 0.672 13.5 0 12.828 0 12 L 0 1.5 C 0 0.672 0.672 0 1.5 0 Z", "translate(3 4.5)", true],
+  ["M 16.5 0 C 17.328 0 18 0.672 18 1.5 L 18 12 C 18 12.828 17.328 13.5 16.5 13.5 L 1.5 13.5 C 0.672 13.5 0 12.828 0 12 L 0 1.5 C 0 0.672 0.672 0 1.5 0 Z", "translate(3 4.5)", false],
+  ["M 6 0 L 0 0", "translate(9 21)", false],
+] as const;
+
+const dollarPaths = [
+  ["M 0 0 L 0 19.5", "translate(12 2.25)", false],
+  ["M 11.25 3.75 C 11.25 1.679 9.571 0 7.5 0 L 4.5 0 C 2.429 0 0.75 1.679 0.75 3.75 C 0.75 5.821 2.429 7.5 4.5 7.5 L 8.25 7.5 C 10.321 7.5 12 9.179 12 11.25 C 12 13.321 10.321 15 8.25 15 L 3.75 15 C 1.679 15 0 13.321 0 11.25", "translate(6 4.5)", false],
+] as const;
+
+const sparkPaths = [
+  ["M 5.65 10.849 L 0.485 8.946 C 0.194 8.839 0 8.561 0 8.25 C 0 7.939 0.194 7.661 0.485 7.553 L 5.65 5.65 L 7.553 0.485 C 7.661 0.194 7.939 0 8.25 0 C 8.561 0 8.839 0.194 8.946 0.485 L 10.849 5.65 L 16.014 7.553 C 16.306 7.661 16.5 7.939 16.5 8.25 C 16.5 8.561 16.306 8.839 16.014 8.946 L 10.849 10.849 L 8.946 16.014 C 8.839 16.306 8.561 16.5 8.25 16.5 C 7.939 16.5 7.661 16.306 7.553 16.014 Z", "translate(2.25 5.25)", true],
+  ["M 5.65 10.849 L 0.485 8.946 C 0.194 8.839 0 8.561 0 8.25 C 0 7.939 0.194 7.661 0.485 7.553 L 5.65 5.65 L 7.553 0.485 C 7.661 0.194 7.939 0 8.25 0 C 8.561 0 8.839 0.194 8.946 0.485 L 10.849 5.65 L 16.014 7.553 C 16.306 7.661 16.5 7.939 16.5 8.25 C 16.5 8.561 16.306 8.839 16.014 8.946 L 10.849 10.849 L 8.946 16.014 C 8.839 16.306 8.561 16.5 8.25 16.5 C 7.939 16.5 7.661 16.306 7.553 16.014 Z", "translate(2.25 5.25)", false],
+  ["M 0 0 L 0 4.5", "translate(16.5 1.5)", false],
+  ["M 0 0 L 0 3", "translate(21 6.75)", false],
+  ["M 0 0 L 4.5 0", "translate(14.25 3.75)", false],
+  ["M 0 0 L 3 0", "translate(19.5 8.25)", false],
+] as const;
+
+const tagPaths = [
+  ["M 5.25 0 L 5.25 5.78 C 5.25 5.978 5.171 6.169 5.031 6.309 L 1.81 9.53 C 1.609 9.73 1.312 9.8 1.043 9.71 C 0.774 9.62 0.578 9.386 0.538 9.105 L 0 5.25 Z", "translate(12 11.25)", true],
+  ["M 9.749 0 L 3.969 0 C 3.77 0 3.58 0.079 3.439 0.219 L 0.219 3.44 C 0.019 3.641 -0.051 3.938 0.039 4.207 C 0.129 4.476 0.363 4.672 0.644 4.712 L 4.499 5.25 Z", "translate(3.001 6.75)", true],
+  ["M 5.115 2.473 C 4.752 3.269 3.53 5.115 0 5.115 C 0 1.585 1.846 0.363 2.642 0 Z", "translate(3.75 15.135)", true],
+  ["M 10.417 6.833 C 12.667 4.583 12.807 1.907 12.737 0.713 C 12.713 0.337 12.413 0.037 12.037 0.013 C 10.843 -0.057 8.168 0.082 5.917 2.333 L 0 8.25 L 4.5 12.75 Z", "translate(7.5 3.75)", false],
+  ["M 9.749 0 L 3.969 0 C 3.77 0 3.58 0.079 3.439 0.219 L 0.219 3.44 C 0.019 3.641 -0.051 3.938 0.039 4.207 C 0.129 4.476 0.363 4.672 0.644 4.712 L 4.499 5.25 Z", "translate(3.001 6.75)", false],
+  ["M 5.25 0 L 5.25 5.78 C 5.25 5.978 5.171 6.169 5.031 6.309 L 1.81 9.53 C 1.609 9.73 1.312 9.8 1.043 9.71 C 0.774 9.62 0.578 9.386 0.538 9.105 L 0 5.25 Z", "translate(12 11.25)", false],
+  ["M 5.115 2.473 C 4.752 3.269 3.53 5.115 0 5.115 C 0 1.585 1.846 0.363 2.642 0 Z", "translate(3.75 15.135)", false],
+] as const;
+
+const playPaths = [
+  ["M 0 0.736 L 0 17.259 C 0.005 17.527 0.153 17.772 0.388 17.902 C 0.623 18.031 0.91 18.025 1.139 17.886 L 14.647 9.625 C 14.866 9.492 15 9.254 15 8.997 C 15 8.741 14.866 8.503 14.647 8.37 L 1.139 0.109 C 0.91 -0.03 0.623 -0.036 0.388 0.093 C 0.153 0.222 0.005 0.468 0 0.736 Z", "translate(6.75 3.003)", true],
+  ["M 0 0.736 L 0 17.259 C 0.005 17.527 0.153 17.772 0.388 17.902 C 0.623 18.031 0.91 18.025 1.139 17.886 L 14.647 9.625 C 14.866 9.492 15 9.254 15 8.997 C 15 8.741 14.866 8.503 14.647 8.37 L 1.139 0.109 C 0.91 -0.03 0.623 -0.036 0.388 0.093 C 0.153 0.222 0.005 0.468 0 0.736 Z", "translate(6.75 3.003)", false],
+] as const;
+
+function HelpMark() {
+  return (
+    <span className={styles.help} aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="12" height="12">
+        <path
+          d="M 0 2.627 C 0 1.435 0.823 0 3 0 C 5.177 0 6 1.363 6 2.627 C 6 5.608 3 5.391 3 7.179 L 3 8.968"
+          transform="translate(9 5.5)"
+          fill="none"
+          stroke="#fff"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+        <path
+          d="M 0 0 L 0 0"
+          transform="translate(12 17.449)"
+          fill="none"
+          stroke="#fff"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
+    </span>
   );
 }
 
@@ -161,43 +239,59 @@ export function CheckoutPage() {
             />
           </div>
           <article className={styles.block}>
-            <h2>
-              <WindowIcon />
-              Website Template
-            </h2>
+            <div className={styles.titleBlock}>
+              <ProductIcon filled paths={windowPaths} />
+              <h2>Website Template</h2>
+            </div>
             <Points items={templatePoints} />
           </article>
           <p className={styles.kit}>
             Bonus SaaS Launch Kit
             <span>($186 in total value)</span>
           </p>
-          <article className={styles.block}>
-            <h2>
-              High Conversion Copywriter <span>($49 Value)</span>
-            </h2>
+          <article className={`${styles.block} ${styles.inset}`}>
+            <div className={styles.titleBlock}>
+              <ProductIcon filled={false} paths={dollarPaths} />
+              <h2>
+                High Conversion Copywriter <span>($49 Value)</span>
+              </h2>
+            </div>
             <ol className={styles.steps}>
               <li>Answer a few questions about your business and offerings</li>
               <li>Use the provided AI prompt to generate all content for your website based on your answers</li>
             </ol>
             <Points items={copywriter} />
           </article>
-          <article className={styles.block}>
-            <h2>
-              AI Style Guide <span>($29 Value)</span>
-            </h2>
+          <article className={`${styles.block} ${styles.inset}`}>
+            <div className={styles.titleBlock}>
+              <ProductIcon filled paths={sparkPaths} />
+              <h2>
+                AI Style Guide <span>($29 Value)</span>
+              </h2>
+            </div>
             <Points items={styleGuide} />
           </article>
-          <article className={styles.block}>
-            <h2>
-              SEO Booster
-              <span>JSON-LD Generator ($59 Value)</span>
-            </h2>
+          <article className={`${styles.block} ${styles.inset}`}>
+            <div className={styles.titleBlock}>
+              <ProductIcon filled paths={tagPaths} />
+              <div className={styles.seoHead}>
+                <h2>
+                  SEO Booster
+                  <br />
+                  JSON-LD Generator <span>($59 Value)</span>
+                </h2>
+                <HelpMark />
+              </div>
+            </div>
             <Points items={seo} />
           </article>
-          <article className={styles.block}>
-            <h2>
-              50 Minute Go-Live Video Guide <span>($49 Value)</span>
-            </h2>
+          <article className={`${styles.block} ${styles.inset}`}>
+            <div className={styles.titleBlock}>
+              <ProductIcon filled paths={playPaths} />
+              <h2>
+                50 Minute Go-Live Video Guide <span>($49 Value)</span>
+              </h2>
+            </div>
             <Points items={guide} />
           </article>
           <h2 className={styles.saying}>What people are saying</h2>

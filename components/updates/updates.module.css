@@ -388,6 +388,10 @@
 }
 
 @media (min-width: 1200px) {
+  .sheet:not(:has(.crumb)) {
+    padding-bottom: 4px;
+  }
+
   .ctaCopy {
     padding-bottom: 43px;
   }
