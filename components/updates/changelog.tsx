@@ -6,7 +6,7 @@ import styles from "@/components/updates/updates.module.css";
 
 function Cover({ note }: { note: UpdateNote }) {
   if (note.videoId && note.poster) {
-    return <VideoCover videoId={note.videoId} poster={note.poster} />;
+    return <VideoCover videoId={note.videoId} />;
   }
   return (
     <UpdateCover
