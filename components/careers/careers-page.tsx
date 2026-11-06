@@ -64,7 +64,11 @@ export function CareersPage() {
         </div>
       </section>
 
-      <section className={styles.frame} id="benefits" aria-labelledby="benefits-title">
+      <section
+        className={`${styles.frame} ${styles.benefits}`}
+        id="benefits"
+        aria-labelledby="benefits-title"
+      >
         <div className={styles.benefitsHead}>
           <h2 id="benefits-title">What drives us.</h2>
           <p>

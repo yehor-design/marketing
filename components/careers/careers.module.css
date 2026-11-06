@@ -176,7 +176,6 @@
   color: #fff;
 }
 
-.benefitsHead,
 .rolesIntro,
 .roleHead,
 .details,
@@ -184,14 +183,37 @@
   padding: 40px 24px;
 }
 
+.benefits {
+  border: 0;
+  background-image:
+    repeating-linear-gradient(to right, var(--rule) 0 12px, transparent 12px 18px),
+    repeating-linear-gradient(to bottom, var(--rule) 0 12px, transparent 12px 18px);
+  background-repeat: no-repeat;
+  background-position:
+    left top,
+    left top;
+  background-size:
+    100% 1px,
+    1px 100%;
+}
+
 .benefitsHead {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  border-bottom: 1px dashed var(--rule);
+  padding: 50px 0;
+  background-image:
+    repeating-linear-gradient(to bottom, var(--rule) 0 12px, transparent 12px 18px),
+    repeating-linear-gradient(to right, var(--rule) 0 12px, transparent 12px 18px);
+  background-repeat: repeat-y, repeat-x;
+  background-position:
+    right top,
+    left bottom;
+  background-size:
+    1px 18px,
+    18px 1px;
 }
 
-.benefitsHead h2,
 .rolesIntro h2,
 .apply h2 {
   margin: 0;
@@ -200,10 +222,28 @@
   line-height: 1.2;
 }
 
-.benefitsHead p,
+.benefitsHead h2 {
+  margin: 0;
+  padding: 0 24px;
+  font-size: 22.4px;
+  font-weight: 1000;
+  font-variation-settings: "opsz" 14, "wght" 550;
+  letter-spacing: -0.224px;
+  line-height: 26.88px;
+}
+
 .rolesIntro p {
   max-width: 400px;
   margin: 0;
+}
+
+.benefitsHead p {
+  max-width: none;
+  margin: 0;
+  padding: 0 24px;
+  font-variation-settings: "opsz" 14, "wght" 550;
+  letter-spacing: -0.16px;
+  line-height: 24px;
 }
 
 .benefitGrid,
@@ -216,23 +256,38 @@
 }
 
 .benefitGrid li {
+  position: relative;
   display: flex;
-  gap: 16px;
+  gap: 12px;
   align-items: center;
+  height: 76px;
   min-height: 76px;
-  padding: 16px 24px;
-  border-top: 1px dashed var(--rule);
-}
-
-.benefitGrid li:first-child {
-  border-top: 0;
+  padding: 24px;
+  background-image:
+    repeating-linear-gradient(to bottom, var(--rule) 0 12px, transparent 12px 18px),
+    repeating-linear-gradient(to right, var(--rule) 0 12px, transparent 12px 18px);
+  background-repeat: repeat-y, repeat-x;
+  background-position:
+    right top,
+    left bottom;
+  background-size:
+    1px 18px,
+    18px 1px;
 }
 
 .benefitGrid svg {
+  position: relative;
+  z-index: 1;
   flex: none;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   color: var(--muted);
+}
+
+.benefitGrid li > div {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
 }
 
 .benefitGrid h3,
@@ -240,25 +295,30 @@
   margin: 0;
   font-size: 16px;
   letter-spacing: -0.01em;
-  line-height: 1.4;
+  line-height: 24px;
 }
 
 .benefitGrid p {
-  max-height: 0;
+  position: absolute;
+  bottom: -58px;
+  left: 0;
+  width: 240px;
+  max-width: 240px;
   margin: 0;
-  overflow: hidden;
   color: var(--muted);
   font-size: 14px;
-  font-variation-settings: "opsz" 14, "wght" 450;
+  font-variation-settings: "opsz" 14, "wght" 550;
   letter-spacing: 0;
-  line-height: 1.5;
+  line-height: 21px;
   opacity: 0;
+  transition: opacity 0.25s ease;
 }
 
 .benefitGrid li:hover p,
 .benefitGrid li:focus-within p {
-  max-height: 4.5em;
-  margin-top: 8px;
+  position: relative;
+  bottom: auto;
+  left: auto;
   opacity: 1;
 }
 
@@ -600,7 +660,6 @@
     padding: 50px 24px 42px;
   }
 
-  .benefitsHead,
   .rolesIntro,
   .roleHead,
   .details,
@@ -609,13 +668,24 @@
   }
 
   .benefitsHead {
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    align-items: start;
+    padding: 50px 0;
+  }
+
+  .benefitsHead h2 {
+    padding: 0 34px;
+    font-size: 28.8px;
+    letter-spacing: -0.288px;
+    line-height: 34.56px;
   }
 
   .benefitsHead p {
-    max-width: 400px;
+    grid-column: 3;
+    max-width: none;
+    padding: 6px 34px 0 0;
   }
 
   .benefitGrid {
@@ -627,21 +697,18 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
+    height: 230px;
     min-height: 230px;
-    padding: 34px 34px 28px;
-    border-top: 0;
-    border-right: 1px dashed var(--rule);
-    border-bottom: 1px dashed var(--rule);
-    background-image: radial-gradient(rgba(255, 255, 255, 0.16) 0.6px, transparent 0.7px);
-    background-size: 7px 7px;
+    padding: 34px 34px 0;
   }
 
-  .benefitGrid li:nth-child(3n) {
-    border-right: 0;
-  }
-
-  .benefitGrid li:nth-last-child(-n + 3) {
-    border-bottom: 0;
+  .benefitGrid li > div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    padding: 0 0 34px;
+    overflow: hidden;
   }
 
   .benefitGrid svg {
@@ -650,7 +717,9 @@
   }
 
   .benefitGrid h3 {
-    font-size: 1.2rem;
+    font-size: 21.6px;
+    letter-spacing: -0.216px;
+    line-height: 30.24px;
   }
 
   .roleList a {
@@ -788,21 +857,21 @@
     margin-top: 98px;
   }
 
+  .hero + .benefits {
+    margin-top: 100px;
+  }
+
   .benefitsHead {
-    padding: 50px 23px;
+    padding: 50px 0;
   }
 
   .rolesIntro {
     padding: 48px 23px 50px;
   }
 
-  .benefitGrid {
-    margin-top: -1px;
-  }
-
   .benefitGrid li {
-    align-items: flex-start;
-    padding: 26px 23px 22px;
+    align-items: center;
+    padding: 24px;
   }
 
   .benefitGrid h3 {
@@ -894,12 +963,16 @@
 }
 
 @media (min-width: 1200px) {
-  .benefitsHead {
-    padding: 48px 33px 50px;
+  .benefitsHead h2 {
+    font-size: 32px;
+    letter-spacing: -0.32px;
+    line-height: 38.4px;
   }
 
-  .benefitGrid {
-    margin-bottom: 2px;
+  .benefitGrid h3 {
+    font-size: 24px;
+    letter-spacing: -0.24px;
+    line-height: 33.6px;
   }
 
   .rolesIntro {
