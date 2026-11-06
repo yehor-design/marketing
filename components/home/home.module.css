@@ -1262,4 +1262,16 @@
   .bandHead h2 {
     width: min(240px, calc(100% - 48px));
   }
+
+  .faqGrid > h2 {
+    justify-content: flex-start;
+    padding-left: 36px;
+    text-align: left;
+  }
+
+  .faqGrid > h2 span {
+    width: 286px;
+    text-align: left;
+    text-wrap: wrap;
+  }
 }

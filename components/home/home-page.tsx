@@ -632,7 +632,9 @@ export function HomePage() {
 
       <section className={styles.section} aria-labelledby="faq-title">
         <div className={`${styles.frame} ${styles.dash} ${styles.faqGrid}`}>
-        <h2 id="faq-title">Frequently asked questions.</h2>
+        <h2 id="faq-title">
+          <span>Frequently asked questions.</span>
+        </h2>
         <div>
           {faqs.map((item, index) => {
             const open = openFaq === index;

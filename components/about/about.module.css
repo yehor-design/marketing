@@ -310,16 +310,31 @@
   object-position: center;
 }
 
-.team h3 {
+.caption {
   position: absolute;
   right: 20px;
   bottom: 20px;
   left: 20px;
   z-index: 1;
+}
+
+.team h3 {
   margin: 0;
   font-size: 16px;
   letter-spacing: -0.01em;
   line-height: 1.5;
+}
+
+.role {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .hiring {
@@ -491,6 +506,48 @@
 }
 
 @media (max-width: 809.98px) {
+  .photo {
+    inset: 10px;
+  }
+
+  .caption {
+    right: 14px;
+    bottom: 16px;
+    left: 16px;
+  }
+
+  .team h3 {
+    font-size: 12px;
+    letter-spacing: 0;
+    line-height: 19.2px;
+  }
+
+  .role {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+    letter-spacing: 0;
+    line-height: 19.2px;
+    white-space: normal;
+  }
+
+  .slash {
+    flex: none;
+  }
+
+  /* Keeps "Lead Solutions Engineer" on one line and wraps the wider roles. */
+  .roleText {
+    max-width: 139.5px;
+  }
+
   .postsHead {
     min-height: 82px;
     padding: 24px;
@@ -578,7 +635,7 @@
     border-right: 0;
   }
 
-  .team h3 {
+  .caption {
     right: 34px;
     bottom: 34px;
     left: 34px;

@@ -772,6 +772,14 @@
 }
 
 @media (max-width: 809.98px) {
+  .heroCopy {
+    padding-bottom: 50px;
+  }
+
+  .actions {
+    margin-top: 32px;
+  }
+
   .hero + .frame {
     margin-top: 98px;
   }

@@ -134,8 +134,15 @@ function Portrait({
           preset={hot ? portraitHoverDither : portraitDither}
         />
       </span>
-      <h3>{person.name}</h3>
-      <p className="visually-hidden">{person.role}</p>
+      <div className={styles.caption}>
+        <h3>{person.name}</h3>
+        <p className={styles.role}>
+          <span className={styles.slash} aria-hidden="true">
+            /
+          </span>
+          <span className={styles.roleText}>{person.role}</span>
+        </p>
+      </div>
     </a>
   );
 }

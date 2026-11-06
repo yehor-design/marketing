@@ -264,8 +264,7 @@
   }
 
   .form {
-    padding-top: 23px;
-    padding-bottom: 24px;
+    padding: 23px 23px 24px;
   }
 }
 

@@ -536,6 +536,10 @@ button {
   html {
     font-size: 87.5%;
   }
+
+  .footer-title {
+    align-items: flex-start;
+  }
 }
 
 @media (min-width: 810px) {
