@@ -773,6 +773,18 @@
   margin-top: auto;
 }
 
+@media (max-width: 809.98px) {
+  .card,
+  .cardPopular {
+    min-height: 0;
+  }
+
+  .cardButton,
+  .cardButtonPrimary {
+    margin-top: 34px;
+  }
+}
+
 @media (min-width: 810px) {
   .cards {
     grid-template-columns: repeat(3, minmax(0, 1fr));

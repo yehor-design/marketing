@@ -18,6 +18,21 @@ function Cover({ note }: { note: UpdateNote }) {
   );
 }
 
+function ItemText({ text }: { text: string }) {
+  const lines = text.split("\n");
+  if (lines.length === 1) return text;
+  return lines.map((line, index) =>
+    index === 0 ? (
+      line
+    ) : (
+      <span key={index}>
+        <br />
+        {line}
+      </span>
+    ),
+  );
+}
+
 function Body({ note }: { note: UpdateNote }) {
   return (
     <div className={styles.detail}>
@@ -30,9 +45,14 @@ function Body({ note }: { note: UpdateNote }) {
               <h2>{section.heading}</h2>
               <ul>
                 {section.items.map((item) => (
-                  <li key={item}>{item}</li>
+                  <li key={item}>
+                    <ItemText text={item} />
+                  </li>
                 ))}
               </ul>
+              {note.slug === "march-momentum-update" && section.heading === "Fixed" ? (
+                <p className={styles.blankLine}> </p>
+              ) : null}
             </section>
           ))}
         </div>

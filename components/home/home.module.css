@@ -1259,3 +1259,9 @@
     transform: none;
   }
 }
+
+@media (max-width: 809.98px) {
+  .bandHead h2 {
+    width: min(240px, calc(100% - 48px));
+  }
+}

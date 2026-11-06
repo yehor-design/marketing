@@ -620,7 +620,13 @@
   }
 
   .cta {
+    align-items: start;
+    justify-items: center;
     min-height: 382px;
+  }
+
+  .ctaCopy {
+    padding-top: 44px;
   }
 }
 

@@ -21,7 +21,7 @@
 
 .hero {
   width: min(1200px, calc(100% - 32px));
-  margin: 0 auto 80px;
+  margin: 0 auto;
   overflow: hidden;
   border: 1px dashed #1c1c1c;
   text-align: center;
@@ -111,8 +111,10 @@
 .hero h1 {
   margin: 0;
   font-size: 3.5rem;
+  font-weight: 1000;
   letter-spacing: -0.04em;
   line-height: 1.1;
+  white-space: pre-wrap;
 }
 
 .lede {
@@ -206,6 +208,13 @@
   font-variation-settings: "opsz" 14, "wght" 450;
   line-height: 1.4;
   text-align: left;
+}
+
+@media (max-width: 809.98px) {
+  .hero {
+    margin-top: calc(-1 * var(--header-height));
+    margin-bottom: calc(-1 * var(--header-height));
+  }
 }
 
 @media (min-width: 810px) {

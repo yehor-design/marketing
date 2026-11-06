@@ -704,7 +704,7 @@
   }
 
   .apply {
-    padding-top: 24px;
+    padding-bottom: 34px;
   }
 
   header.frame {
@@ -756,7 +756,7 @@
   }
 
   .frame.applySection {
-    margin-top: 22px;
+    margin-top: 12px;
   }
 
   .apply {
@@ -781,7 +781,19 @@
   }
 
   .rolesIntro {
-    padding-top: 47px;
+    padding: 47px 24px 50px;
+  }
+
+  .rolesIntro p {
+    margin-top: 24px;
+  }
+
+  .roleList a {
+    padding: 24px 60px 23px 24px;
+  }
+
+  .roleName {
+    row-gap: 0;
   }
 
   .roleHeading {

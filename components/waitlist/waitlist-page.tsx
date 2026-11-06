@@ -114,7 +114,7 @@ export function WaitlistPage() {
                 </span>
               </span>
             </p>
-            <h1 id="waitlist-title">Jet is launching soon.</h1>
+            <h1 id="waitlist-title">Jet is launching soon. </h1>
             <p className={styles.lede}>
               Get on the waitlist and be among the first to get access to Jet.
             </p>

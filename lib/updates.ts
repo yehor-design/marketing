@@ -131,7 +131,7 @@ export const updates: UpdateNote[] = [
         heading: "Improved",
         items: [
           "Faster automatic image compression by 15%",
-          "Enhanced responsive image sizing for mobile breakpoints",
+          "Enhanced responsive image sizing for mobile breakpoints\n\n\n",
         ],
       },
     ],

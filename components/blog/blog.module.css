@@ -77,9 +77,14 @@
   color: var(--muted);
 }
 
+.kicker span {
+  font-size: 2.2rem;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
 .all {
   margin-top: 89px;
-  padding-bottom: 8px;
 }
 
 .allHead {
