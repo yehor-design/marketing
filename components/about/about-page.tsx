@@ -20,6 +20,7 @@ const portraitDither = {
   threshold: 84,
   midtones: 100,
   glow: 30,
+  dot: "#00ffff",
 };
 
 const portraitHoverDither = {

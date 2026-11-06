@@ -563,7 +563,11 @@ export function HomePage() {
               <div className={styles.featureArt}>
                 <div className={styles.featureDots} aria-hidden="true" />
                 <div className={styles.featureFrame}>
-                  <DitherImage src={feature.src} label={feature.label} preset={orderedDither} />
+                  <DitherImage
+                    src={feature.src}
+                    label={feature.label}
+                    preset={{ ...orderedDither, animation: false }}
+                  />
                 </div>
               </div>
             </article>

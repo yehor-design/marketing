@@ -807,7 +807,7 @@
   .benefitGrid li > div {
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 10px;
     width: 100%;
     padding: 0 0 34px;
     overflow: hidden;
@@ -868,29 +868,28 @@
   }
 
   .benefitReveal {
+    position: absolute;
+    top: calc(100% + 16px);
+    left: 0;
+    width: 240px;
     margin-top: 0;
-    transition:
-      grid-template-rows 600ms var(--reveal-ease),
-      margin-top 600ms var(--reveal-ease);
+    opacity: 0;
+    grid-template-rows: 1fr;
+    transition: opacity 600ms var(--reveal-ease);
   }
 
   .benefitGrid p {
-    transform: translateY(24px);
-    transition:
-      opacity 600ms var(--reveal-ease),
-      transform 600ms var(--reveal-ease);
+    height: auto;
+    overflow: visible;
+    opacity: 1;
+    transform: none;
   }
 
   .benefitGrid li:hover .benefitReveal,
   .benefitGrid li:focus-within .benefitReveal {
-    grid-template-rows: 1fr;
-    margin-top: 10px;
-  }
-
-  .benefitGrid li:hover p,
-  .benefitGrid li:focus-within p {
+    position: relative;
+    top: auto;
     opacity: 1;
-    transform: none;
   }
 
   .benefitGrid svg {
