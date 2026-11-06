@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from "react";
 import { DitherImage } from "@/components/home/dither-image";
 import { RollingText, orderedDither, randomDither } from "@/components/motion";
 import styles from "@/components/waitlist/waitlist.module.css";
@@ -31,19 +31,35 @@ const artHighlight = {
   glow: 0,
 };
 
+function easeRadius(kind: "in" | "out", progress: number) {
+  const t = Math.min(1, Math.max(0, progress));
+  return kind === "out" ? 1 - (1 - t) ** 3 : t ** 3;
+}
+
 function Flashlight({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
-  const point = useRef({ x: 0, y: 0, radius: 0, target: 0 });
+  const point = useRef({
+    x: 0,
+    y: 0,
+    radius: 0,
+    from: 0,
+    to: 0,
+    start: 0,
+    ease: "out" as "in" | "out",
+  });
 
   useEffect(() => {
     let frame = 0;
-    const tick = () => {
+    const tick = (now: number) => {
       const state = point.current;
-      const next = state.radius + (state.target - state.radius) * 0.28;
-      state.radius = Math.abs(state.target - next) < 0.4 ? state.target : next;
+      const progress = (now - state.start) / 300;
+      state.radius =
+        progress >= 1
+          ? state.to
+          : state.from + (state.to - state.from) * easeRadius(state.ease, progress);
       const node = ref.current;
       if (node) {
-        node.style.maskImage = `radial-gradient(circle ${state.radius}px at ${state.x}px ${state.y}px, black 40%, transparent 100%)`;
+        node.style.maskImage = `radial-gradient(circle ${state.radius}px at ${state.x}px ${state.y}px, rgb(0, 0, 0), rgb(0, 0, 0) 40%, rgba(0, 0, 0, 0) 100%)`;
         node.style.webkitMaskImage = node.style.maskImage;
       }
       frame = requestAnimationFrame(tick);
@@ -52,24 +68,33 @@ function Flashlight({ children }: { children: ReactNode }) {
     return () => cancelAnimationFrame(frame);
   }, []);
 
+  function place(event: PointerEvent<HTMLDivElement>, open: boolean) {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const state = point.current;
+    state.x = event.clientX - bounds.left;
+    state.y = event.clientY - bounds.top;
+    if (!open) {
+      return;
+    }
+    state.from = state.radius;
+    state.to = 400;
+    state.start = performance.now();
+    state.ease = "out";
+  }
+
   return (
     <div
       ref={ref}
       className={styles.flashlight}
-      onPointerEnter={(event) => {
-        const bounds = event.currentTarget.getBoundingClientRect();
-        point.current.x = event.clientX - bounds.left;
-        point.current.y = event.clientY - bounds.top;
-        point.current.target = 400;
-      }}
+      onPointerEnter={(event) => place(event, true)}
       onPointerLeave={() => {
-        point.current.target = 0;
+        const state = point.current;
+        state.from = state.radius;
+        state.to = 0;
+        state.start = performance.now();
+        state.ease = "in";
       }}
-      onPointerMove={(event) => {
-        const bounds = event.currentTarget.getBoundingClientRect();
-        point.current.x = event.clientX - bounds.left;
-        point.current.y = event.clientY - bounds.top;
-      }}
+      onPointerMove={(event) => place(event, false)}
     >
       {children}
     </div>
