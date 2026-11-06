@@ -280,7 +280,11 @@
   }
 
   .form {
-    padding: 23px 23px 24px;
+    padding: 23px 23px 25px;
+  }
+
+  .field select {
+    height: 40px;
   }
 }
 
@@ -317,11 +321,16 @@
     flex-direction: row;
     align-items: center;
     min-height: 745px;
+    margin-top: 1px;
+    border: 0;
+    outline: 1px dashed #1c1c1c;
+    outline-offset: -1px;
   }
 
   .intro,
   .panel {
-    width: 50%;
+    width: 600px;
+    flex: 0 0 600px;
   }
 
   .intro {
@@ -339,6 +348,17 @@
   }
 
   .introCopy {
-    padding: 51px 33px 50px;
+    padding: 51px 33px 50px 34px;
+  }
+
+  .heading p {
+    margin-top: 0;
+    font-variation-settings: "opsz" 14, "wght" 550;
+    line-height: 30px;
+  }
+
+  .field select {
+    width: calc(100% - 12px);
+    height: 40px;
   }
 }

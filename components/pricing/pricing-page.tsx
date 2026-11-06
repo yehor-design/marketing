@@ -490,6 +490,8 @@ export function PricingPage() {
             text={activePlan.cta}
             tone={activePlan.tone}
             className={styles.smallButton}
+            fontSize={12}
+            letterSpacing={activePlan.id === "starter" ? 0.103 : undefined}
           />
         </div>
 

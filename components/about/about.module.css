@@ -720,6 +720,10 @@
     margin-bottom: -1px;
   }
 
+  .cta h2 {
+    transform: translateY(-1.05px);
+  }
+
   .hero .frame {
     min-height: 703px;
   }

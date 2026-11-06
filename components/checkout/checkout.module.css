@@ -74,8 +74,8 @@
   align-items: flex-start;
   min-width: 0;
   min-height: 68px;
-  padding: 12px 14px;
-  border: 2px solid transparent;
+  padding: 14px 16px;
+  border: 0;
   border-radius: 12px;
   background: #171717;
   color: #fff;
@@ -84,19 +84,23 @@
 }
 
 .planOn {
-  border-color: #fff;
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+.plans button:last-child {
+  padding-left: 17px;
 }
 
 .price {
-  font-size: 16px;
-  line-height: 1.2;
+  font-size: 14px;
+  line-height: 21px;
 }
 
 .detail {
   color: var(--muted);
   font-size: 12px;
-  font-variation-settings: "opsz" 14, "wght" 450;
-  line-height: 1.4;
+  font-variation-settings: "opsz" 14, "wght" 500;
+  line-height: 19.2px;
 }
 
 .scroller {
@@ -232,6 +236,13 @@
   line-height: 18px;
 }
 
+.points li {
+  gap: 5px;
+  font-variation-settings: "opsz" 14, "wght" 500;
+  white-space: pre-wrap;
+  text-wrap: balance;
+}
+
 .points li + li,
 .steps li + li {
   margin-top: 4px;
@@ -239,7 +250,9 @@
 
 .points svg {
   flex: none;
-  margin-top: 2px;
+  width: 18px;
+  height: 18px;
+  margin-top: 0;
   color: #fff;
 }
 
@@ -260,7 +273,9 @@
   color: #fff;
   font-size: 12px;
   font-weight: 1000;
+  font-variation-settings: "opsz" 14, "wght" 500;
   line-height: 19.2px;
+  text-align: center;
 }
 
 .kit span {
@@ -270,12 +285,15 @@
 }
 
 .saying {
+  display: block;
   margin-top: 24px;
   padding: 10px 0;
   font-size: 12px;
   font-weight: 1000;
+  font-variation-settings: "opsz" 14, "wght" 500;
   letter-spacing: 0;
   line-height: 19.2px;
+  text-align: center;
 }
 
 .saying + .quote {
@@ -332,7 +350,7 @@
 .thread strong {
   display: block;
   font-size: 12px;
-  line-height: 16px;
+  line-height: 15.6px;
 }
 
 .handle,

@@ -682,10 +682,34 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  .featureGrid > .small:last-child,
-  .grid li:nth-child(even),
-  .related li + li {
+  .featureGrid > .small,
+  .grid li,
+  .related li {
+    position: relative;
+    border-top: 0;
+  }
+
+  .featureGrid > .small::before,
+  .grid li:nth-child(n + 3)::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    border-top: 1px dashed var(--rule);
+    pointer-events: none;
+  }
+
+  .featureGrid > .small:last-child::after,
+  .grid li:nth-child(even)::after,
+  .related li + li::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
     border-left: 1px dashed var(--rule);
+    pointer-events: none;
   }
 
   .grid li:nth-child(-n + 2),
@@ -694,7 +718,7 @@
   }
 
   .grid li:nth-child(n + 3) {
-    border-top: 1px dashed var(--rule);
+    border-top: 0;
   }
 
   .relatedHead {
@@ -828,5 +852,19 @@
 
   .cta h2 {
     font-size: 3.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .feature .text {
+    transform: translateX(16px);
+  }
+
+  .feature .tagRow {
+    transform: translate(22px, 7.38px);
+  }
+
+  .feature .date {
+    transform: translate(16px, 6.47px);
   }
 }
