@@ -451,6 +451,7 @@
 }
 
 .postCopy h3 {
+  max-width: 400px;
   margin: 0;
   font-size: 1.4rem;
   letter-spacing: -0.01em;
