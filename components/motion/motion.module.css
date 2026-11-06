@@ -1,4 +1,5 @@
 .glitch {
+  position: relative;
   display: inline-block;
   font-family: var(--font-display);
   font-size: 12px;
@@ -6,7 +7,22 @@
   font-variation-settings: "opsz" 14, "wght" 500;
   line-height: 1.6;
   letter-spacing: 0;
+  white-space: nowrap;
   cursor: pointer;
+}
+
+.glitchSizer {
+  visibility: hidden;
+}
+
+.glitchLive {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  white-space: nowrap;
 }
 
 .glitch:focus-visible {

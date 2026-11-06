@@ -83,7 +83,10 @@ export function TextGlitch({
       style={{ color: engaged ? TEXT_GLITCH_HOVER_COLOR : restingColor }}
     >
       <span className="visually-hidden">{children}</span>
-      <span aria-hidden="true">
+      <span className={styles.glitchSizer} aria-hidden="true">
+        {children}
+      </span>
+      <span className={styles.glitchLive} aria-hidden="true">
         {cells
           ? cells.map((cell, index) =>
               cell.scrambled ? (
