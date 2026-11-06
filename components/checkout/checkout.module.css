@@ -244,6 +244,7 @@
 }
 
 .steps {
+  margin-bottom: -4px;
   counter-reset: step;
 }
 
@@ -257,20 +258,28 @@
 .kit {
   margin: 26px 0 0;
   color: #fff;
-  font-size: 13px;
-  line-height: 1.4;
+  font-size: 12px;
+  font-weight: 1000;
+  line-height: 19.2px;
 }
 
 .kit span {
   display: block;
+  font-size: 12px;
+  line-height: 19.2px;
 }
 
 .saying {
-  margin-top: 22px;
+  margin-top: 24px;
+  padding: 10px 0;
+  font-size: 12px;
+  font-weight: 1000;
+  letter-spacing: 0;
+  line-height: 19.2px;
 }
 
 .saying + .quote {
-  margin-top: 36px;
+  margin-top: 12px;
 }
 
 .quote,
@@ -481,6 +490,12 @@
 
 .askDesktop {
   display: none;
+}
+
+@media (max-width: 809.98px) {
+  .page {
+    padding-top: 8px;
+  }
 }
 
 @media (min-width: 810px) {
