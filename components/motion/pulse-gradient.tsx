@@ -4,15 +4,10 @@ import { useCallback, useEffect, useRef } from "react";
 import { loadMask, punchMask } from "./mask-composite";
 import styles from "./motion.module.css";
 
-if (typeof document !== "undefined") {
-  document.documentElement.dataset.rayField = "pulse";
-}
-
 /**
- * Homepage hero. Animated Backgrounds variant Radial, last published as the
- * ray-masked Pulse field. Preset is Pulse, not custom, so the shader uniforms
- * come from that preset (colors stay the instance teals). Pricing dots stay
- * on DOTS_CONFIG.
+ * Animated gradient field used by the homepage background cycle and the
+ * pricing dots. The homepage hero and footer use Lines No Mask, the last
+ * item in that cycle: a custom Edge field, no ray mask.
  */
 
 const PULSE_ROTATION = (-167 * Math.PI) / 180;
@@ -90,9 +85,35 @@ function pulseSpeed(amount: number) {
   return (3 * (1 - t) * t * t * y2 + t * t * t) * 5;
 }
 
+/**
+ * Last Animated Backgrounds cycle entry, `hbGvLF35h` / Lines No Mask.
+ * preset custom, so these overrides are the uniforms. Softness stays at the
+ * instance default of 100. Colors stay the instance teals.
+ */
+const LINES_NO_MASK_CONFIG: PulseConfig = {
+  scale: 0.5,
+  rotation: (-232 * Math.PI) / 180,
+  proportion: 1,
+  softness: 1,
+  distortion: 7 / 50,
+  swirl: 0.66,
+  iterations: 4,
+  shape: 2,
+  shapeScale: 0,
+  seed: (-471 * 10) / 120,
+  speed: 0,
+};
+
 const SPEED = pulseSpeed(0.2);
 PULSE_CONFIG.speed = SPEED;
 DOTS_CONFIG.speed = pulseSpeed(0.24);
+LINES_NO_MASK_CONFIG.speed = pulseSpeed(0.44);
+
+function configFor(variant: "pulse" | "dots" | "lines") {
+  if (variant === "dots") return DOTS_CONFIG;
+  if (variant === "lines") return LINES_NO_MASK_CONFIG;
+  return PULSE_CONFIG;
+}
 
 const FRAGMENT = `#version 300 es
 precision highp float;
@@ -323,10 +344,12 @@ function paintFallback(
 export function PulseGradient({
   variant = "pulse",
   masked = false,
+  label = "Animated gradient",
 }: {
-  variant?: "pulse" | "dots";
-  /** Radial hero. Clip the moving field with the published ray mask. */
+  variant?: "pulse" | "dots" | "lines";
+  /** Clip the field with the ray mask. Pricing dots and Lines No Mask do not. */
   masked?: boolean;
+  label?: string;
 } = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const glRef = useRef<WebGL2RenderingContext | null>(null);
@@ -334,8 +357,10 @@ export function PulseGradient({
   const maskRef = useRef<HTMLImageElement | null>(null);
   const maskedRef = useRef(masked);
   maskedRef.current = masked;
-  const configRef = useRef(variant === "dots" ? DOTS_CONFIG : PULSE_CONFIG);
-  configRef.current = variant === "dots" ? DOTS_CONFIG : PULSE_CONFIG;
+  const configRef = useRef(configFor(variant));
+  configRef.current = configFor(variant);
+  const continuousRef = useRef(variant === "lines");
+  continuousRef.current = variant === "lines";
   const timeRef = useRef(configRef.current.seed);
   const lastFallback = useRef(0);
 
@@ -473,7 +498,7 @@ export function PulseGradient({
       if (!motionQuery.matches && visible && delta > 0) {
         timeRef.current += delta * configRef.current.speed * 0.001;
       }
-      const everyFrame = Boolean(glRef.current) || maskedRef.current;
+      const everyFrame = Boolean(glRef.current) || maskedRef.current || continuousRef.current;
       if (everyFrame || now - lastFallback.current >= 240) {
         if (!everyFrame) {
           lastFallback.current = now;
@@ -513,7 +538,7 @@ export function PulseGradient({
 
   return (
     <div className={styles.pulse}>
-      <canvas ref={canvasRef} role="img" aria-label="Hero background" />
+      <canvas ref={canvasRef} role="img" aria-label={label} />
     </div>
   );
 }

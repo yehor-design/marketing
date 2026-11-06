@@ -5,7 +5,6 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import {
   LineAnimator,
-  Pulser,
   PulseGradient,
   RollingText,
   nestedDither,
@@ -481,7 +480,7 @@ export function HomePage() {
             <div className={styles.heroMedia}>
               <div className={styles.heroShafts}>
                 <div className={styles.heroGlow}>
-                  <PulseGradient masked />
+                  <PulseGradient variant="lines" label="Hero background" />
                   <div className={styles.grain} />
                 </div>
               </div>
@@ -725,7 +724,7 @@ export function HomePage() {
       <section className={styles.cta} aria-labelledby="cta-title">
         <div className={`${styles.frame} ${styles.dash} ${styles.ctaCard}`}>
           <div className={styles.ctaMedia}>
-            <Pulser />
+            <PulseGradient variant="lines" label="Footer background" />
             <div className={styles.grain} />
           </div>
           <LineAnimator />
