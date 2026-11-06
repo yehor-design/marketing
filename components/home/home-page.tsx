@@ -4,8 +4,8 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import {
+  GodRays,
   LineAnimator,
-  PulseGradient,
   RollingText,
   nestedDither,
   orderedDither,
@@ -480,7 +480,17 @@ export function HomePage() {
             <div className={styles.heroMedia}>
               <div className={styles.heroShafts}>
                 <div className={styles.heroGlow}>
-                  <PulseGradient variant="lines" label="Hero background" />
+                  <GodRays
+                    shader
+                    speed={5}
+                    frequency={0.1}
+                    offsetY={1.2}
+                    spotty={5}
+                    density={0.5}
+                    centerIntensity={0.57}
+                    centerSize={0.8}
+                    label="Hero background"
+                  />
                   <div className={styles.grain} />
                 </div>
               </div>
@@ -724,7 +734,17 @@ export function HomePage() {
       <section className={styles.cta} aria-labelledby="cta-title">
         <div className={`${styles.frame} ${styles.dash} ${styles.ctaCard}`}>
           <div className={styles.ctaMedia}>
-            <PulseGradient variant="lines" label="Footer background" />
+            <GodRays
+              shader
+              speed={5}
+              frequency={0.1}
+              offsetY={0}
+              spotty={5}
+              density={0.5}
+              centerIntensity={0.57}
+              centerSize={0.8}
+              label="Footer background"
+            />
             <div className={styles.grain} />
           </div>
           <LineAnimator />
