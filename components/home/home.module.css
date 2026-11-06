@@ -1259,6 +1259,10 @@
 }
 
 @media (max-width: 809.98px) {
+  .cta {
+    margin-top: 2px;
+  }
+
   .bandHead h2:not(:global(#quotes-title)) {
     width: min(240px, calc(100% - 48px));
   }

@@ -316,8 +316,13 @@
     margin-bottom: -2px;
   }
 
+  .sheet:not(:has(.crumb)) .item:nth-child(5) .cover {
+    margin-top: 4px;
+  }
+
   .sheet:not(:has(.crumb)) .item:nth-child(5) .copy {
     padding-top: 27px;
+    padding-bottom: 22px;
   }
 
   .sheet:not(:has(.crumb)) .item:last-child .cover {
