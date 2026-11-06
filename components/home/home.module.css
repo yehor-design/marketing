@@ -102,24 +102,29 @@
   inset: 0;
   filter: hue-rotate(1deg);
   mask-image:
-    url("/about/connections-mask.svg"),
-    linear-gradient(0deg, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.7) 100%);
-  mask-repeat: repeat, repeat;
-  mask-position: center, 0 0;
-  mask-size: 17.15px 17.15px, auto;
+    url("/home/rays-mask.svg"),
+    linear-gradient(0deg, rgba(0, 0, 0, 0) 46%, rgba(0, 0, 0, 0.7) 100%);
+  mask-repeat: no-repeat, no-repeat;
+  mask-position:
+    bottom center,
+    center;
+  mask-size: cover, 100% 100%;
   mask-composite: add, add;
   -webkit-mask-image:
-    url("/about/connections-mask.svg"),
-    linear-gradient(0deg, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.7) 100%);
-  -webkit-mask-repeat: repeat, repeat;
-  -webkit-mask-position: center, 0 0;
-  -webkit-mask-size: 17.15px 17.15px, auto;
+    url("/home/rays-mask.svg"),
+    linear-gradient(0deg, rgba(0, 0, 0, 0) 46%, rgba(0, 0, 0, 0.7) 100%);
+  -webkit-mask-repeat: no-repeat, no-repeat;
+  -webkit-mask-position:
+    bottom center,
+    center;
+  -webkit-mask-size: cover, 100% 100%;
   -webkit-mask-composite: plus-lighter, plus-lighter;
 }
 
 .heroGlow {
   position: absolute;
   inset: 0;
+  filter: brightness(1.5) contrast(0.85);
 }
 
 .heroGlow > :first-child,
@@ -926,21 +931,25 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
-  filter: hue-rotate(1deg);
+  filter: brightness(1.5) contrast(0.85) hue-rotate(1deg);
   pointer-events: none;
   mask-image:
-    url("/about/connections-mask.svg"),
-    linear-gradient(0deg, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.7) 100%);
-  mask-repeat: repeat, repeat;
-  mask-position: center, 0 0;
-  mask-size: 17.15px 17.15px, auto;
+    url("/home/rays-mask.svg"),
+    linear-gradient(0deg, rgba(0, 0, 0, 0) 46%, rgba(0, 0, 0, 0.7) 100%);
+  mask-repeat: no-repeat, no-repeat;
+  mask-position:
+    bottom center,
+    center;
+  mask-size: cover, 100% 100%;
   mask-composite: add, add;
   -webkit-mask-image:
-    url("/about/connections-mask.svg"),
-    linear-gradient(0deg, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.7) 100%);
-  -webkit-mask-repeat: repeat, repeat;
-  -webkit-mask-position: center, 0 0;
-  -webkit-mask-size: 17.15px 17.15px, auto;
+    url("/home/rays-mask.svg"),
+    linear-gradient(0deg, rgba(0, 0, 0, 0) 46%, rgba(0, 0, 0, 0.7) 100%);
+  -webkit-mask-repeat: no-repeat, no-repeat;
+  -webkit-mask-position:
+    bottom center,
+    center;
+  -webkit-mask-size: cover, 100% 100%;
   -webkit-mask-composite: plus-lighter, plus-lighter;
 }
 

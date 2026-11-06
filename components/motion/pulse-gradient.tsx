@@ -5,9 +5,8 @@ import { loadMask, punchMask } from "./mask-composite";
 import styles from "./motion.module.css";
 
 /**
- * Animated gradient field used by the homepage background cycle and the
- * pricing dots. The homepage hero and footer use Lines No Mask, the last
- * item in that cycle: a custom Edge field, no ray mask.
+ * Animated gradient field. Homepage hero and footer use Radial: the Pulse
+ * preset, with the ray mask applied by the section. Pricing uses Dots.
  */
 
 const PULSE_ROTATION = (-167 * Math.PI) / 180;
@@ -359,8 +358,8 @@ export function PulseGradient({
   maskedRef.current = masked;
   const configRef = useRef(configFor(variant));
   configRef.current = configFor(variant);
-  const continuousRef = useRef(variant === "lines");
-  continuousRef.current = variant === "lines";
+  const continuousRef = useRef(variant === "lines" || variant === "pulse");
+  continuousRef.current = variant === "lines" || variant === "pulse";
   const timeRef = useRef(configRef.current.seed);
   const lastFallback = useRef(0);
 
