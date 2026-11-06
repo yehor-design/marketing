@@ -39,6 +39,11 @@ const postDither = {
   glow: 2,
 };
 
+const postHoverDither = {
+  ...postDither,
+  animation: true,
+};
+
 const people = [
   {
     name: "Grace Lee",
@@ -141,13 +146,40 @@ function Portrait({
       <div className={styles.caption}>
         <h3>{person.name}</h3>
         <p className={styles.role}>
-          <span className={styles.slash} aria-hidden="true">
-            /
+          <span className={styles.roleLine}>
+            <span className={styles.slash} aria-hidden="true">
+              /
+            </span>
+            <span className={styles.roleText}>{person.role}</span>
           </span>
-          <span className={styles.roleText}>{person.role}</span>
         </p>
       </div>
     </a>
+  );
+}
+
+function PostCard({ post }: { post: (typeof posts)[number] }) {
+  const [hot, setHot] = useState(false);
+
+  return (
+    <Link
+      href={post.href}
+      className="corner-host"
+      onPointerEnter={() => setHot(true)}
+      onPointerLeave={() => setHot(false)}
+      onFocus={() => setHot(true)}
+      onBlur={() => setHot(false)}
+    >
+      <CornerMarks />
+      <span className={styles.postArt} aria-hidden="true">
+        <DitherImage src={post.image} label="" preset={hot ? postHoverDither : postDither} />
+      </span>
+      <span className={styles.postCopy}>
+        <span className={styles.tag}>{post.tag}</span>
+        <h3>{post.title}</h3>
+        <span className={styles.date}>{post.date}</span>
+      </span>
+    </Link>
   );
 }
 
@@ -369,17 +401,7 @@ export function AboutPage() {
           <ul className={styles.posts}>
             {posts.map((post) => (
               <li key={post.href}>
-                <Link href={post.href} className="corner-host">
-                  <CornerMarks />
-                  <span className={styles.postArt} aria-hidden="true">
-                    <DitherImage src={post.image} label="" preset={postDither} />
-                  </span>
-                  <span className={styles.postCopy}>
-                    <span className={styles.tag}>{post.tag}</span>
-                    <h3>{post.title}</h3>
-                    <span className={styles.date}>{post.date}</span>
-                  </span>
-                </Link>
+                <PostCard post={post} />
               </li>
             ))}
           </ul>

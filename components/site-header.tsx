@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { RollingText } from "@/components/motion";
+import { RollingText, TextGlitch } from "@/components/motion";
 import { GrayRing } from "@/components/motion/gray-ring";
 import { navLinks } from "@/lib/routes";
 
@@ -35,6 +35,35 @@ function NavRoll({
 
 function isCurrent(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+function NavItem({
+  href,
+  label,
+  current,
+  badge,
+}: {
+  href: string;
+  label: string;
+  current: boolean;
+  badge?: string;
+}) {
+  const [hot, setHot] = useState(false);
+
+  return (
+    <Link
+      href={href}
+      aria-current={current ? "page" : undefined}
+      data-framer-page-link-current={current ? "true" : undefined}
+      onPointerEnter={() => setHot(true)}
+      onPointerLeave={() => setHot(false)}
+      onFocus={() => setHot(true)}
+      onBlur={() => setHot(false)}
+    >
+      <TextGlitch active={hot}>{label}</TextGlitch>
+      {badge ? <span className="count-badge">{badge}</span> : null}
+    </Link>
+  );
 }
 
 export function SiteHeader() {
@@ -128,23 +157,16 @@ export function SiteHeader() {
           </Link>
           <nav className="desktop-nav" aria-label="Primary">
             <ul>
-              {navLinks.map((link) => {
-                const current = isCurrent(pathname, link.href);
-                return (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      aria-current={current ? "page" : undefined}
-                      data-framer-page-link-current={current ? "true" : undefined}
-                    >
-                      {link.label}
-                      {"badge" in link ? (
-                        <span className="count-badge">{link.badge}</span>
-                      ) : null}
-                    </Link>
-                  </li>
-                );
-              })}
+              {navLinks.map((link) => (
+                <li key={link.href}>
+                  <NavItem
+                    href={link.href}
+                    label={link.label}
+                    current={isCurrent(pathname, link.href)}
+                    badge={"badge" in link ? link.badge : undefined}
+                  />
+                </li>
+              ))}
             </ul>
           </nav>
           <div className="desktop-actions">

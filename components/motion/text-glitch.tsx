@@ -1,7 +1,6 @@
 "use client";
 
-import { useAnimationFrame } from "motion/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./motion.module.css";
 import { usePrefersReducedMotion } from "./use-reduced-motion";
 
@@ -22,88 +21,81 @@ export const restingTextGlitch = {
   speedMs: 60,
 } as const;
 
-function scrambleText(text: string) {
-  let next = "";
-  for (const char of text) {
+type Cell = { char: string; scrambled: boolean };
+
+function scrambleCells(text: string): Cell[] {
+  return Array.from(text).map((char) => {
     if (char === " " || char === "\u00A0" || Math.random() >= TEXT_GLITCH_SCRAMBLE) {
-      next += char;
-      continue;
+      return { char, scrambled: false };
     }
-    next += GLITCH_CHARS[(Math.random() * GLITCH_CHARS.length) | 0];
-  }
-  return next;
+    return {
+      char: GLITCH_CHARS[(Math.random() * GLITCH_CHARS.length) | 0],
+      scrambled: true,
+    };
+  });
 }
 
 export function TextGlitch({
   children,
   tabIndex,
+  active,
   restingColor = TEXT_GLITCH_REST_COLOR,
 }: {
   children: string;
   tabIndex?: number;
-  /** Current-page links rest at full white. Others rest at 50% white. */
+  /** When set, the parent link owns the hover. Otherwise the text watches the pointer. */
+  active?: boolean;
   restingColor?: string;
 }) {
   const reduced = usePrefersReducedMotion();
-  const [active, setActive] = useState(false);
-  const [shown, setShown] = useState(children);
+  const [hovered, setHovered] = useState(false);
+  const [cells, setCells] = useState<Cell[] | null>(null);
   const textRef = useRef(children);
-  const moveRef = useRef(false);
-  const clock = useRef({ elapsed: 0, next: TEXT_GLITCH_SPEED_MS, running: false, finished: false });
+  const engaged = active ?? hovered;
   textRef.current = children;
-  moveRef.current = active && reduced === false;
 
   useEffect(() => {
-    setShown(children);
-  }, [children]);
-
-  const onFrame = useCallback((_timestamp: number, deltaMs: number) => {
-    const state = clock.current;
-    if (!moveRef.current) {
-      if (state.running || state.finished) {
-        state.running = false;
-        state.finished = false;
-        state.elapsed = 0;
-        state.next = TEXT_GLITCH_SPEED_MS;
-        setShown(textRef.current);
-      }
+    if (!engaged || reduced !== false) {
       return;
     }
-    if (!state.running && !state.finished) {
-      state.running = true;
-      state.elapsed = 0;
-      state.next = TEXT_GLITCH_SPEED_MS;
-    }
-    if (state.finished) {
-      return;
-    }
-    state.elapsed += deltaMs;
-    if (state.elapsed >= TEXT_GLITCH_DURATION_MS) {
-      state.running = false;
-      state.finished = true;
-      setShown(textRef.current);
-      return;
-    }
-    if (state.elapsed >= state.next) {
-      state.next += TEXT_GLITCH_SPEED_MS;
-      setShown(scrambleText(textRef.current));
-    }
-  }, []);
-
-  useAnimationFrame(onFrame);
+    const id = window.setInterval(() => {
+      setCells(scrambleCells(textRef.current));
+    }, TEXT_GLITCH_SPEED_MS);
+    const stop = window.setTimeout(() => {
+      window.clearInterval(id);
+      setCells(null);
+    }, TEXT_GLITCH_DURATION_MS);
+    return () => {
+      window.clearInterval(id);
+      window.clearTimeout(stop);
+      setCells(null);
+    };
+  }, [engaged, reduced]);
 
   return (
     <span
       className={styles.glitch}
       tabIndex={tabIndex}
-      onPointerEnter={() => setActive(true)}
-      onPointerLeave={() => setActive(false)}
-      onFocus={() => setActive(true)}
-      onBlur={() => setActive(false)}
-      style={{ color: active ? TEXT_GLITCH_HOVER_COLOR : restingColor }}
+      onPointerEnter={() => setHovered(true)}
+      onPointerLeave={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
+      style={{ color: engaged ? TEXT_GLITCH_HOVER_COLOR : restingColor }}
     >
       <span className="visually-hidden">{children}</span>
-      <span aria-hidden="true">{shown}</span>
+      <span aria-hidden="true">
+        {cells
+          ? cells.map((cell, index) =>
+              cell.scrambled ? (
+                <span key={index} style={{ color: TEXT_GLITCH_REST_COLOR }}>
+                  {cell.char}
+                </span>
+              ) : (
+                <span key={index}>{cell.char}</span>
+              ),
+            )
+          : children}
+      </span>
     </span>
   );
 }

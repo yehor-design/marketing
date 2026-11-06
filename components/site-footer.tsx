@@ -2,11 +2,41 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { CSSProperties } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
+import { TextGlitch } from "@/components/motion";
 import { footerColumns, socialLinks } from "@/lib/routes";
 
 function isCurrent(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+function FooterLink({
+  href,
+  label,
+  current,
+  badge,
+}: {
+  href: string;
+  label: string;
+  current: boolean;
+  badge?: ReactNode;
+}) {
+  const [hot, setHot] = useState(false);
+
+  return (
+    <Link
+      href={href}
+      aria-current={current ? "page" : undefined}
+      data-framer-page-link-current={current ? "true" : undefined}
+      onPointerEnter={() => setHot(true)}
+      onPointerLeave={() => setHot(false)}
+      onFocus={() => setHot(true)}
+      onBlur={() => setHot(false)}
+    >
+      <TextGlitch active={hot}>{label}</TextGlitch>
+      {badge}
+    </Link>
+  );
 }
 
 function HiringMark() {
@@ -42,23 +72,16 @@ export function SiteFooter() {
               <div className="footer-column" key={column.title}>
                 <p className="footer-title">{column.title}</p>
                 <ul>
-                  {column.links.map((link) => {
-                    const current = isCurrent(pathname, link.href);
-                    return (
-                      <li key={link.href}>
-                        <Link
-                          href={link.href}
-                          aria-current={current ? "page" : undefined}
-                          data-framer-page-link-current={
-                            current ? "true" : undefined
-                          }
-                        >
-                          {link.label}
-                          {"badge" in link ? <HiringMark /> : null}
-                        </Link>
-                      </li>
-                    );
-                  })}
+                  {column.links.map((link) => (
+                    <li key={link.href}>
+                      <FooterLink
+                        href={link.href}
+                        label={link.label}
+                        current={isCurrent(pathname, link.href)}
+                        badge={"badge" in link ? <HiringMark /> : undefined}
+                      />
+                    </li>
+                  ))}
                 </ul>
               </div>
             ))}

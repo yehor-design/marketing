@@ -331,29 +331,51 @@
 }
 
 .role {
-  display: flex;
-  gap: 4px;
-  align-items: flex-start;
-  max-height: 0;
+  display: grid;
+  grid-template-rows: 0fr;
   margin: 0;
   overflow: hidden;
   color: rgba(255, 255, 255, 0.5);
   font-size: 16px;
   letter-spacing: -0.01em;
   line-height: 1.5;
+  transition: grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.roleLine {
+  display: flex;
+  gap: 4px;
+  align-items: flex-start;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.slash {
+  flex: none;
+  color: #fff;
+}
+
+.slash,
+.roleText {
   opacity: 0;
-  transform: translateY(30px);
-  transition:
-    max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .team a:hover .role,
 .team a:focus-visible .role {
-  max-height: 32px;
+  grid-template-rows: 1fr;
+}
+
+.team a:hover .slash,
+.team a:focus-visible .slash {
   opacity: 1;
-  transform: none;
+  transition-delay: 0.15s;
+}
+
+.team a:hover .roleText,
+.team a:focus-visible .roleText {
+  opacity: 1;
+  transition-delay: 0.175s;
 }
 
 .hiring {
@@ -459,11 +481,12 @@
   display: inline-flex;
   align-items: center;
   height: 24px;
-  padding: 0 8px;
-  border-radius: 4px;
+  padding: 0 6px;
+  border-radius: 6px;
   background: #171717;
   color: #fff;
   font-size: 12px;
+  font-variation-settings: "opsz" 14, "wght" 500;
   letter-spacing: 0;
   line-height: 1.6;
 }
@@ -549,6 +572,7 @@
 
   .role {
     display: flex;
+    grid-template-rows: none;
     align-items: flex-start;
     gap: 4px;
     position: static;
@@ -564,6 +588,15 @@
     white-space: normal;
     opacity: 1;
     transform: none;
+  }
+
+  .roleLine {
+    display: contents;
+  }
+
+  .slash,
+  .roleText {
+    opacity: 1;
   }
 
   .slash {
@@ -710,6 +743,26 @@
     padding: 36px 34px 34px;
   }
 
+  .postArt {
+    filter: brightness(0.7);
+  }
+
+  .posts a:hover,
+  .posts a:focus-visible {
+    background-color: #080808;
+  }
+
+  .posts a:hover .postArt,
+  .posts a:focus-visible .postArt {
+    filter: none;
+  }
+
+  .posts a:hover .tag,
+  .posts a:focus-visible .tag {
+    background: var(--accent);
+    color: #000;
+  }
+
   .cta {
     align-items: start;
     justify-items: center;
@@ -776,7 +829,11 @@
   }
 
   .photo,
-  .role {
+  .role,
+  .slash,
+  .roleText,
+  .postArt,
+  .tag {
     transition: none;
   }
 }
