@@ -36,11 +36,13 @@ export function RollingText({
   text,
   rolling,
   fontSize = ROLLING_TEXT_FONT_SIZE_PX,
+  letterSpacing,
 }: {
   text: string;
   rolling?: boolean;
   /** Nav buttons are 12px. Hero and form buttons are 14px. */
   fontSize?: number;
+  letterSpacing?: number;
 }) {
   const reduced = usePrefersReducedMotion();
   const [hovered, setHovered] = useState(false);
@@ -98,6 +100,7 @@ export function RollingText({
       style={{
         fontSize,
         lineHeight: `${lineHeight}px`,
+        letterSpacing: letterSpacing === undefined ? undefined : `${letterSpacing}px`,
       }}
       onPointerEnter={controlled ? undefined : () => setHovered(true)}
       onPointerLeave={controlled ? undefined : () => setHovered(false)}

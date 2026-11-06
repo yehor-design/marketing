@@ -311,7 +311,15 @@ export function CheckoutPage() {
           <article className={styles.thread}>
             <div className={styles.threadHead}>
               <img src="/checkout/dylan.png" alt="" width={34} height={34} />
-              <strong>Dylan Ott</strong>
+              <span className={styles.nameRow}>
+                <strong>Dylan Ott</strong>
+                <svg viewBox="0 0 10.88 10.88" aria-hidden="true">
+                  <path
+                    d="M 10.88 5.44 C 10.858 4.677 10.409 3.991 9.717 3.667 C 9.979 2.95 9.813 2.146 9.287 1.592 C 8.733 1.067 7.93 0.9 7.213 1.163 C 6.891 0.469 6.204 0.019 5.44 0 C 4.677 0.02 3.992 0.47 3.672 1.163 C 3.32 1.033 2.939 1.005 2.571 1.081 C 2.203 1.157 1.865 1.334 1.593 1.592 C 1.067 2.146 0.902 2.951 1.168 3.667 C 0.474 3.989 0.022 4.676 0 5.44 C 0.023 6.204 0.475 6.89 1.168 7.213 C 0.904 7.929 1.068 8.733 1.592 9.287 C 2.147 9.811 2.95 9.977 3.667 9.717 C 3.991 10.409 4.677 10.858 5.44 10.88 C 6.203 10.86 6.89 10.41 7.213 9.718 C 7.928 10 8.743 9.831 9.287 9.287 C 9.83 8.743 10 7.928 9.717 7.213 C 10.409 6.889 10.858 6.203 10.88 5.44 Z M 4.665 7.669 L 2.68 5.684 L 3.429 4.93 L 4.628 6.13 L 7.175 3.354 L 7.955 4.076 Z"
+                    fill="#209bf0"
+                  />
+                </svg>
+              </span>
             </div>
             <div className={styles.note}>
               <p className={styles.incoming}>

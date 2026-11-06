@@ -316,6 +316,35 @@
     margin-bottom: -2px;
   }
 
+  .sheet:not(:has(.crumb)) .item:nth-child(2) {
+    margin-top: -1.03px;
+  }
+
+  .sheet:not(:has(.crumb)) .item:nth-child(2) .copy {
+    padding-top: 27.03px;
+  }
+
+  .sheet:not(:has(.crumb)) .item:nth-child(3) {
+    margin-top: -1px;
+  }
+
+  .sheet:not(:has(.crumb)) .item:nth-child(3) .copy {
+    padding-top: 27px;
+  }
+
+  .sheet:not(:has(.crumb)) .item:nth-child(4) {
+    margin-top: -1.39px;
+  }
+
+  .sheet:not(:has(.crumb)) .item:nth-child(4) .cover {
+    margin-top: 4px;
+  }
+
+  .sheet:not(:has(.crumb)) .item:nth-child(4) .copy {
+    padding-top: 26.8px;
+    padding-bottom: 22.6px;
+  }
+
   .sheet:not(:has(.crumb)) .item:nth-child(5) .cover {
     margin-top: 4px;
   }
@@ -325,12 +354,16 @@
     padding-bottom: 22px;
   }
 
+  .sheet:not(:has(.crumb)) .item:last-child {
+    margin-top: 1.16px;
+  }
+
   .sheet:not(:has(.crumb)) .item:last-child .cover {
     margin-top: 4px;
   }
 
   .sheet:not(:has(.crumb)) .item:last-child .copy {
-    padding-top: 29px;
+    padding-top: 26.81px;
   }
 
   .cover {
@@ -425,7 +458,36 @@
 
 @media (min-width: 1200px) {
   .sheet:not(:has(.crumb)) {
+    margin-top: 0;
+    margin-bottom: -2.24px;
     padding-bottom: 4px;
+  }
+
+  .sheet:not(:has(.crumb)) .pageHead,
+  .sheet:not(:has(.crumb)) .copy,
+  .sheet:not(:has(.crumb)) .sideLink {
+    padding-right: 33px;
+    padding-left: 33px;
+  }
+
+  .sheet:not(:has(.crumb)) .item:nth-child(2) {
+    margin-top: -1.04px;
+  }
+
+  .sheet:not(:has(.crumb)) .item:nth-child(3) {
+    margin-top: 0.55px;
+  }
+
+  .sheet:not(:has(.crumb)) .item:nth-child(4) {
+    margin-top: 0.54px;
+  }
+
+  .sheet:not(:has(.crumb)) .item:nth-child(5) {
+    margin-top: 1.76px;
+  }
+
+  .sheet:not(:has(.crumb)) .item:last-child {
+    margin-top: 1.76px;
   }
 
   .ctaCopy {

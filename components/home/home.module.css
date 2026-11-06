@@ -924,7 +924,7 @@
 
 @media (min-width: 810px) {
   .heroFrame {
-    height: 992px;
+    height: 720px;
   }
 
   .hero h1 {
@@ -1060,7 +1060,25 @@
   }
 }
 
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .social {
+    margin-top: 1.44px;
+  }
+
+  .bandHead {
+    height: 134.56px;
+  }
+
+  .ctaCard {
+    height: 366.6px;
+  }
+}
+
 @media (min-width: 1200px) {
+  .social {
+    margin-top: 2px;
+  }
+
   .frame {
     width: min(1200px, calc(100% - 32px));
   }
@@ -1106,7 +1124,7 @@
 
   .featureFrame {
     width: 440px;
-    height: 440px;
+    height: 443px;
   }
 
   .tiles {
@@ -1277,5 +1295,41 @@
     width: 286px;
     text-align: left;
     text-wrap: wrap;
+    transform: translateY(1.51px);
+  }
+
+  .benefitCopy {
+    right: 24px;
+    bottom: 24px;
+    left: 24px;
+    height: auto;
+  }
+
+  .benefitCopy p {
+    position: static;
+    margin-top: 6px;
+  }
+
+  .halftone {
+    top: 4px;
+    right: auto;
+    bottom: auto;
+    left: 4px;
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+  }
+
+  .section:has(:global(#quotes-title)) {
+    margin-bottom: -2.04px;
+  }
+
+  .featuredCopy {
+    min-height: 321.48px;
+    padding: 34px;
+  }
+
+  .mark {
+    width: 44px;
+    height: 44px;
   }
 }

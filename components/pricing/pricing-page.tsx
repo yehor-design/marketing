@@ -226,11 +226,15 @@ function RollLink({
   text,
   tone,
   className,
+  fontSize,
+  letterSpacing,
 }: {
   href: string;
   text: string;
   tone: "primary" | "secondary";
   className?: string;
+  fontSize?: number;
+  letterSpacing?: number;
 }) {
   const [rolling, setRolling] = useState(false);
 
@@ -243,7 +247,7 @@ function RollLink({
       onFocus={() => setRolling(true)}
       onBlur={() => setRolling(false)}
     >
-      <RollingText text={text} rolling={rolling} />
+      <RollingText text={text} rolling={rolling} fontSize={fontSize} letterSpacing={letterSpacing} />
     </Link>
   );
 }
@@ -494,11 +498,16 @@ export function PricingPage() {
             <div />
             {plans.map((plan) => (
               <div className={styles.headPlan} key={plan.id}>
-                <h3>
-                  <PlanMark id={plan.id} size={20} />
-                  {plan.name}
-                </h3>
-                <RollLink href={CHECKOUT_HREF} text={plan.cta} tone={plan.tone} className={styles.smallButton} />
+                <PlanMark id={plan.id} size={20} />
+                <h3>{plan.name}</h3>
+                <RollLink
+                  href={CHECKOUT_HREF}
+                  text={plan.cta}
+                  tone={plan.tone}
+                  className={styles.compareButton}
+                  fontSize={12}
+                  letterSpacing={plan.id === "starter" ? 0.103 : undefined}
+                />
               </div>
             ))}
           </div>

@@ -752,21 +752,26 @@
 
 .headPlan {
   display: flex;
-  gap: 12px;
+  gap: 6px;
   align-items: center;
-  justify-content: center;
-  padding: 16px 8px;
+  justify-content: flex-start;
+  padding: 20px;
 }
 
 .headPlan h3 {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
+  flex: none;
   margin: 0;
   font-size: 16px;
   font-weight: 1000;
   letter-spacing: -0.01em;
-  line-height: 1.4;
+  line-height: 1.2;
+  transform: translateY(1.16px);
+}
+
+.compareButton {
+  height: 30px;
+  margin-left: auto;
+  padding: 0 12px;
 }
 
 .push {
@@ -779,13 +784,34 @@
     top: 6px;
   }
 
-  .cardPopular .divider,
-  .cardPopular .dividerAccent {
-    margin-top: 25px;
+  .hero {
+    padding-top: 1px;
+  }
+
+  .description {
+    max-width: 240px;
+  }
+
+  .card + .card,
+  .card + .cardPopular,
+  .cardPopular + .card,
+  .cardPopular + .cardPopular {
+    padding-top: 33px;
+  }
+
+  .divider,
+  .dividerAccent {
+    margin-top: 26px;
+  }
+
+  .features svg {
+    width: 20px;
+    height: 20px;
+    margin-top: 0;
   }
 
   .cards {
-    margin-bottom: 2px;
+    margin-bottom: 4px;
   }
 
   .card,
@@ -856,6 +882,10 @@
 }
 
 @media (min-width: 1200px) {
+  .hero {
+    padding-top: 1px;
+  }
+
   .hero,
   .plans,
   .compare,

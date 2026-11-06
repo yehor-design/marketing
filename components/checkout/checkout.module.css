@@ -307,6 +307,18 @@
   width: 100%;
 }
 
+.nameRow {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.nameRow svg {
+  flex: none;
+  width: 11px;
+  height: 11px;
+}
+
 .quote img,
 .threadHead img {
   flex: none;
@@ -495,6 +507,10 @@
 @media (max-width: 809.98px) {
   .page {
     padding-top: 8px;
+  }
+
+  .support {
+    line-height: 20px;
   }
 }
 

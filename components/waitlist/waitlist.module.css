@@ -134,7 +134,7 @@
 
 .row {
   display: flex;
-  gap: 16px;
+  gap: 10px;
   align-items: center;
   width: 100%;
 }
@@ -214,6 +214,15 @@
   .hero {
     margin-top: calc(-1 * var(--header-height) + 3px);
     margin-bottom: calc(-1 * var(--header-height));
+  }
+
+  .copy {
+    padding-right: 23px;
+    padding-left: 23px;
+  }
+
+  .row {
+    gap: 10px;
   }
 
   .lede {

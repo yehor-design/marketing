@@ -508,6 +508,14 @@
 }
 
 @media (max-width: 809.98px) {
+  .hero {
+    padding-top: 1px;
+  }
+
+  .teamHead {
+    padding-bottom: 49px;
+  }
+
   .photo {
     inset: 10px;
   }
@@ -696,6 +704,22 @@
 }
 
 @media (min-width: 1200px) {
+  .hero {
+    padding-top: 1px;
+  }
+
+  .teamHead {
+    padding-bottom: 48px;
+  }
+
+  .teamHead h2 {
+    transform: translateY(-1px);
+  }
+
+  .cta {
+    margin-bottom: -1px;
+  }
+
   .hero .frame {
     min-height: 703px;
   }

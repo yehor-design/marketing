@@ -789,11 +789,28 @@
   }
 
   .benefitsHead {
-    padding: 50px 24px;
+    padding: 50px 23px;
   }
 
   .rolesIntro {
-    padding: 47px 24px 50px;
+    padding: 48px 23px 50px;
+  }
+
+  .benefitGrid {
+    margin-top: -1px;
+  }
+
+  .benefitGrid li {
+    align-items: flex-start;
+    padding: 26px 23px 22px;
+  }
+
+  .benefitGrid h3 {
+    line-height: 24px;
+  }
+
+  .roleList a {
+    padding-left: 23px;
   }
 
   .rolesIntro p {
@@ -873,5 +890,20 @@
     flex-basis: 100%;
     width: auto;
     max-width: 100%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .benefitsHead {
+    padding: 48px 33px 50px;
+  }
+
+  .benefitGrid {
+    margin-bottom: 2px;
+  }
+
+  .rolesIntro {
+    padding-right: 33px;
+    padding-left: 33px;
   }
 }

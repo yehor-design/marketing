@@ -309,6 +309,10 @@
 }
 
 @media (min-width: 1200px) {
+  .page {
+    padding-bottom: 1px;
+  }
+
   .frame {
     flex-direction: row;
     align-items: center;
@@ -335,6 +339,6 @@
   }
 
   .introCopy {
-    padding: 50px 34px;
+    padding: 51px 33px 50px;
   }
 }
