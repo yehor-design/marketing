@@ -65,6 +65,7 @@ type DitherProps = {
   midtones: number;
   glow?: number;
   radius?: number;
+  smooth?: boolean;
   dot?: string;
   background?: string;
   label: string;
@@ -114,6 +115,7 @@ function drawDither(
     threshold: number;
     midtones: number;
     glow: number;
+    smooth?: boolean;
     dot?: string;
     background?: string;
   },
@@ -137,7 +139,7 @@ function drawDither(
   if (!out) {
     return;
   }
-  out.imageSmoothingEnabled = false;
+  out.imageSmoothingEnabled = props.smooth === true;
   out.drawImage(source, 0, 0, width, height);
   const image = out.getImageData(0, 0, width, height);
   const data = image.data;
@@ -196,6 +198,7 @@ export function Dither({
   midtones,
   glow = 0,
   radius = 0,
+  smooth = false,
   dot,
   background,
   label,
@@ -215,6 +218,7 @@ export function Dither({
         threshold,
         midtones,
         glow,
+        smooth,
         dot,
         background,
       });
@@ -255,6 +259,7 @@ export function Dither({
     threshold,
     midtones,
     glow,
+    smooth,
     dot,
     background,
   ]);

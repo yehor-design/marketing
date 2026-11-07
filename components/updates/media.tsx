@@ -13,6 +13,7 @@ const coverDither = {
   threshold: 87,
   midtones: 77,
   glow: 0,
+  smooth: true,
   background: "#0c0c0c",
 };
 

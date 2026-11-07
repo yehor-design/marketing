@@ -15,11 +15,11 @@ const portraitDither = {
   animation: false,
   intensity: 10,
   interval: 0.08,
-  brightness: -20,
+  brightness: -21,
   pixelSize: 3,
-  threshold: 84,
-  midtones: 100,
-  glow: 30,
+  threshold: 85,
+  midtones: 102,
+  glow: 41,
   dot: "#00ffff",
 };
 
