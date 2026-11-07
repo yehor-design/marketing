@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from "react";
 import { DitherImage } from "@/components/home/dither-image";
-import { RollingText, orderedDither, randomDither } from "@/components/motion";
+import { orderedDither, randomDither } from "@/components/motion";
 import styles from "@/components/waitlist/waitlist.module.css";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -140,7 +140,6 @@ function emailError(value: string) {
 export function WaitlistPage() {
   const [error, setError] = useState("");
   const [done, setDone] = useState(false);
-  const [rolling, setRolling] = useState(false);
 
   return (
     <div className={styles.page}>
@@ -195,15 +194,8 @@ export function WaitlistPage() {
                 />
               </label>
               {done ? null : (
-                <button
-                  className={styles.submit}
-                  type="submit"
-                  onPointerEnter={() => setRolling(true)}
-                  onPointerLeave={() => setRolling(false)}
-                  onFocus={() => setRolling(true)}
-                  onBlur={() => setRolling(false)}
-                >
-                  <RollingText text="Join now" rolling={rolling} />
+                <button className={styles.submit} type="submit">
+                  Join now
                 </button>
               )}
             </div>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { RollingText } from "@/components/motion";
 import styles from "@/components/checkout/checkout.module.css";
 
 /**
@@ -171,7 +170,7 @@ function HelpMark() {
   );
 }
 
-function RollLink({
+function ActionLink({
   href,
   text,
   className,
@@ -180,20 +179,9 @@ function RollLink({
   text: string;
   className: string;
 }) {
-  const [rolling, setRolling] = useState(false);
-
   return (
-    <a
-      className={className}
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-      onPointerEnter={() => setRolling(true)}
-      onPointerLeave={() => setRolling(false)}
-      onFocus={() => setRolling(true)}
-      onBlur={() => setRolling(false)}
-    >
-      <RollingText text={text} rolling={rolling} />
+    <a className={className} href={href} target="_blank" rel="noreferrer">
+      {text}
     </a>
   );
 }
@@ -363,9 +351,9 @@ export function CheckoutPage() {
             Bonus applied: <strong>$186 SaaS Launch Kit for FREE</strong>
           </p>
           <div className={styles.actions}>
-            <RollLink className={styles.access} href={ACCESS_HREF} text={"Get\u00A0access"} />
-            <RollLink className={styles.askDesktop} href={ASK_DESKTOP} text={"Ask\u00A0a\u00A0question"} />
-            <RollLink className={styles.askMobile} href={ASK_MOBILE} text={"Ask\u00A0a\u00A0question"} />
+            <ActionLink className={styles.access} href={ACCESS_HREF} text={"Get\u00A0access"} />
+            <ActionLink className={styles.askDesktop} href={ASK_DESKTOP} text={"Ask\u00A0a\u00A0question"} />
+            <ActionLink className={styles.askMobile} href={ASK_MOBILE} text={"Ask\u00A0a\u00A0question"} />
           </div>
         </footer>
       </section>

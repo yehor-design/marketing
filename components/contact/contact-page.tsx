@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { RollingText } from "@/components/motion";
 import styles from "@/components/contact/contact.module.css";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -48,7 +47,6 @@ function validate(data: FormData): Errors {
 export function ContactPage() {
   const [errors, setErrors] = useState<Errors>({});
   const [done, setDone] = useState(false);
-  const [rolling, setRolling] = useState(false);
   const [reason, setReason] = useState("");
 
   return (
@@ -167,15 +165,8 @@ export function ContactPage() {
                 We&apos;ll get back to you soon!
               </p>
             ) : (
-              <button
-                className={styles.submit}
-                type="submit"
-                onPointerEnter={() => setRolling(true)}
-                onPointerLeave={() => setRolling(false)}
-                onFocus={() => setRolling(true)}
-                onBlur={() => setRolling(false)}
-              >
-                <RollingText text="Get in touch" rolling={rolling} />
+              <button className={styles.submit} type="submit">
+                Get in touch
               </button>
             )}
           </form>

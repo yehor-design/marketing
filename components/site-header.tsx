@@ -11,10 +11,12 @@ function NavRoll({
   href,
   text,
   className,
+  lineHeightPx,
 }: {
   href: string;
   text: string;
   className: string;
+  lineHeightPx: number;
 }) {
   const [rolling, setRolling] = useState(false);
 
@@ -27,7 +29,7 @@ function NavRoll({
       onFocus={() => setRolling(true)}
       onBlur={() => setRolling(false)}
     >
-      <RollingText text={text} rolling={rolling} fontSize={12} />
+      <RollingText text={text} rolling={rolling} fontSize={12} lineHeightPx={lineHeightPx} />
       {className.includes("gray-pill") ? <GrayRing /> : null}
     </Link>
   );
@@ -174,15 +176,13 @@ export function SiteHeader() {
               href="/contact"
               text="Contact"
               className="nav-button nav-button-secondary gray-pill"
+              lineHeightPx={21.6}
             />
             <NavRoll
               href="/waitlist"
               text={"Join\u00A0waitlist"}
-              className={
-                home
-                  ? "nav-button nav-button-secondary gray-pill"
-                  : "nav-button nav-button-primary"
-              }
+              className="nav-button nav-button-primary"
+              lineHeightPx={14.4}
             />
           </div>
           <button

@@ -36,12 +36,15 @@ export function RollingText({
   text,
   rolling,
   fontSize = ROLLING_TEXT_FONT_SIZE_PX,
+  lineHeightPx,
   letterSpacing,
 }: {
   text: string;
   rolling?: boolean;
   /** Nav buttons are 12px. Hero and form buttons are 14px. */
   fontSize?: number;
+  /** Nav Contact rolls 21.6px. Nav Join waitlist rolls 14.4px. */
+  lineHeightPx?: number;
   letterSpacing?: number;
 }) {
   const reduced = usePrefersReducedMotion();
@@ -50,7 +53,7 @@ export function RollingText({
   const move = active && reduced === false;
   const letters = Array.from(text);
   const controlled = rolling !== undefined;
-  const lineHeight = fontSize * ROLLING_TEXT_LINE_HEIGHT_EM;
+  const lineHeight = lineHeightPx ?? fontSize * ROLLING_TEXT_LINE_HEIGHT_EM;
   const sizerRef = useRef<HTMLSpanElement>(null);
   const [offsets, setOffsets] = useState<number[] | null>(null);
 

@@ -7,9 +7,11 @@ import {
   LineAnimator,
   PulseGradient,
   RollingText,
+  nestedDither,
   orderedDither,
   randomDither,
 } from "@/components/motion";
+import { CornerMarks } from "@/components/motion/corner-marks";
 import { GrayRing } from "@/components/motion/gray-ring";
 import { usePrefersReducedMotion } from "@/components/motion/use-reduced-motion";
 import { Announcement } from "@/components/announcement";
@@ -372,11 +374,32 @@ function LogoColumn({
 }
 
 function BenefitCard({ benefit }: { benefit: (typeof benefits)[number] }) {
-  const preset = { ...randomDither, dot: benefit.color };
+  const reduced = usePrefersReducedMotion();
+  const [hot, setHot] = useState(false);
+  const preset =
+    hot && reduced === false
+      ? { ...randomDither, animation: true, intensity: 5, interval: 0.2, dot: benefit.color }
+      : { ...randomDither, dot: benefit.color };
 
   return (
-    <article className={styles.benefit}>
+    <article
+      className={
+        hot
+          ? `${styles.benefit} ${styles.benefitHot} corner-host`
+          : `${styles.benefit} corner-host`
+      }
+      onPointerEnter={() => setHot(true)}
+      onPointerLeave={() => setHot(false)}
+      onFocus={() => setHot(true)}
+      onBlur={() => setHot(false)}
+    >
+      <CornerMarks />
       <div className={styles.benefitField}>
+        {hot && reduced === false ? (
+          <div className={styles.benefitOrdered}>
+            <DitherImage src={benefit.src} label={benefit.label} preset={nestedDither} />
+          </div>
+        ) : null}
         <div className={styles.benefitAccent}>
           <DitherImage src={benefit.src} label={benefit.label} preset={preset} />
         </div>

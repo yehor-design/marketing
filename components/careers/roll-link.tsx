@@ -38,18 +38,9 @@ export function RollSubmit({
   text: string;
   className: string;
 }) {
-  const [rolling, setRolling] = useState(false);
-
   return (
-    <button
-      type="submit"
-      className={className}
-      onPointerEnter={() => setRolling(true)}
-      onPointerLeave={() => setRolling(false)}
-      onFocus={() => setRolling(true)}
-      onBlur={() => setRolling(false)}
-    >
-      <RollingText text={text} rolling={rolling} />
+    <button type="submit" className={className}>
+      {text}
     </button>
   );
 }

@@ -221,7 +221,7 @@
 }
 
 .buttonSecondary {
-  background: #000;
+  background: #171717;
   color: #fff;
 }
 
@@ -393,6 +393,13 @@
   filter: none;
 }
 
+@media (min-width: 810px) {
+  .benefitHot :global(.corner-marks) i,
+  .benefitHot :global(.corner-marks)::before {
+    opacity: 1;
+  }
+}
+
 .benefitCopy {
   --reveal-ease: linear(
     0,
@@ -467,13 +474,19 @@
 }
 
 .benefitReveal {
-  display: grid;
-  grid-template-rows: 0fr;
-  min-height: 0;
+  height: 0;
   margin-top: 0;
+  overflow: hidden;
   transition:
-    grid-template-rows 600ms var(--reveal-ease),
+    height 600ms var(--reveal-ease),
     margin-top 600ms var(--reveal-ease);
+}
+
+.benefit:hover .benefitReveal,
+.benefit:focus-within .benefitReveal,
+.benefitHot .benefitReveal {
+  height: 42px;
+  margin-top: 6px;
 }
 
 .benefitCopy p {
@@ -1619,7 +1632,7 @@
   }
 
   .benefitReveal {
-    grid-template-rows: 1fr;
+    height: auto;
     margin-top: 6px;
     transition: none;
   }

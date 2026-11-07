@@ -309,7 +309,13 @@ function RollLink({
       onFocus={() => setRolling(true)}
       onBlur={() => setRolling(false)}
     >
-      <RollingText text={text} rolling={rolling} fontSize={fontSize} letterSpacing={letterSpacing} />
+      <RollingText
+        text={text}
+        rolling={rolling}
+        fontSize={fontSize}
+        lineHeightPx={fontSize === 12 ? 21.6 : undefined}
+        letterSpacing={letterSpacing}
+      />
       {tone === "secondary" ? <GrayRing /> : null}
     </Link>
   );

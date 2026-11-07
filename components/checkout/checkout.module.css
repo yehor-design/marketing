@@ -521,6 +521,14 @@
 .askMobile {
   background: #262626;
   color: #fff;
+  transition: background-color 400ms;
+}
+
+.askDesktop:hover,
+.askMobile:hover,
+.askDesktop:focus-visible,
+.askMobile:focus-visible {
+  background: #000;
 }
 
 .askDesktop {
